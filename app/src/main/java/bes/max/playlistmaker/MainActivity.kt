@@ -15,11 +15,13 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
+
         val mediatekaButton = findViewById<Button>(R.id.button_mediateka)
         mediatekaButton.setOnClickListener {
             val intent = Intent(this, MediatekaActivity::class.java)
             startActivity(intent)
         }
+
         val settingsButton = findViewById<Button>(R.id.button_settings)
         settingsButton.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
