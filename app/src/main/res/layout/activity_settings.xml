@@ -11,6 +11,7 @@
         android:layout_marginBottom="40dp">
 
         <ImageView
+            android:id="@+id/back_icon"
             android:layout_width="@dimen/back_arrow_size"
             android:layout_height="@dimen/back_arrow_size"
             android:layout_marginTop="11dp"
