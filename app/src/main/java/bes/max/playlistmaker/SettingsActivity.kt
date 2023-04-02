@@ -1,6 +1,5 @@
 package bes.max.playlistmaker
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +11,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val backIcon = findViewById<ImageView>(R.id.back_icon)
         backIcon.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 
