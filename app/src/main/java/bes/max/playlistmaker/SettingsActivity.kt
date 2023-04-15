@@ -29,9 +29,8 @@ class SettingsActivity : AppCompatActivity() {
         val agreementIcon = findViewById<ImageView>(R.id.settings_activity_icon_agreement)
         agreementIcon.setOnClickListener {
             val openAgreementIntent = openUserAgreementIntent()
-            if (openAgreementIntent.resolveActivity(packageManager) != null) {
+            if (openAgreementIntent.resolveActivity(packageManager) != null)
                 startActivity(openAgreementIntent)
-            }
         }
     }
 
