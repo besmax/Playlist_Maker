@@ -14,12 +14,13 @@
 
         <ImageView
             android:id="@+id/back_icon"
-            style="@style/settings_activity_back_arrow"
+            style="@style/toolbar_back_arrow"
             android:src="@drawable/ic_arrow_back"
             />
 
         <TextView
             style="@style/settings_activity_title_textview"
+            android:text="@string/settings"
             />
     </FrameLayout>
 

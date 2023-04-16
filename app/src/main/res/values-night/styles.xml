@@ -23,7 +23,7 @@
         <item name="android:textSize">48sp</item>
     </style>
 
-    <style name="settings_activity_back_arrow">
+    <style name="toolbar_back_arrow">
         <item name="android:layout_width">@dimen/back_arrow_size</item>
         <item name="android:layout_height">@dimen/back_arrow_size</item>
         <item name="tint">@color/white</item>

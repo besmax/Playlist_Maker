@@ -7,4 +7,48 @@
     tools:context=".SearchActivity"
     >
 
+    <LinearLayout
+        android:id="@+id/search_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/search_activity_back_icon"
+            style="@style/toolbar_back_arrow"
+            android:src="@drawable/ic_arrow_back"
+            />
+
+        <TextView
+            android:id="@+id/search_activity_title"
+            style="@style/settings_activity_title_textview"
+            android:text="@string/search_activity_title"
+            />
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_activity_text_input_layout"
+        style="@style/search_activity_edit_text"
+        android:hint="@string/search_activity_title"
+        app:startIconDrawable="@drawable/ic_find"
+        app:endIconMode="clear_text"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_activity_toolbar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_activity_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

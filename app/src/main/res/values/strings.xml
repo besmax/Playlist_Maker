@@ -14,4 +14,6 @@
     <string name="email_for_support">bespalov.m.9@ya.ru</string>
     <string name="email_theme_for_support">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="email_text_for_support">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+
+    <string name="search_activity_title">Поиск</string>
 </resources>
