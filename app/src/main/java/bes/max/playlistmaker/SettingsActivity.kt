@@ -21,7 +21,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val supportIcon = findViewById<ImageView>(R.id.settings_activity_icon_support)
         supportIcon.setOnClickListener {
-            startActivity(sendEmailIntent())
+            startActivity(Intent.createChooser(sendEmailIntent(), null))
         }
 
         val agreementIcon = findViewById<ImageView>(R.id.settings_activity_icon_agreement)
