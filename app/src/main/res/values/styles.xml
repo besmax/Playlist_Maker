@@ -25,7 +25,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">80dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">48sp</item>
+        <item name="android:textSize">40sp</item>
     </style>
 
     <style name="settings_activity_frame_layout">

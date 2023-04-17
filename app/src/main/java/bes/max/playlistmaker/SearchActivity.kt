@@ -40,7 +40,6 @@ class SearchActivity : AppCompatActivity() {
                 savedSearchInputText = s.toString()
             }
         }
-
         searchEditText.addTextChangedListener(textWatcher)
     }
 
