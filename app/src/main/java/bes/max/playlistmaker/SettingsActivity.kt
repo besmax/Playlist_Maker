@@ -21,7 +21,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val supportIcon = findViewById<ImageView>(R.id.settings_activity_icon_support)
         supportIcon.setOnClickListener {
-            startActivity(Intent.createChooser(sendEmailIntent(), null))
+            startActivity(sendEmailIntent())
         }
 
         val agreementIcon = findViewById<ImageView>(R.id.settings_activity_icon_agreement)
@@ -41,12 +41,15 @@ class SettingsActivity : AppCompatActivity() {
         return Intent.createChooser(sendIntent, null)
     }
 
-    private fun sendEmailIntent(): Intent = Intent().apply {
-        action = Intent.ACTION_SENDTO
-        data = Uri.parse("mailto:")
-        putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_for_support)))
-        putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_theme_for_support))
-        putExtra(Intent.EXTRA_TEXT, getString(R.string.email_text_for_support))
+    private fun sendEmailIntent(): Intent {
+        val emailIntent = Intent().apply {
+            action = Intent.ACTION_SENDTO
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_for_support)))
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_theme_for_support))
+            putExtra(Intent.EXTRA_TEXT, getString(R.string.email_text_for_support))
+        }
+        return Intent.createChooser(emailIntent, null)
     }
 
     private fun openUserAgreementIntent(): Intent = Intent(
