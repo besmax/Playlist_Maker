@@ -4,17 +4,24 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
+import androidx.lifecycle.Lifecycle
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.google.android.material.internal.ContextUtils.getActivity
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -25,21 +32,23 @@ import org.junit.runner.RunWith
 @LargeTest
 class SettingsActivityTest {
 
-    @get:Rule
-    var sActivityRule = IntentsTestRule(SettingsActivity::class.java)
+    lateinit var activityScenario: ActivityScenario<SettingsActivity>
 
     @Before
-    fun stubIntents() {
-        intending(not(isInternal())).respondWith(
-            Instrumentation.ActivityResult(
-                Activity.RESULT_OK,
-                null
-            )
-        )
+    fun setUp() {
+        Intents.init()
+        activityScenario =
+            ActivityScenario.launch(SettingsActivity::class.java)
+    }
+
+    @After
+    fun cleanUp() {
+        Intents.release()
+        activityScenario.close()
     }
 
     @Test
-    fun testShareIntent() {
+    fun shareIntentOpensChooser() {
         onView(withId(R.id.settings_activity_icon_share)).perform(click())
 
         intended(
@@ -50,26 +59,26 @@ class SettingsActivityTest {
     }
 
     @Test
-    fun testSendEmailIntent() {
+    fun supportIntentOpensChooser() {
         onView(withId(R.id.settings_activity_icon_support)).perform(click())
 
         intended(
             allOf(
                 hasAction(Intent.ACTION_CHOOSER),
+                hasExtra(Intent.EXTRA_EMAIL, arrayOf("bespalov.m.9@ya.ru"))
             )
         )
     }
 
     @Test
-    fun testOpenAgreementIntent() {
+    fun openAgreementIntentOpensChooser() {
         onView(withId(R.id.settings_activity_icon_agreement)).perform(click())
 
         intended(
             allOf(
-                hasAction(Intent.ACTION_SEND),
+                hasAction(Intent.ACTION_VIEW),
                 hasData(Uri.parse("https://practicum.yandex.ru/android-developer/"))
             )
         )
     }
-
 }
