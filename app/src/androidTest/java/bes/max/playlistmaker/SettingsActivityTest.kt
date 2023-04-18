@@ -2,22 +2,22 @@ package bes.max.playlistmaker
 
 import android.content.Intent
 import android.net.Uri
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import junit.framework.TestCase.assertTrue
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -26,10 +26,9 @@ import org.junit.runner.RunWith
 @LargeTest
 class SettingsActivityTest {
 
-    lateinit var activityScenario: ActivityScenario<SettingsActivity>
+    val activityScenario: ActivityScenario<SettingsActivity>
 
-    @Before
-    fun setUp() {
+    init {
         Intents.init()
         activityScenario =
             ActivityScenario.launch(SettingsActivity::class.java)
@@ -76,7 +75,7 @@ class SettingsActivityTest {
     }
 
     @Test
-    fun openAgreementIntentOpensChooser() {
+    fun openAgreementIntentOpensLink() {
         onView(withId(R.id.settings_activity_icon_agreement)).perform(click())
 
         intended(
@@ -85,6 +84,13 @@ class SettingsActivityTest {
                 hasData(Uri.parse("https://practicum.yandex.ru/android-developer/"))
             )
         )
+    }
+
+    @Test
+    fun clickOnBackIconFinishesActivity() {
+        onView(withId(R.id.back_icon)).perform(click())
+
+        assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)
     }
 
     private fun getChooser(matcher: Matcher<Intent>): Matcher<Intent> {
