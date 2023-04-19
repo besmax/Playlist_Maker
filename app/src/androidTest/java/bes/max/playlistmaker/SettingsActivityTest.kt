@@ -1,5 +1,6 @@
 package bes.max.playlistmaker
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.Lifecycle
@@ -12,14 +13,15 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import junit.framework.TestCase.assertTrue
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.*
 
 
 @RunWith(AndroidJUnit4::class)
@@ -88,9 +90,11 @@ class SettingsActivityTest {
 
     @Test
     fun clickOnBackIconFinishesActivity() {
+        val testScenario = ActivityScenario.launchActivityForResult(SettingsActivity::class.java)
         onView(withId(R.id.back_icon)).perform(click())
 
-        assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)
+        assertTrue(testScenario.state == Lifecycle.State.DESTROYED)
+        assertTrue(testScenario.result.resultCode == Activity.RESULT_CANCELED)
     }
 
     private fun getChooser(matcher: Matcher<Intent>): Matcher<Intent> {
