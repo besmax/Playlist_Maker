@@ -35,10 +35,6 @@
         android:hint="@string/search_activity_title"
         app:startIconDrawable="@drawable/ic_find"
         app:endIconMode="clear_text"
-        app:boxCornerRadiusBottomEnd="15dp"
-        app:boxCornerRadiusBottomStart="15dp"
-        app:boxCornerRadiusTopStart="15dp"
-        app:boxCornerRadiusTopEnd="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_activity_toolbar">
 
