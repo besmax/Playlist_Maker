@@ -51,6 +51,10 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="settings_activity_switch">
+        <item name="android:checked">true</item>
+    </style>
+
     <style name="search_activity_edit_text" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxBackgroundColor">@color/white</item>
         <item name="android:layout_marginHorizontal">16dp</item>

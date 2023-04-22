@@ -39,6 +39,7 @@
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/settings_activity_switch"
             android:layout_gravity="end"
             tools:ignore="UseSwitchCompatOrMaterialXml"
             />
@@ -89,7 +90,6 @@
         <TextView
             style="@style/settings_activity_text_view"
             android:text="@string/user_agreement"
-
             />
 
         <ImageView
