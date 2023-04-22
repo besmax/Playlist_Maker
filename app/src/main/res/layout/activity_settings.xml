@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingHorizontal="@dimen/horizontal_padding_settings_screen"
+    android:paddingVertical="@dimen/vertical_padding_settings_screen"
     >
 
     <FrameLayout
@@ -20,16 +22,14 @@
 
         <TextView
             style="@style/settings_activity_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
             android:text="@string/settings"
             />
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/horizontal_padding_settings_screen"
-        android:paddingVertical="@dimen/vertical_padding_settings_screen"
-        >
+    <FrameLayout style="@style/settings_activity_frame_layout">
 
         <TextView
             style="@style/settings_activity_text_view"
@@ -45,12 +45,7 @@
 
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/horizontal_padding_settings_screen"
-        android:paddingVertical="@dimen/vertical_padding_settings_screen"
-        >
+    <FrameLayout style="@style/settings_activity_frame_layout">
 
         <TextView
             style="@style/settings_activity_text_view"
@@ -65,9 +60,7 @@
 
     </FrameLayout>
 
-    <FrameLayout
-        style="@style/settings_activity_frame_layout"
-        >
+    <FrameLayout style="@style/settings_activity_frame_layout">
 
         <TextView
             style="@style/settings_activity_text_view"
@@ -82,12 +75,7 @@
 
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/horizontal_padding_settings_screen"
-        android:paddingVertical="@dimen/vertical_padding_settings_screen"
-        >
+    <FrameLayout style="@style/settings_activity_frame_layout">
 
         <TextView
             style="@style/settings_activity_text_view"

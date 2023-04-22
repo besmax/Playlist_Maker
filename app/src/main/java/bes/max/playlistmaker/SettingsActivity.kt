@@ -32,25 +32,24 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun shareAppLinkIntent(): Intent {
-        val sendIntent: Intent = Intent().apply {
+    private fun shareAppLinkIntent(): Intent =
+        Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, getString(R.string.link_for_app_share))
             type = "text/plain"
+            Intent.createChooser(this, null)
         }
-        return Intent.createChooser(sendIntent, null)
-    }
 
-    private fun sendEmailIntent(): Intent {
-        val emailIntent = Intent().apply {
+    private fun sendEmailIntent(): Intent =
+        Intent().apply {
             action = Intent.ACTION_SENDTO
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_for_support)))
             putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_theme_for_support))
             putExtra(Intent.EXTRA_TEXT, getString(R.string.email_text_for_support))
+            Intent.createChooser(this, null)
         }
-        return Intent.createChooser(emailIntent, null)
-    }
+
 
     private fun openUserAgreementIntent(): Intent = Intent(
         Intent.ACTION_VIEW,
