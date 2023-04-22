@@ -43,6 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_activity_toolbar"
         app:startIconDrawable="@drawable/ic_find"
+        app:hintEnabled="false"
         >
 
         <com.google.android.material.textfield.TextInputEditText
