@@ -1,12 +1,14 @@
 package bes.max.playlistmaker
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class SearchActivity : AppCompatActivity() {
 
@@ -20,10 +22,22 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        val searchInputLayout =
+            findViewById<TextInputLayout>(R.id.search_activity_text_input_layout)
         val searchEditText = findViewById<TextInputEditText>(R.id.search_activity_edit_text)
-        searchEditText.setText(savedSearchInputText)
-
         val backIcon = findViewById<ImageView>(R.id.search_activity_back_icon)
+
+        searchInputLayout.setEndIconOnClickListener {
+            searchEditText.text?.clear()
+            val inputMethodManager =
+                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            val view = this.currentFocus
+            if (view != null) {
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
+            }
+        }
+
+        searchEditText.setText(savedSearchInputText)
 
         backIcon.setOnClickListener {
             finish()
