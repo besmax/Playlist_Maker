@@ -51,10 +51,8 @@ class SettingsActivity : AppCompatActivity() {
             Intent.createChooser(this, null)
         }
 
-
     private fun openUserAgreementIntent(): Intent = Intent(
         Intent.ACTION_VIEW,
         Uri.parse(getString(R.string.link_for_app_share))
     )
-
 }

@@ -29,8 +29,7 @@
             />
     </FrameLayout>
 
-    <FrameLayout
-        style="@style/settings_activity_frame_layout">
+    <FrameLayout style="@style/settings_activity_frame_layout">
 
         <TextView
             style="@style/settings_activity_text_view"
@@ -48,7 +47,8 @@
 
     <FrameLayout
         android:id="@+id/settings_activity_section_share"
-        style="@style/settings_activity_frame_layout">
+        style="@style/settings_activity_frame_layout"
+        >
 
         <TextView
             style="@style/settings_activity_text_view"
@@ -65,7 +65,8 @@
 
     <FrameLayout
         android:id="@+id/settings_activity_section_support"
-        style="@style/settings_activity_frame_layout">
+        style="@style/settings_activity_frame_layout"
+        >
 
         <TextView
             style="@style/settings_activity_text_view"
@@ -82,7 +83,8 @@
 
     <FrameLayout
         android:id="@+id/settings_activity_section_agreement"
-        style="@style/settings_activity_frame_layout">
+        style="@style/settings_activity_frame_layout"
+        >
 
         <TextView
             style="@style/settings_activity_text_view"
