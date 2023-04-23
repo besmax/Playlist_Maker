@@ -1,20 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_screen_background"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingBottom="30dp"
     tools:context=".MainActivity"
     >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:lineHeight="26sp"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="22sp"
         />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/button_search"
+        style="@style/main_activity_buttons"
+        android:text="@string/button_search"
+        app:icon="@drawable/ic_find"
+        />
+
+    <Button
+        android:id="@+id/button_mediateka"
+        style="@style/main_activity_buttons"
+        android:text="@string/button_mediateka"
+        app:icon="@drawable/ic_music"
+        />
+
+    <Button
+        android:id="@+id/button_settings"
+        style="@style/main_activity_buttons"
+        android:text="@string/settings"
+        app:icon="@drawable/ic_settings"
+        />
+
+</LinearLayout>

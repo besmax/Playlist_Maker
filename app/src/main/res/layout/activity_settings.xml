@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/horizontal_padding_settings_screen"
+    android:paddingVertical="@dimen/vertical_padding_settings_screen"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        >
+
+        <ImageView
+            android:id="@+id/back_icon"
+            style="@style/toolbar_back_arrow"
+            android:src="@drawable/ic_arrow_back"
+            />
+
+        <TextView
+            style="@style/settings_activity_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:text="@string/settings"
+            />
+    </FrameLayout>
+
+    <FrameLayout style="@style/settings_activity_frame_layout">
+
+        <TextView
+            style="@style/settings_activity_text_view"
+            android:text="@string/dark_theme"
+            />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/settings_activity_switch"
+            android:layout_gravity="end"
+            tools:ignore="UseSwitchCompatOrMaterialXml"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/settings_activity_section_share"
+        style="@style/settings_activity_frame_layout"
+        >
+
+        <TextView
+            style="@style/settings_activity_text_view"
+            android:text="@string/share_app"
+            />
+
+        <ImageView
+            android:id="@+id/settings_activity_icon_share"
+            style="@style/settings_activity_image_view"
+            android:src="@drawable/ic_share"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/settings_activity_section_support"
+        style="@style/settings_activity_frame_layout"
+        >
+
+        <TextView
+            style="@style/settings_activity_text_view"
+            android:text="@string/contact_support"
+            />
+
+        <ImageView
+            android:id="@+id/settings_activity_icon_support"
+            style="@style/settings_activity_image_view"
+            android:src="@drawable/ic_support"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/settings_activity_section_agreement"
+        style="@style/settings_activity_frame_layout"
+        >
+
+        <TextView
+            style="@style/settings_activity_text_view"
+            android:text="@string/user_agreement"
+            />
+
+        <ImageView
+            android:id="@+id/settings_activity_icon_agreement"
+            style="@style/settings_activity_image_view"
+            android:src="@drawable/ic_arrow"
+            />
+
+    </FrameLayout>
+
+</LinearLayout>
