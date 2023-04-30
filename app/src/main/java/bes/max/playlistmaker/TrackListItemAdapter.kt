@@ -11,10 +11,12 @@ import bes.max.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
-class TrackListItemAdapter(private val listOfTracks: ArrayList<Track>) : RecyclerView.Adapter<TrackListItemAdapter.TrackViewHolder>() {
+class TrackListItemAdapter(private val listOfTracks: ArrayList<Track>) :
+    RecyclerView.Adapter<TrackListItemAdapter.TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.track_list_item, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.track_list_item, parent, false)
         return TrackViewHolder(view)
     }
 
@@ -24,7 +26,7 @@ class TrackListItemAdapter(private val listOfTracks: ArrayList<Track>) : Recycle
         holder.bind(listOfTracks[position])
     }
 
-    class TrackViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
+    class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(model: Track) {
             val trackCover = itemView.findViewById<ImageView>(R.id.track_list_item_track_cover)
@@ -34,19 +36,14 @@ class TrackListItemAdapter(private val listOfTracks: ArrayList<Track>) : Recycle
 
             Glide.with(itemView)
                 .load(model.artworkUrl100)
-                .placeholder(R.drawable.error)
+                .placeholder(R.drawable.ic_picture_not_found)
                 .transform(RoundedCorners(10))
                 .centerCrop()
                 .into(trackCover)
 
             trackName.setText(model.trackName)
-            trackName.maxLines = 1
-
             artistName.setText(model.artistName)
-            artistName.maxLines = 1
-
             trackTime.setText(model.trackTime)
-            trackTime.maxLines = 1
         }
 
     }

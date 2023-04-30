@@ -40,10 +40,10 @@
         android:layout_height="wrap_content"
         android:hint="@string/search_activity_title"
         app:endIconMode="clear_text"
+        app:hintEnabled="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_activity_toolbar"
         app:startIconDrawable="@drawable/ic_find"
-        app:hintEnabled="false"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -64,6 +64,7 @@
         android:layout_marginTop="24dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_activity_text_input_layout"/>
+        app:layout_constraintTop_toBottomOf="@+id/search_activity_text_input_layout"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

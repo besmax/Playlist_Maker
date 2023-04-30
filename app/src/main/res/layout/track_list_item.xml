@@ -1,73 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/search_activity_list_item_padding"
     >
 
     <ImageView
         android:id="@+id/track_list_item_track_cover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:src="@drawable/error"
+        android:layout_width="@dimen/search_activity_list_item_cover_size"
+        android:layout_height="@dimen/search_activity_list_item_cover_size"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        tools:src="@drawable/error"
+        />
 
     <TextView
         android:id="@+id/track_list_item_track_name"
         style="@style/search_activity_list_item_track_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="250dp"
-        android:paddingStart="8dp"
         android:ellipsize="end"
+        android:maxWidth="250dp"
         android:maxLines="1"
+        android:paddingStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/track_list_item_artist_name"
         app:layout_constraintStart_toEndOf="@+id/track_list_item_track_cover"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/track_list_item_artist_name"
-        tools:text="TRACK NAME"/>
+        tools:text="TRACK NAME"
+        />
 
     <TextView
         android:id="@+id/track_list_item_artist_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="150dp"
-        android:paddingStart="8dp"
         android:ellipsize="end"
+        android:maxWidth="150dp"
         android:maxLines="1"
-        app:layout_constraintStart_toEndOf="@+id/track_list_item_track_cover"
-        app:layout_constraintEnd_toStartOf="@+id/track_list_item_track_time"
-        app:layout_constraintTop_toBottomOf="@+id/track_list_item_track_name"
+        android:paddingStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="ARTIST"/>
+        app:layout_constraintEnd_toStartOf="@+id/track_list_item_track_time"
+        app:layout_constraintStart_toEndOf="@+id/track_list_item_track_cover"
+        app:layout_constraintTop_toBottomOf="@+id/track_list_item_track_name"
+        tools:text="ARTIST"
+        />
 
     <TextView
         android:id="@+id/track_list_item_track_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="50dp"
-        android:paddingStart="8dp"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:drawableStart="@drawable/ic_circle_between_text"
         android:drawablePadding="4dp"
+        android:ellipsize="end"
+        android:maxWidth="50dp"
+        android:maxLines="1"
+        android:paddingStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/track_list_item_artist_name"
         app:layout_constraintTop_toBottomOf="@+id/track_list_item_track_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="00:00"/>
+        tools:text="00:00"
+        />
 
     <ImageView
         android:id="@+id/track_list_item_right_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow"
         android:paddingEnd="16dp"
+        android:src="@drawable/ic_arrow"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

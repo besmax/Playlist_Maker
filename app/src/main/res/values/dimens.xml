@@ -8,4 +8,6 @@
     <dimen name="edit_text_corner_radius">16dp</dimen>
     <dimen name="back_arrow_margin_start">16dp</dimen>
     <dimen name="search_activity_list_item_padding">16dp</dimen>
+    <dimen name="search_activity_list_item_cover_size">45dp</dimen>
+
 </resources>
