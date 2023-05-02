@@ -16,6 +16,8 @@ class SearchActivity : AppCompatActivity() {
 
     private var savedSearchInputText = ""
 
+    lateinit var recyclerView: RecyclerView
+
     companion object {
         const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
     }
@@ -24,7 +26,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.search_activity_recycler_view_tracks)
+        recyclerView = findViewById<RecyclerView>(R.id.search_activity_recycler_view_tracks)
         recyclerView.adapter = TrackListItemAdapter(DatabaseMock.tracks)
 
         val searchInputLayout =
