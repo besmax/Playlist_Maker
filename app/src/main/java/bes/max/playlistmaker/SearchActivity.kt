@@ -5,18 +5,16 @@ import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import bes.max.playlistmaker.data.DatabaseMock
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import bes.max.playlistmaker.databinding.ActivitySearchBinding
 
 class SearchActivity : AppCompatActivity() {
 
     private var savedSearchInputText = ""
 
-    lateinit var recyclerView: RecyclerView
+    private var _binding: ActivitySearchBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
@@ -24,18 +22,14 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        _binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        recyclerView = findViewById<RecyclerView>(R.id.search_activity_recycler_view_tracks)
-        recyclerView.adapter = TrackListItemAdapter(DatabaseMock.tracks)
+        binding.searchActivityRecyclerViewTracks.adapter = TrackListItemAdapter(DatabaseMock.tracks)
 
-        val searchInputLayout =
-            findViewById<TextInputLayout>(R.id.search_activity_text_input_layout)
-        val searchEditText = findViewById<TextInputEditText>(R.id.search_activity_edit_text)
-        val backIcon = findViewById<ImageView>(R.id.search_activity_back_icon)
 
-        searchInputLayout.setEndIconOnClickListener {
-            searchEditText.text?.clear()
+        binding.searchActivityTextInputLayout.setEndIconOnClickListener {
+            binding.searchActivityEditText.text?.clear()
             val inputMethodManager =
                 getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             val view = this.currentFocus
@@ -44,9 +38,9 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        searchEditText.setText(savedSearchInputText)
+        binding.searchActivityEditText.setText(savedSearchInputText)
 
-        backIcon.setOnClickListener {
+        binding.searchActivityBackIcon.setOnClickListener {
             finish()
         }
 
@@ -59,7 +53,7 @@ class SearchActivity : AppCompatActivity() {
                 savedSearchInputText = s.toString()
             }
         }
-        searchEditText.addTextChangedListener(textWatcher)
+        binding.searchActivityEditText.addTextChangedListener(textWatcher)
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
