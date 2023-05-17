@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.databinding.ActivitySearchBinding
 import bes.max.playlistmaker.model.ITunesSearchApiResponse
@@ -39,7 +41,6 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchActivityRecyclerViewTracks.adapter = adapter
 
-
         binding.searchActivityTextInputLayout.setEndIconOnClickListener {
             binding.searchActivityEditText.text?.clear()
             val inputMethodManager =
@@ -50,6 +51,7 @@ class SearchActivity : AppCompatActivity() {
             }
             tracks.clear()
             adapter.notifyDataSetChanged()
+            binding.searchActivityPlaceholder.visibility = View.GONE
         }
 
         binding.searchActivityEditText.setText(savedSearchInputText)
@@ -75,12 +77,6 @@ class SearchActivity : AppCompatActivity() {
                     getTrack(binding.searchActivityEditText.text.toString())
                     adapter.listOfTracks = tracks
                     adapter.notifyDataSetChanged()
-
-                    when(status) {
-                        SearchApiStatus.DONE -> {}
-                        SearchApiStatus.NOT_FOUND -> {}
-                        else -> {}
-                    }
                 }
                 true
             }
@@ -99,32 +95,55 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun getTrack(query: String) {
-        ITunesSearchApi.iTunesSearchApiService.search(query).enqueue(object:
+        tracks.clear()
+        adapter.notifyDataSetChanged()
+        ITunesSearchApi.iTunesSearchApiService.search(query).enqueue(object :
             Callback<ITunesSearchApiResponse> {
             override fun onResponse(
                 call: Call<ITunesSearchApiResponse>,
                 response: Response<ITunesSearchApiResponse>
             ) {
                 if (response.code() == 200) {
-                    tracks.clear()
-                    adapter.notifyDataSetChanged()
                     if (response.body()?.results?.isNotEmpty() == true) {
                         tracks.addAll(response.body()!!.results)
                         adapter.notifyDataSetChanged()
                         status = SearchApiStatus.DONE
-                    } else {
+                    }
+                    if (tracks.isEmpty()) {
                         status = SearchApiStatus.NOT_FOUND
                     }
-
                 } else {
                     status = SearchApiStatus.ERROR
                 }
+                showPlaceHolder()
             }
 
             override fun onFailure(call: Call<ITunesSearchApiResponse>, t: Throwable) {
                 status = SearchApiStatus.ERROR
+                showPlaceHolder()
+            }
+        })
+
+    }
+
+    private fun showPlaceHolder() {
+        when (status) {
+            SearchApiStatus.ERROR -> {
+                binding.searchActivityPlaceholder.visibility = View.VISIBLE
+                binding.searchActivityPlaceholderImage.setImageResource(R.drawable.img_no_internet)
+                binding.searchActivityPlaceholderText.setText(getString(R.string.search_activity_placeholder_text_error))
+                binding.searchActivityPlaceholderButton.visibility = View.VISIBLE
             }
 
-        })
+            SearchApiStatus.NOT_FOUND -> {
+                binding.searchActivityPlaceholder.visibility = View.VISIBLE
+                binding.searchActivityPlaceholderImage.setImageResource(R.drawable.img_not_found)
+                binding.searchActivityPlaceholderText.setText(getString(R.string.search_activity_placeholder_text_not_found))
+                binding.searchActivityPlaceholderButton.visibility = View.GONE
+            }
+
+            else -> binding.searchActivityPlaceholder.visibility = View.GONE
+        }
     }
+
 }
