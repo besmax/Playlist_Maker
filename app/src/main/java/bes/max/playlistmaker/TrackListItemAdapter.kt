@@ -11,8 +11,10 @@ import bes.max.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
-class TrackListItemAdapter(private val listOfTracks: ArrayList<Track>) :
+class TrackListItemAdapter() :
     RecyclerView.Adapter<TrackListItemAdapter.TrackViewHolder>() {
+
+    var listOfTracks = mutableListOf<Track>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view =
