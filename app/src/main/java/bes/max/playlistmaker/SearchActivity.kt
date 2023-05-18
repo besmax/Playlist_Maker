@@ -7,7 +7,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.databinding.ActivitySearchBinding
 import bes.max.playlistmaker.model.ITunesSearchApiResponse
@@ -28,7 +27,7 @@ class SearchActivity : AppCompatActivity() {
     private var tracks = mutableListOf<Track>()
     private val adapter = TrackListItemAdapter()
 
-    private var status = SearchApiStatus.DONE
+    private var status = SearchApiStatus.NOT_STARTED
 
     companion object {
         const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
@@ -82,6 +81,14 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
+
+        binding.searchActivityPlaceholderButton.setOnClickListener {
+            if (binding.searchActivityEditText.text?.isNotEmpty() == true) {
+                getTrack(binding.searchActivityEditText.text.toString())
+                adapter.listOfTracks = tracks
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -103,17 +110,18 @@ class SearchActivity : AppCompatActivity() {
                 call: Call<ITunesSearchApiResponse>,
                 response: Response<ITunesSearchApiResponse>
             ) {
-                if (response.code() == 200) {
-                    if (response.body()?.results?.isNotEmpty() == true) {
-                        tracks.addAll(response.body()!!.results)
-                        adapter.notifyDataSetChanged()
-                        status = SearchApiStatus.DONE
+                when (response.code()) {
+                    200 -> {
+                        if (response.body()?.results?.isNotEmpty() == true) {
+                            tracks.addAll(response.body()!!.results)
+                            adapter.notifyDataSetChanged()
+                            status = SearchApiStatus.DONE
+                        }
+                        if (tracks.isEmpty()) {
+                            status = SearchApiStatus.NOT_FOUND
+                        }
                     }
-                    if (tracks.isEmpty()) {
-                        status = SearchApiStatus.NOT_FOUND
-                    }
-                } else {
-                    status = SearchApiStatus.ERROR
+                    else -> status = SearchApiStatus.ERROR
                 }
                 showPlaceHolder()
             }
@@ -126,7 +134,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun showPlaceHolder() {
+    private inline fun showPlaceHolder() {
         when (status) {
             SearchApiStatus.ERROR -> {
                 binding.searchActivityPlaceholder.visibility = View.VISIBLE

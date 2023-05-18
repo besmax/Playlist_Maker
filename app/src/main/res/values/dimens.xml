@@ -9,6 +9,6 @@
     <dimen name="back_arrow_margin_start">16dp</dimen>
     <dimen name="search_activity_list_item_padding">16dp</dimen>
     <dimen name="search_activity_list_item_cover_size">45dp</dimen>
-    <dimen name="search_activity_placeholder_top_margin">96dp</dimen>
+    <dimen name="search_activity_placeholder_top_margin">128dp</dimen>
     <dimen name="search_activity_placeholder_horizontal_margin">16dp</dimen>
 </resources>
