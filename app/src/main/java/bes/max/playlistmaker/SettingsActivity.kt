@@ -3,30 +3,29 @@ package bes.max.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import bes.max.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+
+    private val binding by lazy {
+        ActivitySettingsBinding.inflate(layoutInflater)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        setContentView(binding.root)
 
-        val backIcon = findViewById<ImageView>(R.id.back_icon)
-        backIcon.setOnClickListener { finish() }
+        binding.backIcon.setOnClickListener { finish() }
 
-        val shareSection = findViewById<FrameLayout>(R.id.settings_activity_section_share)
-        shareSection.setOnClickListener {
+        binding.settingsActivitySectionShare.setOnClickListener {
             startActivity(shareAppLinkIntent())
         }
 
-        val supportSection = findViewById<FrameLayout>(R.id.settings_activity_section_support)
-        supportSection.setOnClickListener {
+        binding.settingsActivitySectionSupport.setOnClickListener {
             startActivity(sendEmailIntent())
         }
 
-        val agreementSection = findViewById<FrameLayout>(R.id.settings_activity_section_agreement)
-        agreementSection.setOnClickListener {
+        binding.settingsActivitySectionAgreement.setOnClickListener {
             val openAgreementIntent = openUserAgreementIntent()
             if (openAgreementIntent.resolveActivity(packageManager) != null)
                 startActivity(openAgreementIntent)

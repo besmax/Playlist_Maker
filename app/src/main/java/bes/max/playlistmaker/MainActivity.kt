@@ -1,29 +1,31 @@
 package bes.max.playlistmaker
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import bes.max.playlistmaker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
-        val searchButton = findViewById<Button>(R.id.button_search)
-        searchButton.setOnClickListener {
+        binding.buttonSearch.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
 
-        val mediatekaButton = findViewById<Button>(R.id.button_mediateka)
-        mediatekaButton.setOnClickListener {
+
+        binding.buttonMediateka.setOnClickListener {
             val intent = Intent(this, MediatekaActivity::class.java)
             startActivity(intent)
         }
 
-        val settingsButton = findViewById<Button>(R.id.button_settings)
-        settingsButton.setOnClickListener {
+        binding.buttonSettings.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
