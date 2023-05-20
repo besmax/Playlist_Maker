@@ -6,12 +6,13 @@ import bes.max.playlistmaker.databinding.ActivityMediatekaBinding
 
 class MediatekaActivity : AppCompatActivity() {
 
-    private var _binding: ActivityMediatekaBinding? = null
-    private val binding get() = _binding!!
+
+    private val binding by lazy {
+        ActivityMediatekaBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMediatekaBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 }

@@ -21,13 +21,12 @@ class SearchActivity : AppCompatActivity() {
 
     private var savedSearchInputText = ""
 
-    private var _binding: ActivitySearchBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy {
+        ActivitySearchBinding.inflate(layoutInflater)
+    }
 
     private var tracks = mutableListOf<Track>()
     private val adapter = TrackListItemAdapter()
-
-    private var status = SearchApiStatus.NOT_STARTED
 
     companion object {
         const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
@@ -35,7 +34,6 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.searchActivityRecyclerViewTracks.adapter = adapter
@@ -91,6 +89,15 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (binding.searchActivityEditText.text?.isNotEmpty() == true) {
+            getTrack(binding.searchActivityEditText.text.toString())
+            adapter.listOfTracks = tracks
+            adapter.notifyDataSetChanged()
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
         outState.putString(SEARCH_INPUT_TEXT, savedSearchInputText)
@@ -115,26 +122,24 @@ class SearchActivity : AppCompatActivity() {
                         if (response.body()?.results?.isNotEmpty() == true) {
                             tracks.addAll(response.body()!!.results)
                             adapter.notifyDataSetChanged()
-                            status = SearchApiStatus.DONE
+                            showPlaceHolder(SearchApiStatus.DONE)
                         }
                         if (tracks.isEmpty()) {
-                            status = SearchApiStatus.NOT_FOUND
+                            showPlaceHolder(SearchApiStatus.NOT_FOUND)
                         }
                     }
-                    else -> status = SearchApiStatus.ERROR
+                    else -> showPlaceHolder(SearchApiStatus.ERROR)
                 }
-                showPlaceHolder()
             }
 
             override fun onFailure(call: Call<ITunesSearchApiResponse>, t: Throwable) {
-                status = SearchApiStatus.ERROR
-                showPlaceHolder()
+                showPlaceHolder(SearchApiStatus.ERROR)
             }
         })
 
     }
 
-    private inline fun showPlaceHolder() {
+    private fun showPlaceHolder(status: SearchApiStatus) {
         when (status) {
             SearchApiStatus.ERROR -> {
                 binding.searchActivityPlaceholder.visibility = View.VISIBLE

@@ -58,7 +58,6 @@
         <item name="boxBackgroundColor">@color/gray</item>
         <item name="android:layout_marginHorizontal">16dp</item>
         <item name="android:layout_marginTop">24dp</item>
-        <item name="android:lineHeight">16sp</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">16sp</item>
         <item name="boxStrokeColor">@color/white</item>
@@ -97,7 +96,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textAllCaps">false</item>
-        <item name="cornerRadius">16dp</item>
+        <item name="cornerRadius">54dp</item>
     </style>
 
 </resources>
