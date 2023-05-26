@@ -1,9 +1,10 @@
-package bes.max.playlistmaker
+package bes.max.playlistmaker.ui.controllers
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {

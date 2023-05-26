@@ -1,4 +1,4 @@
-package bes.max.playlistmaker
+package bes.max.playlistmaker.ui.controllers
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

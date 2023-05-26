@@ -1,4 +1,4 @@
-package bes.max.playlistmaker
+package bes.max.playlistmaker.ui.controllers
 
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -8,6 +8,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import bes.max.playlistmaker.R
+import bes.max.playlistmaker.ui.TrackListItemAdapter
 import bes.max.playlistmaker.databinding.ActivitySearchBinding
 import bes.max.playlistmaker.model.ITunesSearchApiResponse
 import bes.max.playlistmaker.model.Track
