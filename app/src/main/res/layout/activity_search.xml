@@ -74,6 +74,51 @@
         app:layout_constraintHorizontal_bias="0.0"
         />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/search_activity_history_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="search_activity_history_text_view,search_activity_history_recycler_view,search_activity_history_button" />
+
+    <TextView
+        style="@style/search_activity_history_text_view"
+        android:id="@+id/search_activity_history_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="@string/you_searched"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_activity_text_input_layout"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_activity_history_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="24dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_activity_history_text_view"
+        app:layout_constraintHorizontal_bias="0.0"
+        />
+
+    <Button
+        style="@style/search_activity_history_button"
+        android:id="@+id/search_activity_history_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clear_history"
+        android:textAllCaps="false"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_activity_history_recycler_view"/>
+
     <LinearLayout
         android:id="@+id/search_activity_placeholder"
         android:layout_width="match_parent"
@@ -85,7 +130,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_activity_text_input_layout"
-        tools:visibility="visible">
+        tools:visibility="invisible">
 
         <ImageView
             android:id="@+id/search_activity_placeholder_image"
