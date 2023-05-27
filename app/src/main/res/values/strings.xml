@@ -6,6 +6,8 @@
     <string name="settings">Настройки</string>
 
     <string name="dark_theme">Тёмная тема</string>
+    <string name="settings_preferences">settings_preferences</string>
+    <string name="dark_theme_preference_key">dark_theme_preference_key</string>
     <string name="share_app">Поделиться приложением</string>
     <string name="contact_support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
