@@ -31,6 +31,8 @@ class SettingsActivity : AppCompatActivity() {
             if (openAgreementIntent.resolveActivity(packageManager) != null)
                 startActivity(openAgreementIntent)
         }
+
+        binding.settingsActivityThemeSwitcher.setOnCheckedChangeListener { compoundButton, b ->  }
     }
 
     private fun shareAppLinkIntent(): Intent =
