@@ -50,24 +50,16 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.searchActivityRecyclerViewTracks.adapter = adapter
-
         adapter.onListElementClick = { track: Track -> searchHistory.saveTrack(track) }
         adapterForHistory.listOfTracks = searchHistory.history
         binding.searchActivityHistoryRecyclerView.adapter = adapterForHistory
 
         binding.searchActivityTextInputLayout.setEndIconOnClickListener {
             binding.searchActivityEditText.text?.clear()
-            val inputMethodManager =
-                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            val view = this.currentFocus
-            if (view != null) {
-                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
-            }
+            hideKeyboard()
             tracks.clear()
             adapter.notifyDataSetChanged()
             binding.searchActivityPlaceholder.visibility = View.GONE
-
-
         }
 
         binding.searchActivityEditText.setOnFocusChangeListener { _, hasFocus ->
@@ -76,9 +68,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchActivityEditText.setText(savedSearchInputText)
 
-        binding.searchActivityBackIcon.setOnClickListener {
-            finish()
-        }
+        binding.searchActivityBackIcon.setOnClickListener { finish() }
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -171,7 +161,6 @@ class SearchActivity : AppCompatActivity() {
                 showPlaceHolder(SearchApiStatus.ERROR)
             }
         })
-
     }
 
     private fun showPlaceHolder(status: SearchApiStatus) {
@@ -201,7 +190,15 @@ class SearchActivity : AppCompatActivity() {
         binding.searchActivityHistoryGroup.visibility =
             if (hasFocus && binding.searchActivityEditText.text.isNullOrEmpty() && adapterForHistory.listOfTracks.isNotEmpty()) View.VISIBLE
             else View.GONE
+    }
 
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val view = this.currentFocus
+        if (view != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
+        }
     }
 
 }
