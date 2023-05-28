@@ -28,7 +28,7 @@ class TrackListItemAdapter() :
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(listOfTracks[position])
         holder.itemView.setOnClickListener {
-            onListElementClick?.invoke(listOfTracks[position])
+            if (onListElementClick != null) onListElementClick?.invoke(listOfTracks[position])
         }
     }
 

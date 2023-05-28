@@ -66,6 +66,8 @@ class SearchActivity : AppCompatActivity() {
             tracks.clear()
             adapter.notifyDataSetChanged()
             binding.searchActivityPlaceholder.visibility = View.GONE
+
+
         }
 
         binding.searchActivityEditText.setOnFocusChangeListener { _, hasFocus ->
@@ -82,9 +84,11 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.searchActivityHistoryGroup.visibility =
-                    if (binding.searchActivityEditText.hasFocus() && s.isNullOrEmpty()) View.VISIBLE
-                    else View.GONE
+                if (binding.searchActivityEditText.hasFocus() && s.isNullOrEmpty()) {
+                    showOrHideHistory(binding.searchActivityEditText.hasFocus())
+                    tracks.clear()
+                    adapter.notifyDataSetChanged()
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
