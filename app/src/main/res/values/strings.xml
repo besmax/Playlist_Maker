@@ -24,4 +24,7 @@
     <string name="search_activity_placeholder_refresh_button">Обновить</string>
     <string name="search_activity_placeholder_text_error">Проблемы со связью \n \n Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="search_activity_placeholder_text_not_found">Ничего не нашлось</string>
+
+    <string name="search_history_preferences">search_history_preferences</string>
+    <string name="search_history_preferences_key">search_history_preferences_key</string>
 </resources>

@@ -15,6 +15,7 @@ class TrackListItemAdapter() :
     RecyclerView.Adapter<TrackListItemAdapter.TrackViewHolder>() {
 
     var listOfTracks = mutableListOf<Track>()
+    var onListElementClick: ((track: Track) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view =
@@ -26,6 +27,9 @@ class TrackListItemAdapter() :
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(listOfTracks[position])
+        holder.itemView.setOnClickListener {
+            onListElementClick?.invoke(listOfTracks[position])
+        }
     }
 
     class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
