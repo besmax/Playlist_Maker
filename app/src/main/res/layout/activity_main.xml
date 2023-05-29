@@ -8,8 +8,7 @@
     android:orientation="vertical"
     android:paddingHorizontal="20dp"
     android:paddingBottom="30dp"
-    tools:context=".ui.controllers.MainActivity"
-    >
+    tools:context=".ui.controllers.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,28 +19,24 @@
         android:lineHeight="26sp"
         android:text="@string/app_name"
         android:textColor="@color/white"
-        android:textSize="22sp"
-        />
+        android:textSize="22sp" />
 
     <Button
         android:id="@+id/button_search"
         style="@style/main_activity_buttons"
         android:text="@string/button_search"
-        app:icon="@drawable/ic_find"
-        />
+        app:icon="@drawable/ic_find" />
 
     <Button
         android:id="@+id/button_mediateka"
         style="@style/main_activity_buttons"
         android:text="@string/button_mediateka"
-        app:icon="@drawable/ic_music"
-        />
+        app:icon="@drawable/ic_music" />
 
     <Button
         android:id="@+id/button_settings"
         style="@style/main_activity_buttons"
         android:text="@string/settings"
-        app:icon="@drawable/ic_settings"
-        />
+        app:icon="@drawable/ic_settings" />
 
 </LinearLayout>
