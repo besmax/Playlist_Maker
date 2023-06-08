@@ -17,7 +17,7 @@ class SearchHistory(private val sharedPreferences: SharedPreferences, private va
                     history.remove(track)
                 }
                 if (history.size > 9) {
-                    history.removeLast()
+                    history.removeFirst()
                 }
             }
         }
