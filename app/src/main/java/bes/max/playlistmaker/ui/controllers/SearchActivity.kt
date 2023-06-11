@@ -166,7 +166,6 @@ class SearchActivity : AppCompatActivity() {
                             showPlaceHolder(SearchApiStatus.NOT_FOUND)
                         }
                     }
-
                     else -> showPlaceHolder(SearchApiStatus.ERROR)
                 }
             }

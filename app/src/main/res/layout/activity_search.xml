@@ -30,7 +30,6 @@
         app:layout_constraintStart_toEndOf="@id/search_activity_back_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_activity_text_input_layout"
         style="@style/search_activity_edit_text"

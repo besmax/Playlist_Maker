@@ -34,4 +34,5 @@
     <string name="activity_player_genre_title">Жанр</string>
     <string name="activity_player_country_title">Страна</string>
     <string name="activity_search_to_activity_player_track_as_json">TRACK_JSON</string>
+
 </resources>
