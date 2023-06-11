@@ -27,4 +27,10 @@
 
     <string name="search_history_preferences">search_history_preferences</string>
     <string name="search_history_preferences_key">search_history_preferences_key</string>
+
+    <string name="activity_player_duration_title">Длительность</string>
+    <string name="activity_player_album_title">Альбом</string>
+    <string name="activity_player_year_title">Год</string>
+    <string name="activity_player_genre_title">Жанр</string>
+    <string name="activity_player_country_title">Страна</string>
 </resources>

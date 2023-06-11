@@ -12,4 +12,5 @@
     <dimen name="search_activity_placeholder_top_margin">110dp</dimen>
     <dimen name="search_activity_placeholder_horizontal_margin">16dp</dimen>
     <dimen name="search_activity_history_group_margin_top">24dp</dimen>
+    <dimen name="activity_player_padding_between_text_bottom_section">16dp</dimen>
 </resources>
