@@ -5,10 +5,15 @@
     <string name="button_mediateka">Медиатека</string>
     <string name="settings">Настройки</string>
 
-    <string name="dark_theme">Темная тема</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="settings_preferences">settings_preferences</string>
+    <string name="dark_theme_preference_key">dark_theme_preference_key</string>
     <string name="share_app">Поделиться приложением</string>
     <string name="contact_support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
+    <string name="you_searched">Вы искали</string>
+    <string name="clear_history">Очистить историю</string>
+
 
     <string name="link_for_app_share">https://practicum.yandex.ru/android-developer/</string>
     <string name="email_for_support">bespalov.m.9@ya.ru</string>
@@ -19,4 +24,7 @@
     <string name="search_activity_placeholder_refresh_button">Обновить</string>
     <string name="search_activity_placeholder_text_error">Проблемы со связью \n \n Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="search_activity_placeholder_text_not_found">Ничего не нашлось</string>
+
+    <string name="search_history_preferences">search_history_preferences</string>
+    <string name="search_history_preferences_key">search_history_preferences_key</string>
 </resources>

@@ -1,9 +1,12 @@
-package bes.max.playlistmaker
+package bes.max.playlistmaker.ui.controllers
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import bes.max.playlistmaker.App
+import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
@@ -29,6 +32,20 @@ class SettingsActivity : AppCompatActivity() {
             val openAgreementIntent = openUserAgreementIntent()
             if (openAgreementIntent.resolveActivity(packageManager) != null)
                 startActivity(openAgreementIntent)
+        }
+
+        val darkThemePreference = getSharedPreferences(getString(R.string.settings_preferences), Context.MODE_PRIVATE)
+        val switcherIsChecked = darkThemePreference.getBoolean(
+            getString(R.string.dark_theme_preference_key), resources.configuration.isNightModeActive
+        )
+
+        binding.settingsActivityThemeSwitcher.isChecked = switcherIsChecked
+
+        binding.settingsActivityThemeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (application as App).switchTheme(checked)
+            darkThemePreference.edit()
+                .putBoolean(getString(R.string.dark_theme_preference_key), checked)
+                .apply()
         }
     }
 

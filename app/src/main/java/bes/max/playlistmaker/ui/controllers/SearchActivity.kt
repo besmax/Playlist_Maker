@@ -1,4 +1,4 @@
-package bes.max.playlistmaker
+package bes.max.playlistmaker.ui.controllers
 
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -8,11 +8,14 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import bes.max.playlistmaker.R
+import bes.max.playlistmaker.ui.TrackListItemAdapter
 import bes.max.playlistmaker.databinding.ActivitySearchBinding
 import bes.max.playlistmaker.model.ITunesSearchApiResponse
 import bes.max.playlistmaker.model.Track
 import bes.max.playlistmaker.network.ITunesSearchApi
 import bes.max.playlistmaker.network.SearchApiStatus
+import bes.max.playlistmaker.ui.SearchHistory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +30,16 @@ class SearchActivity : AppCompatActivity() {
 
     private var tracks = mutableListOf<Track>()
     private val adapter = TrackListItemAdapter()
+    private val adapterForHistory = TrackListItemAdapter()
+    private val sharedPreferences by lazy {
+        getSharedPreferences(getString(R.string.search_history_preferences), MODE_PRIVATE)
+    }
+    private val searchHistory by lazy {
+        SearchHistory(
+            sharedPreferences,
+            getString(R.string.search_history_preferences_key)
+        )
+    }
 
     companion object {
         const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
@@ -37,30 +50,36 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.searchActivityRecyclerViewTracks.adapter = adapter
+        adapter.onListElementClick = { track: Track -> searchHistory.saveTrack(track) }
+        adapterForHistory.listOfTracks = searchHistory.history
+        binding.searchActivityHistoryRecyclerView.adapter = adapterForHistory
 
         binding.searchActivityTextInputLayout.setEndIconOnClickListener {
             binding.searchActivityEditText.text?.clear()
-            val inputMethodManager =
-                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            val view = this.currentFocus
-            if (view != null) {
-                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
-            }
+            hideKeyboard()
             tracks.clear()
             adapter.notifyDataSetChanged()
             binding.searchActivityPlaceholder.visibility = View.GONE
         }
 
+        binding.searchActivityEditText.setOnFocusChangeListener { _, hasFocus ->
+            showOrHideHistory(hasFocus)
+        }
+
         binding.searchActivityEditText.setText(savedSearchInputText)
 
-        binding.searchActivityBackIcon.setOnClickListener {
-            finish()
-        }
+        binding.searchActivityBackIcon.setOnClickListener { finish() }
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (binding.searchActivityEditText.hasFocus() && s.isNullOrEmpty()) {
+                    showOrHideHistory(binding.searchActivityEditText.hasFocus())
+                    tracks.clear()
+                    adapter.notifyDataSetChanged()
+                }
+            }
 
             override fun afterTextChanged(s: Editable?) {
                 savedSearchInputText = s.toString()
@@ -74,6 +93,7 @@ class SearchActivity : AppCompatActivity() {
                     getTrack(binding.searchActivityEditText.text.toString())
                     adapter.listOfTracks = tracks
                     adapter.notifyDataSetChanged()
+                    showOrHideHistory()
                 }
                 true
             }
@@ -86,6 +106,11 @@ class SearchActivity : AppCompatActivity() {
                 adapter.listOfTracks = tracks
                 adapter.notifyDataSetChanged()
             }
+        }
+
+        binding.searchActivityHistoryButton.setOnClickListener {
+            searchHistory.clearTracksHistory()
+            adapterForHistory.notifyDataSetChanged()
         }
     }
 
@@ -136,7 +161,6 @@ class SearchActivity : AppCompatActivity() {
                 showPlaceHolder(SearchApiStatus.ERROR)
             }
         })
-
     }
 
     private fun showPlaceHolder(status: SearchApiStatus) {
@@ -156,6 +180,24 @@ class SearchActivity : AppCompatActivity() {
             }
 
             else -> binding.searchActivityPlaceholder.visibility = View.GONE
+        }
+    }
+
+    private fun showOrHideHistory(hasFocus: Boolean = false) {
+        searchHistory.getHistoryTracks()
+        adapterForHistory.listOfTracks = searchHistory.history
+        adapterForHistory.notifyDataSetChanged()
+        binding.searchActivityHistoryGroup.visibility =
+            if (hasFocus && binding.searchActivityEditText.text.isNullOrEmpty() && adapterForHistory.listOfTracks.isNotEmpty()) View.VISIBLE
+            else View.GONE
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val view = this.currentFocus
+        if (view != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
         }
     }
 

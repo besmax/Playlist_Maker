@@ -11,4 +11,5 @@
     <dimen name="search_activity_list_item_cover_size">45dp</dimen>
     <dimen name="search_activity_placeholder_top_margin">110dp</dimen>
     <dimen name="search_activity_placeholder_horizontal_margin">16dp</dimen>
+    <dimen name="search_activity_history_group_margin_top">24dp</dimen>
 </resources>

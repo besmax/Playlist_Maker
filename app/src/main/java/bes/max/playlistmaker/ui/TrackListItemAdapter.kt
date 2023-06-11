@@ -1,4 +1,4 @@
-package bes.max.playlistmaker
+package bes.max.playlistmaker.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import bes.max.playlistmaker.R
 import bes.max.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -14,6 +15,7 @@ class TrackListItemAdapter() :
     RecyclerView.Adapter<TrackListItemAdapter.TrackViewHolder>() {
 
     var listOfTracks = mutableListOf<Track>()
+    var onListElementClick: ((track: Track) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view =
@@ -25,6 +27,9 @@ class TrackListItemAdapter() :
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(listOfTracks[position])
+        holder.itemView.setOnClickListener {
+            if (onListElementClick != null) onListElementClick?.invoke(listOfTracks[position])
+        }
     }
 
     class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
