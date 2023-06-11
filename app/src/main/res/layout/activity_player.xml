@@ -39,7 +39,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:layout_marginHorizontal="8dp"
-
         app:layout_constraintStart_toEndOf="@id/activity_player_guideline_start"
         app:layout_constraintEnd_toStartOf="@id/activity_player_guideline_end"
         app:layout_constraintTop_toBottomOf="@id/activity_player_back_arrow"
@@ -147,7 +146,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:paddingBottom="@dimen/activity_player_padding_between_text_bottom_section"
-        android:text="@string/activity_player_duration_title"
         app:layout_constraintStart_toEndOf="@id/activity_player_duration_title"
         app:layout_constraintEnd_toStartOf="@id/activity_player_guideline_end"
         app:layout_constraintTop_toBottomOf="@id/activity_player_barrier_before_details"
@@ -170,11 +168,14 @@
         style="@style/activity_player_text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:maxWidth="250dp"
         android:paddingBottom="@dimen/activity_player_padding_between_text_bottom_section"
-        app:layout_constraintStart_toEndOf="@id/activity_player_album_title"
         app:layout_constraintEnd_toStartOf="@id/activity_player_guideline_end"
+        app:layout_constraintStart_toEndOf="@id/activity_player_album_title"
         app:layout_constraintTop_toBottomOf="@id/activity_player_duration"
-        tools:text="Yesterday (Remastered 2009)"/>
+        tools:text="Yesterday (Remastered 2009)" />
 
     <TextView
         android:id="@+id/activity_player_year_title"

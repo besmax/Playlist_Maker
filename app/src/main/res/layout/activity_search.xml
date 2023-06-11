@@ -88,7 +88,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_activity_history_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:paddingBottom="24dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -96,6 +96,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_activity_history_text_view"
+        app:layout_constraintBottom_toTopOf="@id/search_activity_history_button"
         app:reverseLayout="true"
         app:stackFromEnd="true" />
 
@@ -104,12 +105,13 @@
         style="@style/search_activity_history_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/search_activity_history_group_margin_top"
+        android:layout_marginVertical="@dimen/search_activity_history_group_margin_top"
         android:text="@string/clear_history"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_activity_history_recycler_view" />
+        app:layout_constraintTop_toBottomOf="@id/search_activity_history_recycler_view"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <LinearLayout
         android:id="@+id/search_activity_placeholder"
