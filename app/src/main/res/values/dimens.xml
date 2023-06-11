@@ -13,4 +13,10 @@
     <dimen name="search_activity_placeholder_horizontal_margin">16dp</dimen>
     <dimen name="search_activity_history_group_margin_top">24dp</dimen>
     <dimen name="activity_player_padding_between_text_bottom_section">16dp</dimen>
+    <dimen name="activity_player_margin_before_text_bottom_section">32dp</dimen>
+    <dimen name="activity_player_margin_top_small_buttons">48dp</dimen>
+    <dimen name="activity_player_additional_horizontal_margin">8dp</dimen>
+    <dimen name="activity_player_margin_start">16dp</dimen>
+    <dimen name="activity_player_margin_end">16dp</dimen>
+
 </resources>

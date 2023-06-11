@@ -225,5 +225,4 @@ class SearchActivity : AppCompatActivity() {
         adapterForHistory.notifyDataSetChanged()
     }
 
-
 }
