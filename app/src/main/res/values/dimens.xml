@@ -9,8 +9,8 @@
     <dimen name="back_arrow_margin_start">16dp</dimen>
     <dimen name="search_activity_list_item_padding">8dp</dimen>
     <dimen name="search_activity_list_item_cover_size">45dp</dimen>
-    <dimen name="search_activity_placeholder_top_margin">110dp</dimen>
-    <dimen name="search_activity_placeholder_horizontal_margin">16dp</dimen>
+    <dimen name="search_activity_placeholder_top_margin">104dp</dimen>
+    <dimen name="search_activity_placeholder_horizontal_margin">24dp</dimen>
     <dimen name="search_activity_history_group_margin_top">24dp</dimen>
     <dimen name="activity_player_padding_between_text_bottom_section">16dp</dimen>
     <dimen name="activity_player_margin_before_text_bottom_section">32dp</dimen>
