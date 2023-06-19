@@ -1,5 +1,6 @@
 package bes.max.playlistmaker.ui.controllers
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
@@ -16,6 +17,7 @@ import bes.max.playlistmaker.model.Track
 import bes.max.playlistmaker.network.ITunesSearchApi
 import bes.max.playlistmaker.network.SearchApiStatus
 import bes.max.playlistmaker.ui.SearchHistory
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,9 +51,20 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        val onElementClickAction = { track: Track ->
+            saveTrackInHistory(track)
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra(
+                getString(R.string.activity_search_to_activity_player_track_as_json),
+                convertTrackToJson(track)
+            )
+            startActivity(intent)
+        }
+
         binding.searchActivityRecyclerViewTracks.adapter = adapter
-        adapter.onListElementClick = { track: Track -> searchHistory.saveTrack(track) }
+        adapter.onListElementClick = onElementClickAction
         adapterForHistory.listOfTracks = searchHistory.history
+        adapterForHistory.onListElementClick = onElementClickAction
         binding.searchActivityHistoryRecyclerView.adapter = adapterForHistory
 
         binding.searchActivityTextInputLayout.setEndIconOnClickListener {
@@ -199,6 +212,16 @@ class SearchActivity : AppCompatActivity() {
         if (view != null) {
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
         }
+    }
+
+    private fun convertTrackToJson(track: Track): String {
+        return Gson().toJson(track)
+    }
+
+    private fun saveTrackInHistory(track: Track) {
+        searchHistory.saveTrack(track)
+        adapterForHistory.listOfTracks = searchHistory.history
+        adapterForHistory.notifyDataSetChanged()
     }
 
 }
