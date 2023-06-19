@@ -6,7 +6,8 @@ import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivityPlayerBinding
 import bes.max.playlistmaker.model.Track
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
 
@@ -39,7 +40,7 @@ class PlayerActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(track.bigCover)
                 .placeholder(R.drawable.ic_picture_not_found)
-                .transform(RoundedCorners(8), CenterCrop())
+                .transform(MultiTransformation(FitCenter(), RoundedCorners(8)))
                 .into(binding.activityPlayerAlbumCover)
 
             binding.activityPlayerTimeCounter.text = track.trackTime
