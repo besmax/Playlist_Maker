@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
         binding.buttonMediateka.setOnClickListener {
             val intent = Intent(this, MediatekaActivity::class.java)
             startActivity(intent)
