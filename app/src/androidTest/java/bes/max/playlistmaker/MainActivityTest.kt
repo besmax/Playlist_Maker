@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
 
-    val activityScenario: ActivityScenario<MainActivity>
+    private val activityScenario: ActivityScenario<MainActivity>
 
     init {
         Intents.init()
@@ -31,5 +31,19 @@ class MainActivityTest {
         onView(withId(R.id.button_search)).perform(click())
 
         intending(hasComponent(hasShortClassName(".SearchActivity")))
+    }
+
+    @Test
+    fun settingsButtonOpensSettingsActivity() {
+        onView(withId(R.id.button_settings)).perform(click())
+
+        intending(hasComponent(hasShortClassName(".SettingsActivity")))
+    }
+
+    @Test
+    fun mediatekaButtonOpensMediatekaActivity() {
+        onView(withId(R.id.button_mediateka)).perform(click())
+
+        intending(hasComponent(hasShortClassName(".MediatekaActivity")))
     }
 }

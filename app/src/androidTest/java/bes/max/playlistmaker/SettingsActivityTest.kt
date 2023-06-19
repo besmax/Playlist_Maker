@@ -29,7 +29,7 @@ import java.util.*
 @LargeTest
 class SettingsActivityTest {
 
-    val activityScenario: ActivityScenario<SettingsActivity>
+    private val activityScenario: ActivityScenario<SettingsActivity>
 
     init {
         Intents.init()
