@@ -2,6 +2,8 @@ package bes.max.playlistmaker.ui.controllers
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -43,9 +45,8 @@ class SearchActivity : AppCompatActivity() {
         )
     }
 
-    companion object {
-        const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
-    }
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { getTrack(savedSearchInputText) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,27 +92,23 @@ class SearchActivity : AppCompatActivity() {
                     showOrHideHistory(binding.searchActivityEditText.hasFocus())
                     tracks.clear()
                     adapter.notifyDataSetChanged()
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                savedSearchInputText = s.toString()
-            }
-        }
-        binding.searchActivityEditText.addTextChangedListener(textWatcher)
-
-        binding.searchActivityEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (binding.searchActivityEditText.text?.isNotEmpty() == true) {
-                    getTrack(binding.searchActivityEditText.text.toString())
+                } else {
+                    searchDebounce(s)
                     adapter.listOfTracks = tracks
                     adapter.notifyDataSetChanged()
                     showOrHideHistory()
                 }
-                true
             }
-            false
+
+            override fun afterTextChanged(s: Editable?) {
+                if (binding.searchActivityEditText.hasFocus() && s.isNullOrEmpty()) {
+                    showOrHideHistory(binding.searchActivityEditText.hasFocus())
+                    tracks.clear()
+                    adapter.notifyDataSetChanged()
+                }
+            }
         }
+        binding.searchActivityEditText.addTextChangedListener(textWatcher)
 
         binding.searchActivityPlaceholderButton.setOnClickListener {
             if (binding.searchActivityEditText.text?.isNotEmpty() == true) {
@@ -166,6 +163,7 @@ class SearchActivity : AppCompatActivity() {
                             showPlaceHolder(SearchApiStatus.NOT_FOUND)
                         }
                     }
+
                     else -> showPlaceHolder(SearchApiStatus.ERROR)
                 }
             }
@@ -222,6 +220,20 @@ class SearchActivity : AppCompatActivity() {
         searchHistory.saveTrack(track)
         adapterForHistory.listOfTracks = searchHistory.history
         adapterForHistory.notifyDataSetChanged()
+    }
+
+    private fun searchDebounce(s: CharSequence?) {
+        if (!s.isNullOrBlank()) {
+            savedSearchInputText = s.toString()
+            handler.removeCallbacks(searchRunnable)
+            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        }
+    }
+
+    companion object {
+        private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
 }

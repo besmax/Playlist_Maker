@@ -12,5 +12,5 @@
 /build
 /captures
 .externalNativeBuild
-.cxx
+.cxxgit
 local.properties
