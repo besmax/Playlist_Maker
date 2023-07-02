@@ -1,9 +1,10 @@
 package bes.max.playlistmaker.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import bes.max.playlistmaker.domain.Player
 import bes.max.playlistmaker.model.Track
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayerViewModel(val track: Track) : ViewModel() {
 
@@ -16,8 +17,8 @@ class PlayerViewModel(val track: Track) : ViewModel() {
     }
 
     fun playbackControl() {
-        Log.wtf("PlayerViewModel", "playerState.value ${player.playerState.value.toString()}")
         when (player.playerState.value) {
+
             Player.PlayerState.STATE_PREPARED, Player.PlayerState.STATE_PAUSED -> {
                 player.startPlayer()
             }
@@ -32,6 +33,11 @@ class PlayerViewModel(val track: Track) : ViewModel() {
 
     fun releasePlayer() {
         player.releasePlayer()
+    }
+
+    fun getCurrentPositionAsFormattedText(): String {
+        val timeAsANumber = player.getCurrentPosition()
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(timeAsANumber)
     }
 
 

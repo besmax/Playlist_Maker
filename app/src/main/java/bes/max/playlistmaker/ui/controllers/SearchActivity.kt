@@ -199,7 +199,6 @@ class SearchActivity : AppCompatActivity() {
             SearchStatus.SearchNotFound -> {
                 showNotFound()
             }
-
             SearchStatus.SearchLoading -> {
                 binding.searchActivityPlaceholder.visibility = View.GONE
                 binding.searchActivityProgressBar.visibility = View.VISIBLE

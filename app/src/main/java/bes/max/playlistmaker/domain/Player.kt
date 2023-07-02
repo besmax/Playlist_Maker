@@ -2,16 +2,14 @@ package bes.max.playlistmaker.domain
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 class Player {
 
     private var mediaPlayer: MediaPlayer? = null
-    val _playerState = MutableLiveData<PlayerState>(PlayerState.STATE_DEFAULT)
+    private val _playerState = MutableLiveData<PlayerState>(PlayerState.STATE_DEFAULT)
     val playerState: LiveData<PlayerState> = _playerState
-
 
     fun createNewMediaPlayer() {
         mediaPlayer = MediaPlayer().apply {
@@ -22,7 +20,6 @@ class Player {
                     .build()
             )
         }
-        Log.wtf("Player", "in createNewMediaPlayer mediaPlayer is ${mediaPlayer.toString()}")
     }
 
     fun preparePlayer(dataSourceUrl: String) {
@@ -30,17 +27,10 @@ class Player {
             with(mediaPlayer!!) {
                 setDataSource(dataSourceUrl)
                 prepareAsync()
-                setOnPreparedListener {
-                    _playerState.value = PlayerState.STATE_PREPARED
-                }
+                setOnPreparedListener { _playerState.value = PlayerState.STATE_PREPARED }
                 setOnCompletionListener { _playerState.value = PlayerState.STATE_PREPARED }
             }
-
-        } else {
-            Log.wtf("Player", "in preparePlayer media player is null: ${mediaPlayer.toString()}")
-
         }
-
     }
 
     fun startPlayer() {
@@ -60,6 +50,9 @@ class Player {
         mediaPlayer = null
         _playerState.value = PlayerState.STATE_DEFAULT
     }
+
+    fun getCurrentPosition(): Int? =
+        mediaPlayer?.currentPosition
 
     sealed interface PlayerState {
         object STATE_DEFAULT : PlayerState
