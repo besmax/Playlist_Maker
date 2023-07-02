@@ -14,12 +14,6 @@ import bes.max.playlistmaker.ui.PlayerViewModelFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.FitCenter
-import androidx.appcompat.app.AppCompatActivity
-import bes.max.playlistmaker.R
-import bes.max.playlistmaker.databinding.ActivityPlayerBinding
-import bes.max.playlistmaker.model.Track
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
 
