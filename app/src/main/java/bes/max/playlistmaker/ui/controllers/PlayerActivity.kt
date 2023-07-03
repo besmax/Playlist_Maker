@@ -1,8 +1,6 @@
 package bes.max.playlistmaker.ui.controllers
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
@@ -32,9 +30,6 @@ class PlayerActivity : AppCompatActivity() {
             )
         )
     }
-
-    private val handler = Handler(Looper.getMainLooper())
-    private val timerRunnable = Runnable { updateTimer() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,9 +65,12 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.playingTime.observe(this) { playingTimeString ->
+            binding.activityPlayerTimeCounter.text = playingTimeString
+        }
+
         binding.activityPlayerButtonPlay.setOnClickListener {
             viewModel.playbackControl()
-            updateTimer()
         }
     }
 
@@ -84,7 +82,6 @@ class PlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.releasePlayer()
-        updateTimer()
     }
 
     private fun fromJsonToTrack(json: String?): Track {
@@ -112,32 +109,6 @@ class PlayerActivity : AppCompatActivity() {
                 activityPlayerCountry.text = track.country
             }
         }
-    }
-
-    private fun updateTimer() {
-        val formattedText = viewModel.formatIntToFormattedTimeText(
-            viewModel.getCurrentPlayerPositionAsNumber())
-        when (viewModel.playerState.value) {
-            Player.PlayerState.STATE_PLAYING -> {
-                binding.activityPlayerTimeCounter.text =
-                    formattedText
-                handler.postDelayed(timerRunnable, TIMER_UPDATE_RATE)
-            }
-
-            Player.PlayerState.STATE_PAUSED -> {
-                handler.removeCallbacks(timerRunnable)
-            }
-
-            else -> {
-                handler.removeCallbacks(timerRunnable)
-                binding.activityPlayerTimeCounter.text = DEFAULT_TIMER_TIME
-            }
-        }
-    }
-
-    companion object {
-        private const val TIMER_UPDATE_RATE = 500L
-        private const val DEFAULT_TIMER_TIME = "00:00"
     }
 
 }
