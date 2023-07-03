@@ -1,5 +1,6 @@
 package bes.max.playlistmaker.ui
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import bes.max.playlistmaker.domain.Player
 import bes.max.playlistmaker.model.Track
@@ -10,6 +11,7 @@ class PlayerViewModel(val track: Track) : ViewModel() {
 
     private val player: Player = Player()
     val playerState = player.playerState
+    val playingTime = MutableLiveData<Int>(0) //TODO change this value and update ui with seconds
 
     init {
         player.createNewMediaPlayer()
@@ -35,9 +37,13 @@ class PlayerViewModel(val track: Track) : ViewModel() {
         player.releasePlayer()
     }
 
-    fun getCurrentPositionAsFormattedText(): String {
+    fun getCurrentPlayerPositionAsNumber(): Int {
         val timeAsANumber = player.getCurrentPosition()
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(timeAsANumber)
+        return timeAsANumber ?: 0
+    }
+
+    fun formatIntToFormattedTimeText(time: Int): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
     }
 
 

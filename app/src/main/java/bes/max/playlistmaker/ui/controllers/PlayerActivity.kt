@@ -115,10 +115,12 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun updateTimer() {
+        val formattedText = viewModel.formatIntToFormattedTimeText(
+            viewModel.getCurrentPlayerPositionAsNumber())
         when (viewModel.playerState.value) {
             Player.PlayerState.STATE_PLAYING -> {
                 binding.activityPlayerTimeCounter.text =
-                    viewModel.getCurrentPositionAsFormattedText()
+                    formattedText
                 handler.postDelayed(timerRunnable, TIMER_UPDATE_RATE)
             }
 
