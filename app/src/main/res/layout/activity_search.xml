@@ -36,7 +36,6 @@
         style="@style/search_activity_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/search_activity_title"
         app:endIconDrawable="@drawable/ic_clear_text"
         app:endIconMode="clear_text"
         app:hintEnabled="false"
@@ -46,8 +45,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_activity_edit_text"
+            style="@style/search_activity_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:hint="@string/search_activity_title"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"
@@ -170,5 +171,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_activity_placeholder_text" />
+
+    <ProgressBar android:id="@+id/search_activity_progress_bar"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/search_activity_progress_bar"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
