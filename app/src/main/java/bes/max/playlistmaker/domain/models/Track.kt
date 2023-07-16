@@ -1,7 +1,7 @@
-package bes.max.playlistmaker.model
+package bes.max.playlistmaker.domain.models
 
 import android.icu.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 data class Track(
     val trackId: Long,
@@ -14,13 +14,11 @@ data class Track(
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String
-
 ) {
     val trackTime: String
         get() = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
     val bigCover: String
         get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-
     val year: String
         get() = releaseDate.take(4)
 

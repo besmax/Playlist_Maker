@@ -1,8 +1,9 @@
-package bes.max.playlistmaker
+package bes.max.playlistmaker.app
 
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import bes.max.playlistmaker.R
 
 class App : Application() {
 

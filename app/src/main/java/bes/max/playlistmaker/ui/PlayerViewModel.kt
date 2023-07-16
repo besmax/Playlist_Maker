@@ -4,8 +4,8 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import bes.max.playlistmaker.domain.Player
-import bes.max.playlistmaker.model.Track
+import bes.max.playlistmaker.data.player.Player
+import bes.max.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 

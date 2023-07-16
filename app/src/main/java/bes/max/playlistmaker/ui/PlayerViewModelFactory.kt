@@ -2,7 +2,7 @@ package bes.max.playlistmaker.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import bes.max.playlistmaker.model.Track
+import bes.max.playlistmaker.domain.models.Track
 
 class PlayerViewModelFactory(private val track: Track): ViewModelProvider.Factory {
 

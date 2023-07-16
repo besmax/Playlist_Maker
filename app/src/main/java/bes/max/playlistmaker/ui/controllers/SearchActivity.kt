@@ -9,19 +9,16 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivitySearchBinding
-import bes.max.playlistmaker.model.ITunesSearchApiResponse
-import bes.max.playlistmaker.model.Track
-import bes.max.playlistmaker.network.ITunesSearchApi
-import bes.max.playlistmaker.ui.SearchHistory
+import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.ui.SearchStatus
+import bes.max.playlistmaker.ui.SearchViewModel
+import bes.max.playlistmaker.ui.SearchViewModelFactory
 import bes.max.playlistmaker.ui.TrackListItemAdapter
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
 
@@ -31,23 +28,15 @@ class SearchActivity : AppCompatActivity() {
         ActivitySearchBinding.inflate(layoutInflater)
     }
 
-    private var tracks = mutableListOf<Track>()
+    private val viewModel: SearchViewModel by viewModels {
+        SearchViewModelFactory(context = this)
+    }
+
     private val adapter = TrackListItemAdapter()
     private val adapterForHistory = TrackListItemAdapter()
-    private val sharedPreferences by lazy {
-        getSharedPreferences(getString(R.string.search_history_preferences), MODE_PRIVATE)
-    }
-    private val searchHistory by lazy {
-        SearchHistory(
-            sharedPreferences,
-            getString(R.string.search_history_preferences_key)
-        )
-    }
 
     private val handler = Handler(Looper.getMainLooper())
-    private val searchRunnable = Runnable { getTrack(savedSearchInputText) }
-
-    private var searchStatus: SearchStatus = SearchStatus.SearchNotStarted
+    private val searchRunnable = Runnable { viewModel.searchTrack(savedSearchInputText) }
 
     private var isClickAllowed = true
 
@@ -57,7 +46,7 @@ class SearchActivity : AppCompatActivity() {
 
         val onElementClickAction = { track: Track ->
             if (clickDebounce()) {
-                saveTrackInHistory(track)
+                viewModel.saveTrackToHistory(track)
                 val intent = Intent(this, PlayerActivity::class.java)
                 intent.putExtra(
                     getString(R.string.activity_search_to_activity_player_track_as_json),
@@ -69,15 +58,14 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchActivityRecyclerViewTracks.adapter = adapter
         adapter.onListElementClick = onElementClickAction
-        adapterForHistory.listOfTracks = searchHistory.history
+        adapterForHistory.listOfTracks = viewModel.historyTracks.value ?: emptyList()
         adapterForHistory.onListElementClick = onElementClickAction
         binding.searchActivityHistoryRecyclerView.adapter = adapterForHistory
 
         binding.searchActivityTextInputLayout.setEndIconOnClickListener {
             binding.searchActivityEditText.text?.clear()
             hideKeyboard()
-            tracks.clear()
-            adapter.notifyDataSetChanged()
+            viewModel.clearTracks()
             binding.searchActivityPlaceholder.visibility = View.GONE
         }
 
@@ -89,19 +77,27 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchActivityBackIcon.setOnClickListener { finish() }
 
+        viewModel.tracks.observe(this) {
+            if (!it.isNullOrEmpty()) adapter.listOfTracks = it
+        }
+
+        viewModel.searchStatus.observe(this) {
+            showPlaceHolder()
+        }
+
+        viewModel.historyTracks.observe(this) {
+            adapterForHistory.listOfTracks = viewModel.historyTracks.value ?: emptyList()
+        }
+
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (binding.searchActivityEditText.hasFocus() && s.isNullOrBlank()) {
-                    searchStatus = SearchStatus.SearchNotStarted
                     showOrHideHistory(binding.searchActivityEditText.hasFocus())
-                    tracks.clear()
-                    adapter.notifyDataSetChanged()
+                    viewModel.clearTracks()
                 } else {
                     searchDebounce(s)
-                    adapter.listOfTracks = tracks
-                    adapter.notifyDataSetChanged()
                     showOrHideHistory()
                 }
             }
@@ -109,10 +105,8 @@ class SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (binding.searchActivityEditText.hasFocus() && s.isNullOrBlank()) {
                     showOrHideHistory(binding.searchActivityEditText.hasFocus())
-                    searchStatus = SearchStatus.SearchNotStarted
-                    tracks.clear()
-                    adapter.notifyDataSetChanged()
-                    showPlaceHolder()
+                    viewModel.clearTracks()
+                    adapter.listOfTracks = viewModel.tracks.value!!
                 }
             }
         }
@@ -120,24 +114,20 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchActivityPlaceholderButton.setOnClickListener {
             if (binding.searchActivityEditText.text?.isNotEmpty() == true) {
-                getTrack(binding.searchActivityEditText.text.toString())
-                adapter.listOfTracks = tracks
-                adapter.notifyDataSetChanged()
+                viewModel.searchTrack(binding.searchActivityEditText.text.toString())
             }
         }
 
         binding.searchActivityHistoryButton.setOnClickListener {
-            searchHistory.clearTracksHistory()
-            adapterForHistory.notifyDataSetChanged()
+            viewModel.clearHistory()
         }
     }
 
     override fun onResume() {
         super.onResume()
         if (binding.searchActivityEditText.text?.isNotEmpty() == true) {
-            getTrack(binding.searchActivityEditText.text.toString())
-            adapter.listOfTracks = tracks
-            adapter.notifyDataSetChanged()
+            viewModel.searchTrack(binding.searchActivityEditText.text.toString())
+            adapter.listOfTracks = viewModel.tracks.value ?: emptyList()
         }
     }
 
@@ -151,47 +141,8 @@ class SearchActivity : AppCompatActivity() {
         savedInstanceState.getString(SEARCH_INPUT_TEXT)
     }
 
-    private fun getTrack(query: String) {
-        searchStatus = SearchStatus.SearchLoading
-        showPlaceHolder()
-        tracks.clear()
-        adapter.notifyDataSetChanged()
-        ITunesSearchApi.iTunesSearchApiService.search(query).enqueue(object :
-            Callback<ITunesSearchApiResponse> {
-            override fun onResponse(
-                call: Call<ITunesSearchApiResponse>,
-                response: Response<ITunesSearchApiResponse>
-            ) {
-                when (response.code()) {
-                    200 -> {
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            tracks.addAll(response.body()!!.results)
-                            adapter.notifyDataSetChanged()
-                            searchStatus = SearchStatus.SearchDone
-                            showPlaceHolder()
-                        }
-                        if (tracks.isEmpty()) {
-                            searchStatus = SearchStatus.SearchNotFound
-                            showPlaceHolder()
-                        }
-                    }
-
-                    else -> {
-                        searchStatus = SearchStatus.SearchError
-                        showPlaceHolder()
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<ITunesSearchApiResponse>, t: Throwable) {
-                searchStatus = SearchStatus.SearchError
-                showPlaceHolder()
-            }
-        })
-    }
-
     private fun showPlaceHolder() {
-        when (searchStatus) {
+        when (viewModel.searchStatus.value) {
             SearchStatus.SearchError -> {
                 showError()
             }
@@ -238,8 +189,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showOrHideHistory(hasFocus: Boolean = false) {
-        searchHistory.getHistoryTracks()
-        adapterForHistory.listOfTracks = searchHistory.history
+        viewModel.getTracksFromHistory()
         adapterForHistory.notifyDataSetChanged()
         binding.searchActivityHistoryGroup.visibility =
             if (hasFocus && binding.searchActivityEditText.text.isNullOrEmpty() && adapterForHistory.listOfTracks.isNotEmpty()) View.VISIBLE
@@ -257,12 +207,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun convertTrackToJson(track: Track): String {
         return Gson().toJson(track)
-    }
-
-    private fun saveTrackInHistory(track: Track) {
-        searchHistory.saveTrack(track)
-        adapterForHistory.listOfTracks = searchHistory.history
-        adapterForHistory.notifyDataSetChanged()
     }
 
     private fun searchDebounce(s: CharSequence?) {

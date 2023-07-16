@@ -5,8 +5,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivityPlayerBinding
-import bes.max.playlistmaker.domain.Player
-import bes.max.playlistmaker.model.Track
+import bes.max.playlistmaker.data.player.Player
+import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.ui.PlayerViewModel
 import bes.max.playlistmaker.ui.PlayerViewModelFactory
 import com.bumptech.glide.Glide

@@ -1,14 +1,22 @@
-package bes.max.playlistmaker.ui
+package bes.max.playlistmaker.data.dao
 
+import android.content.Context
 import android.content.SharedPreferences
-import bes.max.playlistmaker.model.Track
+import androidx.appcompat.app.AppCompatActivity
+import bes.max.playlistmaker.R
+import bes.max.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 
-class SearchHistory(private val sharedPreferences: SharedPreferences, private val key: String) {
+class SearchHistoryDaoImpl(context: Context) : SearchHistoryDao {
 
-    var history: MutableList<Track> = arrayListOf()
+    private var history: MutableList<Track> = arrayListOf()
+    private val key = context.getString(R.string.search_history_preferences_key)
+    private val sharedPreferences = context.getSharedPreferences(
+        key,
+        AppCompatActivity.MODE_PRIVATE
+    )
 
-    fun saveTrack(track: Track) {
+    override fun saveTrack(track: Track) {
         if (sharedPreferences.contains(key)) {
             val jsonString = sharedPreferences.getString(key, "")
             if (!jsonString.isNullOrBlank()) {
@@ -27,7 +35,7 @@ class SearchHistory(private val sharedPreferences: SharedPreferences, private va
             .apply()
     }
 
-    fun getHistoryTracks(){
+    override fun getHistoryTracks(): List<Track> {
         history.clear()
         if (sharedPreferences.contains(key)) {
             val jsonString = sharedPreferences.getString(key, "")
@@ -35,9 +43,10 @@ class SearchHistory(private val sharedPreferences: SharedPreferences, private va
                 history = Gson().fromJson(jsonString, Array<Track>::class.java).toMutableList()
             }
         }
+        return history.toList()
     }
 
-    fun clearTracksHistory() {
+    override fun clearTracksHistory() {
         history.clear()
         sharedPreferences.edit()
             .clear()

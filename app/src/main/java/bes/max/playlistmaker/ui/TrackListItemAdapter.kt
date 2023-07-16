@@ -7,14 +7,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import bes.max.playlistmaker.R
-import bes.max.playlistmaker.model.Track
+import bes.max.playlistmaker.domain.models.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = null) :
     RecyclerView.Adapter<TrackListItemAdapter.TrackViewHolder>() {
 
-    var listOfTracks = mutableListOf<Track>()
+    var listOfTracks = listOf<Track>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view =
@@ -40,7 +44,7 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
             val trackTime = itemView.findViewById<TextView>(R.id.track_list_item_track_time)
 
             Glide.with(itemView)
-                .load(model.artworkUrl100)
+                .load(model.bigCover)
                 .placeholder(R.drawable.ic_picture_not_found)
                 .transform(RoundedCorners(10))
                 .centerCrop()
