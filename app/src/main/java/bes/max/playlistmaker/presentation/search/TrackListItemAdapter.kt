@@ -46,7 +46,13 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
             Glide.with(itemView)
                 .load(model.bigCover)
                 .placeholder(R.drawable.ic_picture_not_found)
-                .transform(RoundedCorners(10))
+                .transform(
+                    RoundedCorners(
+                        itemView.resources.getDimensionPixelSize(
+                            R.dimen.search_activity_album_cover_corner_radius
+                        )
+                    )
+                )
                 .centerCrop()
                 .into(trackCover)
 

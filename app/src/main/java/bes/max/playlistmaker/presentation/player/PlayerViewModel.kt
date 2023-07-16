@@ -43,9 +43,9 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
         updateTimer()
     }
 
-    fun getCurrentPlayerPositionAsNumber() = playerInteractor.getCurrentTime()
+    private fun getCurrentPlayerPositionAsNumber() = playerInteractor.getCurrentTime()
 
-    fun formatIntToFormattedTimeText(time: Int): String {
+    private fun formatIntToFormattedTimeText(time: Int): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
     }
 
