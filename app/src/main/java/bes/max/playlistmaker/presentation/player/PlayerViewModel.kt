@@ -4,34 +4,33 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import bes.max.playlistmaker.data.player.Player
+import bes.max.playlistmaker.domain.api.Player
 import bes.max.playlistmaker.domain.models.Track
+import bes.max.playlistmaker.domain.player.PlayerInteractor
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(val track: Track) : ViewModel() {
+class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInteractor) : ViewModel() {
 
-    private val player: Player = Player()
-    val playerState = player.playerState
+    val playerState = playerInteractor.state
     val playingTime =
-        MutableLiveData<String>("00:00") //TODO change this value and update ui with seconds
+        MutableLiveData<String>("00:00")
     private val handler = Handler(Looper.getMainLooper())
     private val timerRunnable = Runnable { updateTimer() }
 
     init {
-        player.createNewMediaPlayer()
-        player.preparePlayer(track.previewUrl)
+        playerInteractor.preparePlayer(track.previewUrl ?: "")
     }
 
     fun playbackControl() {
-        when (player.playerState.value) {
+        when (playerState.value) {
 
             Player.PlayerState.STATE_PREPARED, Player.PlayerState.STATE_PAUSED -> {
-                player.startPlayer()
+                playerInteractor.play()
             }
 
             Player.PlayerState.STATE_PLAYING -> {
-                player.pausePlayer()
+                playerInteractor.pause()
             }
 
             else -> {}
@@ -40,14 +39,11 @@ class PlayerViewModel(val track: Track) : ViewModel() {
     }
 
     fun releasePlayer() {
-        player.releasePlayer()
+        playerInteractor.release()
         updateTimer()
     }
 
-    fun getCurrentPlayerPositionAsNumber(): Int {
-        val timeAsANumber = player.getCurrentPosition()
-        return timeAsANumber ?: 0
-    }
+    fun getCurrentPlayerPositionAsNumber() = playerInteractor.getCurrentTime()
 
     fun formatIntToFormattedTimeText(time: Int): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
