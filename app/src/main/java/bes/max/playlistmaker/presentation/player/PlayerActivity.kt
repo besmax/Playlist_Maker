@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.ui.controllers
+package bes.max.playlistmaker.presentation.player
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -7,8 +7,6 @@ import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivityPlayerBinding
 import bes.max.playlistmaker.data.player.Player
 import bes.max.playlistmaker.domain.models.Track
-import bes.max.playlistmaker.ui.PlayerViewModel
-import bes.max.playlistmaker.ui.PlayerViewModelFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.FitCenter

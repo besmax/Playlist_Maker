@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.ui.controllers
+package bes.max.playlistmaker.presentation.mediateka
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

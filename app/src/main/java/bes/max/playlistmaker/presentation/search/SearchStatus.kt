@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.ui
+package bes.max.playlistmaker.presentation.search
 
 sealed interface SearchStatus {
     object SearchNotStarted: SearchStatus

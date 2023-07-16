@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.ui.controllers
+package bes.max.playlistmaker.presentation.search
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,10 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivitySearchBinding
 import bes.max.playlistmaker.domain.models.Track
-import bes.max.playlistmaker.ui.SearchStatus
-import bes.max.playlistmaker.ui.SearchViewModel
-import bes.max.playlistmaker.ui.SearchViewModelFactory
-import bes.max.playlistmaker.ui.TrackListItemAdapter
+import bes.max.playlistmaker.presentation.player.PlayerActivity
 import com.google.gson.Gson
 
 class SearchActivity : AppCompatActivity() {

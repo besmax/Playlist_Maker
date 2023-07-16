@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.ui
+package bes.max.playlistmaker.presentation.search
 
 import android.content.Context
 import android.util.Log
@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bes.max.playlistmaker.data.NetworkClient
 import bes.max.playlistmaker.data.dao.SearchHistoryDaoImpl
 import bes.max.playlistmaker.data.network.RetrofitNetworkClient
 import bes.max.playlistmaker.data.repositories.TracksRepositoryImpl

@@ -1,9 +1,12 @@
-package bes.max.playlistmaker.ui.controllers
+package bes.max.playlistmaker.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.databinding.ActivityMainBinding
+import bes.max.playlistmaker.presentation.mediateka.MediatekaActivity
+import bes.max.playlistmaker.presentation.search.SearchActivity
+import bes.max.playlistmaker.presentation.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
 

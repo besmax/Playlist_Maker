@@ -1,6 +1,5 @@
 package bes.max.playlistmaker
 
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -9,7 +8,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import bes.max.playlistmaker.ui.controllers.SearchActivity
+import bes.max.playlistmaker.presentation.search.SearchActivity
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith

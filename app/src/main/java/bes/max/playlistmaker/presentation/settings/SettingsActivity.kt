@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.ui.controllers
+package bes.max.playlistmaker.presentation.settings
 
 import android.content.Context
 import android.content.Intent

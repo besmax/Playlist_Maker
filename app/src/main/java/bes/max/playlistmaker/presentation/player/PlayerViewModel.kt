@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.ui
+package bes.max.playlistmaker.presentation.player
 
 import android.os.Handler
 import android.os.Looper

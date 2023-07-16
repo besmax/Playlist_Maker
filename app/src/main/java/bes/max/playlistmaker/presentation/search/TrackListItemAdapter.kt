@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.ui
+package bes.max.playlistmaker.presentation.search
 
 import android.view.LayoutInflater
 import android.view.View
