@@ -2,15 +2,17 @@ package bes.max.playlistmaker.data.player
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import bes.max.playlistmaker.domain.api.Player
+import bes.max.playlistmaker.domain.models.PlayerState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class PlayerImpl : Player {
 
     private var mediaPlayer: MediaPlayer? = null
-    private val _playerState = MutableLiveData<Player.PlayerState>(Player.PlayerState.STATE_DEFAULT)
-    override val playerState: LiveData<Player.PlayerState> = _playerState
+    private val _playerState = MutableStateFlow<PlayerState>(PlayerState.STATE_DEFAULT)
+    override val playerState: StateFlow<PlayerState> = _playerState.asStateFlow()
 
     init {
         createNewMediaPlayer()
@@ -32,28 +34,28 @@ class PlayerImpl : Player {
             with(mediaPlayer!!) {
                 setDataSource(dataSourceUrl)
                 prepareAsync()
-                setOnPreparedListener { _playerState.value = Player.PlayerState.STATE_PREPARED }
-                setOnCompletionListener { _playerState.value = Player.PlayerState.STATE_PREPARED }
+                setOnPreparedListener { _playerState.value = PlayerState.STATE_PREPARED }
+                setOnCompletionListener { _playerState.value = PlayerState.STATE_PREPARED }
             }
         }
     }
 
     override fun startPlayer() {
-        if (_playerState.value == Player.PlayerState.STATE_PREPARED || _playerState.value == Player.PlayerState.STATE_PAUSED) {
+        if (_playerState.value == PlayerState.STATE_PREPARED || _playerState.value == PlayerState.STATE_PAUSED) {
             mediaPlayer?.start()
-            _playerState.value = Player.PlayerState.STATE_PLAYING
+            _playerState.value = PlayerState.STATE_PLAYING
         }
     }
 
     override fun pausePlayer() {
         mediaPlayer?.pause()
-        _playerState.value = Player.PlayerState.STATE_PAUSED
+        _playerState.value = PlayerState.STATE_PAUSED
     }
 
     override fun releasePlayer() {
         mediaPlayer?.release()
         mediaPlayer = null
-        _playerState.value = Player.PlayerState.STATE_DEFAULT
+        _playerState.value = PlayerState.STATE_DEFAULT
     }
 
     override fun getCurrentPosition(): Int =

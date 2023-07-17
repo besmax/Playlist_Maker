@@ -4,7 +4,8 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import bes.max.playlistmaker.domain.api.Player
+import androidx.lifecycle.asLiveData
+import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.player.PlayerInteractor
 import java.text.SimpleDateFormat
@@ -12,7 +13,7 @@ import java.util.Locale
 
 class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInteractor) : ViewModel() {
 
-    val playerState = playerInteractor.state
+    val playerState = playerInteractor.state.asLiveData()
     val playingTime =
         MutableLiveData<String>("00:00")
     private val handler = Handler(Looper.getMainLooper())
@@ -25,11 +26,11 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
     fun playbackControl() {
         when (playerState.value) {
 
-            Player.PlayerState.STATE_PREPARED, Player.PlayerState.STATE_PAUSED -> {
+            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
                 playerInteractor.play()
             }
 
-            Player.PlayerState.STATE_PLAYING -> {
+            PlayerState.STATE_PLAYING -> {
                 playerInteractor.pause()
             }
 
@@ -54,13 +55,13 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
             getCurrentPlayerPositionAsNumber()
         )
         when (playerState.value) {
-            Player.PlayerState.STATE_PLAYING -> {
+            PlayerState.STATE_PLAYING -> {
                 playingTime.value =
                     formattedText
                 handler.postDelayed(timerRunnable, TIMER_UPDATE_RATE)
             }
 
-            Player.PlayerState.STATE_PAUSED -> {
+            PlayerState.STATE_PAUSED -> {
                 handler.removeCallbacks(timerRunnable)
             }
 

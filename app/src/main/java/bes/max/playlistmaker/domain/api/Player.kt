@@ -1,10 +1,11 @@
 package bes.max.playlistmaker.domain.api
 
-import androidx.lifecycle.LiveData
+import bes.max.playlistmaker.domain.models.PlayerState
+import kotlinx.coroutines.flow.StateFlow
 
 interface Player {
 
-    val playerState: LiveData<PlayerState>
+    val playerState: StateFlow<PlayerState>
 
     fun preparePlayer(dataSourceUrl: String)
 
@@ -15,12 +16,5 @@ interface Player {
     fun releasePlayer()
 
     fun getCurrentPosition(): Int
-
-    sealed interface PlayerState {
-        object STATE_DEFAULT : PlayerState
-        object STATE_PREPARED : PlayerState
-        object STATE_PLAYING : PlayerState
-        object STATE_PAUSED : PlayerState
-    }
 
 }

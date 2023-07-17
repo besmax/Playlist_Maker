@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivityPlayerBinding
 import bes.max.playlistmaker.domain.api.Player
+import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -41,17 +42,17 @@ class PlayerActivity : AppCompatActivity() {
 
         viewModel.playerState.observe(this) {
             when (it) {
-                Player.PlayerState.STATE_PLAYING -> {
+                PlayerState.STATE_PLAYING -> {
                     binding.activityPlayerButtonPlay.isEnabled = true
                     binding.activityPlayerButtonPlay.setImageDrawable(getDrawable(R.drawable.ic_player_pause))
                 }
 
-                Player.PlayerState.STATE_PAUSED -> {
+                PlayerState.STATE_PAUSED -> {
                     binding.activityPlayerButtonPlay.isEnabled = true
                     binding.activityPlayerButtonPlay.setImageDrawable(getDrawable(R.drawable.ic_player_play))
                 }
 
-                Player.PlayerState.STATE_PREPARED -> {
+                PlayerState.STATE_PREPARED -> {
                     binding.activityPlayerButtonPlay.isEnabled = true
                     binding.activityPlayerButtonPlay.setImageDrawable(getDrawable(R.drawable.ic_player_play))
                 }
