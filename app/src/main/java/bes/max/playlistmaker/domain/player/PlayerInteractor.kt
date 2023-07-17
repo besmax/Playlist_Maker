@@ -1,33 +1,19 @@
 package bes.max.playlistmaker.domain.player
 
-import bes.max.playlistmaker.domain.api.Player
+import bes.max.playlistmaker.domain.models.PlayerState
+import kotlinx.coroutines.flow.StateFlow
 
-class PlayerInteractor (private val player: Player) {
+interface PlayerInteractor {
 
-    private val getCurrentPlayingTimeUseCase: GetCurrentPlayingTimeUseCase = GetCurrentPlayingTimeUseCase(player)
-    private val pauseTrackUseCase: PauseTrackUseCase = PauseTrackUseCase(player)
-    private val playTrackUseCase: PlayTrackUseCase = PlayTrackUseCase(player)
-    private val releasePlayerUseCase: ReleasePlayerUseCase = ReleasePlayerUseCase(player)
-    private val preparePlayerUseCase: PreparePlayerUseCase = PreparePlayerUseCase(player)
+    val state : StateFlow<PlayerState>
+    fun preparePlayer(dataSourceUrl: String)
 
-    val state = player.playerState
+    fun play()
 
-    fun preparePlayer(dataSourceUrl: String) {
-        preparePlayerUseCase.execute(dataSourceUrl)
-    }
+    fun pause()
 
-    fun play() {
-        playTrackUseCase.execute()
-    }
+    fun release()
 
-    fun pause() {
-        pauseTrackUseCase.execute()
-    }
+    fun getCurrentTime() : Int
 
-    fun release() {
-        releasePlayerUseCase.execute()
-    }
-
-    fun getCurrentTime() =
-        getCurrentPlayingTimeUseCase.execute()
 }
