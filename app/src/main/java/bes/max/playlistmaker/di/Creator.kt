@@ -9,6 +9,7 @@ import bes.max.playlistmaker.domain.api.TracksRepository
 import bes.max.playlistmaker.domain.search.ClearHistoryUseCase
 import bes.max.playlistmaker.domain.search.GetTracksFromHistoryUseCase
 import bes.max.playlistmaker.domain.search.SaveTrackInHistoryUseCase
+import bes.max.playlistmaker.domain.search.SearchHistoryInteractorImpl
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase
 
 class Creator(private val context: Context?) {
@@ -58,5 +59,11 @@ class Creator(private val context: Context?) {
         }
         return clearHistoryUseCase
     }
+
+    fun getSearchHistoryInteractor() = SearchHistoryInteractorImpl(
+        getSaveTrackInHistoryUseCase(),
+        getGetTracksFromHistoryUseCase(),
+        getClearHistoryUseCase()
+    )
 
 }

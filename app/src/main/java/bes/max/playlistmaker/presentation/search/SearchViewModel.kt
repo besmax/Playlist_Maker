@@ -8,9 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bes.max.playlistmaker.di.Creator
 import bes.max.playlistmaker.domain.models.Track
-import bes.max.playlistmaker.domain.search.ClearHistoryUseCase
-import bes.max.playlistmaker.domain.search.GetTracksFromHistoryUseCase
-import bes.max.playlistmaker.domain.search.SaveTrackInHistoryUseCase
+import bes.max.playlistmaker.domain.search.SearchHistoryInteractor
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase
 import kotlinx.coroutines.launch
 
@@ -27,9 +25,7 @@ class SearchViewModel(private val context: Context) : ViewModel() {
 
     private val creator = Creator(context)
     private val searchInNetworkUseCase: SearchInNetworkUseCase = creator.getSearchInNetworkUseCase()
-    private val saveTrackInHistoryUseCase: SaveTrackInHistoryUseCase = creator.getSaveTrackInHistoryUseCase()
-    private val getTracksFromHistoryUseCase: GetTracksFromHistoryUseCase = creator.getGetTracksFromHistoryUseCase()
-    private val clearHistoryUseCase: ClearHistoryUseCase = creator.getClearHistoryUseCase()
+    private val searchHistoryInteractor: SearchHistoryInteractor = creator.getSearchHistoryInteractor()
 
     fun searchTrack(searchRequest: String) {
         _searchStatus.value = SearchStatus.SearchLoading
@@ -54,16 +50,16 @@ class SearchViewModel(private val context: Context) : ViewModel() {
     }
 
     fun getTracksFromHistory() {
-        _historyTracks.value = getTracksFromHistoryUseCase.execute()
+        _historyTracks.value = searchHistoryInteractor.getTracksFromHistory()
     }
 
     fun saveTrackToHistory(track: Track) {
-        saveTrackInHistoryUseCase.execute(track)
+        searchHistoryInteractor.saveTrackToHistory(track)
         getTracksFromHistory()
     }
 
     fun clearHistory() {
-        clearHistoryUseCase.execute()
+        searchHistoryInteractor.clearHistory()
         _historyTracks.value = emptyList()
     }
 }
