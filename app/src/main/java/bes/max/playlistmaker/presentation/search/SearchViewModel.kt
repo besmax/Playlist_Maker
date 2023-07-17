@@ -6,20 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bes.max.playlistmaker.data.dao.SearchHistoryDaoImpl
-import bes.max.playlistmaker.data.network.RetrofitNetworkClient
-import bes.max.playlistmaker.data.repositories.TracksRepositoryImpl
+import bes.max.playlistmaker.di.Creator
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.search.ClearHistoryUseCase
 import bes.max.playlistmaker.domain.search.GetTracksFromHistoryUseCase
 import bes.max.playlistmaker.domain.search.SaveTrackInHistoryUseCase
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class SearchViewModel(private val context: Context) : ViewModel() {
-
-
 
     private val _searchStatus: MutableLiveData<SearchStatus> = MutableLiveData(SearchStatus.SearchNotStarted)
     val searchStatus: LiveData<SearchStatus> = _searchStatus!!
@@ -30,19 +25,11 @@ class SearchViewModel(private val context: Context) : ViewModel() {
     private val _historyTracks: MutableLiveData<List<Track>> = MutableLiveData(emptyList())
     val historyTracks: LiveData<List<Track>> = _historyTracks!!
 
-
-    private val repository = TracksRepositoryImpl(RetrofitNetworkClient(), SearchHistoryDaoImpl(context))
-    private lateinit var searchInNetworkUseCase: SearchInNetworkUseCase
-    private lateinit var saveTrackInHistoryUseCase: SaveTrackInHistoryUseCase
-    private lateinit var getTracksFromHistoryUseCase: GetTracksFromHistoryUseCase
-    private lateinit var clearHistoryUseCase: ClearHistoryUseCase
-
-    init {
-       searchInNetworkUseCase = SearchInNetworkUseCase(repository)
-       saveTrackInHistoryUseCase = SaveTrackInHistoryUseCase(repository)
-       getTracksFromHistoryUseCase = GetTracksFromHistoryUseCase(repository)
-       clearHistoryUseCase = ClearHistoryUseCase(repository)
-    }
+    private val creator = Creator(context)
+    private val searchInNetworkUseCase: SearchInNetworkUseCase = creator.getSearchInNetworkUseCase()
+    private val saveTrackInHistoryUseCase: SaveTrackInHistoryUseCase = creator.getSaveTrackInHistoryUseCase()
+    private val getTracksFromHistoryUseCase: GetTracksFromHistoryUseCase = creator.getGetTracksFromHistoryUseCase()
+    private val clearHistoryUseCase: ClearHistoryUseCase = creator.getClearHistoryUseCase()
 
     fun searchTrack(searchRequest: String) {
         _searchStatus.value = SearchStatus.SearchLoading
