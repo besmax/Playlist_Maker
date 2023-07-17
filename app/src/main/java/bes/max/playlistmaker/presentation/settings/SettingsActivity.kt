@@ -3,10 +3,13 @@ package bes.max.playlistmaker.presentation.settings
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.app.App
 import bes.max.playlistmaker.R
+import bes.max.playlistmaker.app.DARK_THEME_PREFERENCES_KEY
+import bes.max.playlistmaker.app.SETTINGS_PREFERENCES
 import bes.max.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
@@ -14,6 +17,7 @@ class SettingsActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivitySettingsBinding.inflate(layoutInflater)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -34,9 +38,14 @@ class SettingsActivity : AppCompatActivity() {
                 startActivity(openAgreementIntent)
         }
 
-        val darkThemePreference = getSharedPreferences(getString(R.string.settings_preferences), Context.MODE_PRIVATE)
+        val darkThemePreference = getSharedPreferences(SETTINGS_PREFERENCES, Context.MODE_PRIVATE)
+        val isNightModeActiveDefault = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            resources.configuration.isNightModeActive
+        } else {
+            false
+        }
         val switcherIsChecked = darkThemePreference.getBoolean(
-            getString(R.string.dark_theme_preference_key), resources.configuration.isNightModeActive
+            DARK_THEME_PREFERENCES_KEY, isNightModeActiveDefault
         )
 
         binding.settingsActivityThemeSwitcher.isChecked = switcherIsChecked
@@ -44,7 +53,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.settingsActivityThemeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (application as App).switchTheme(checked)
             darkThemePreference.edit()
-                .putBoolean(getString(R.string.dark_theme_preference_key), checked)
+                .putBoolean(DARK_THEME_PREFERENCES_KEY, checked)
                 .apply()
         }
     }
