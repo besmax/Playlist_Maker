@@ -3,7 +3,7 @@ package bes.max.playlistmaker.di
 import android.content.Context
 import bes.max.playlistmaker.data.dao.SearchHistoryDaoImpl
 import bes.max.playlistmaker.data.network.RetrofitNetworkClient
-import bes.max.playlistmaker.data.player.PlayerImpl
+import bes.max.playlistmaker.data.repositories.PlayerImpl
 import bes.max.playlistmaker.data.repositories.TracksRepositoryImpl
 import bes.max.playlistmaker.domain.api.TracksRepository
 import bes.max.playlistmaker.domain.search.ClearHistoryUseCase
