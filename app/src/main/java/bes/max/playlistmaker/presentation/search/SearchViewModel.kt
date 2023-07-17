@@ -38,13 +38,13 @@ class SearchViewModel(private val context: Context) : ViewModel() {
                 _tracks.value = searchInNetworkUseCase.execute(searchRequest)
                 if (tracks.value.isNullOrEmpty()) {
                     _searchStatus.value = SearchStatus.SearchNotFound
-                    Log.w("SearchViewModel", "List from is empty in fun searchTrack")
+                    Log.w("SearchViewModel", "List from remote is empty in fun searchTrack")
                 } else {
                     _searchStatus.value = SearchStatus.SearchDone
                 }
             } catch (e: Exception) {
                 _searchStatus.value = SearchStatus.SearchError
-                Log.w("SearchViewModel", "Error Exception in fun searchTrack: ${e.toString()}")
+                Log.e("SearchViewModel", "Error Exception in fun searchTrack: ${e.toString()}")
             }
         }
     }
