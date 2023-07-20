@@ -1,6 +1,7 @@
 package bes.max.playlistmaker.di
 
 import android.content.Context
+import bes.max.playlistmaker.data.mappers.TrackDtoMapper
 import bes.max.playlistmaker.data.dao.SearchHistoryDaoImpl
 import bes.max.playlistmaker.data.network.RetrofitNetworkClient
 import bes.max.playlistmaker.data.repositories.PlayerImpl
@@ -20,7 +21,7 @@ class Creator(private val context: Context?) {
         if (context != null) {
             val networkClient = RetrofitNetworkClient()
             val searchHistoryDao = SearchHistoryDaoImpl(context)
-            tracksRepository = TracksRepositoryImpl(networkClient, searchHistoryDao)
+            tracksRepository = TracksRepositoryImpl(networkClient, searchHistoryDao, TrackDtoMapper())
         }
     }
 

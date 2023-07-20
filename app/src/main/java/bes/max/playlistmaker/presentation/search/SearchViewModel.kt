@@ -12,6 +12,8 @@ import bes.max.playlistmaker.domain.search.SearchHistoryInteractor
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase
 import kotlinx.coroutines.launch
 
+private const val TAG = "SearchViewModel"
+
 class SearchViewModel(private val context: Context) : ViewModel() {
 
     private val _searchStatus: MutableLiveData<SearchStatus> = MutableLiveData(SearchStatus.SearchNotStarted)
@@ -34,13 +36,13 @@ class SearchViewModel(private val context: Context) : ViewModel() {
                 _tracks.value = searchInNetworkUseCase.execute(searchRequest)
                 if (tracks.value.isNullOrEmpty()) {
                     _searchStatus.value = SearchStatus.SearchNotFound
-                    Log.w("SearchViewModel", "List from remote is empty in fun searchTrack")
+                    Log.w(TAG, "List from remote is empty in fun searchTrack")
                 } else {
                     _searchStatus.value = SearchStatus.SearchDone
                 }
             } catch (e: Exception) {
                 _searchStatus.value = SearchStatus.SearchError
-                Log.e("SearchViewModel", "Error Exception in fun searchTrack: ${e.toString()}")
+                Log.e(TAG, "Error Exception in fun searchTrack: ${e.toString()}")
             }
         }
     }
