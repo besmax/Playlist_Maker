@@ -1,12 +1,10 @@
 package bes.max.playlistmaker.presentation.search
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import bes.max.playlistmaker.R
+import bes.max.playlistmaker.databinding.TrackListItemBinding
 import bes.max.playlistmaker.domain.models.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -21,9 +19,8 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.track_list_item, parent, false)
-        return TrackViewHolder(view)
+        val layoutInspector = LayoutInflater.from(parent.context)
+        return TrackViewHolder(TrackListItemBinding.inflate(layoutInspector, parent, false))
     }
 
     override fun getItemCount(): Int = listOfTracks.size
@@ -35,14 +32,9 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
         }
     }
 
-    class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class TrackViewHolder(private val binding: TrackListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: Track) {
-            val trackCover = itemView.findViewById<ImageView>(R.id.track_list_item_track_cover)
-            val trackName = itemView.findViewById<TextView>(R.id.track_list_item_track_name)
-            val artistName = itemView.findViewById<TextView>(R.id.track_list_item_artist_name)
-            val trackTime = itemView.findViewById<TextView>(R.id.track_list_item_track_time)
-
             Glide.with(itemView)
                 .load(model.bigCover)
                 .placeholder(R.drawable.ic_picture_not_found)
@@ -54,11 +46,11 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
                     )
                 )
                 .centerCrop()
-                .into(trackCover)
+                .into(binding.trackListItemTrackCover)
 
-            trackName.setText(model.trackName)
-            artistName.setText(model.artistName)
-            trackTime.setText(model.trackTime)
+            binding.trackListItemTrackName.setText(model.trackName)
+            binding.trackListItemArtistName.setText(model.artistName)
+            binding.trackListItemTrackTime.setText(model.trackTime)
         }
 
     }
