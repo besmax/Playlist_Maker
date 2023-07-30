@@ -10,7 +10,9 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import bes.max.playlistmaker.ui.controllers.MainActivity
+import bes.max.playlistmaker.presentation.main.MainActivity
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -18,12 +20,18 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
 
-    private val activityScenario: ActivityScenario<MainActivity>
+    private lateinit var activityScenario: ActivityScenario<MainActivity>
 
-    init {
+    @Before
+    fun setUp() {
         Intents.init()
         activityScenario =
             ActivityScenario.launch(MainActivity::class.java)
+    }
+
+    @After
+    fun cleanUp() {
+        Intents.release()
     }
 
     @Test

@@ -22,7 +22,7 @@
     </queries>
 
     <application
-        android:name=".App"
+        android:name=".app.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -32,16 +32,16 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".ui.controllers.PlayerActivity"
+            android:name=".presentation.player.PlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.controllers.MediatekaActivity"
+            android:name=".presentation.mediateka.MediatekaActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.controllers.SearchActivity"
+            android:name=".presentation.search.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.controllers.MainActivity"
+            android:name=".presentation.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.controllers.SettingsActivity"
+            android:name=".presentation.settings.SettingsActivity"
             android:exported="false" />
     </application>
 

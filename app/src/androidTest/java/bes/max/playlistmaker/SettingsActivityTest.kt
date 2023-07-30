@@ -13,13 +13,14 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import bes.max.playlistmaker.ui.controllers.SettingsActivity
+import bes.max.playlistmaker.presentation.settings.SettingsActivity
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.junit.After
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
@@ -29,9 +30,10 @@ import java.util.*
 @LargeTest
 class SettingsActivityTest {
 
-    private val activityScenario: ActivityScenario<SettingsActivity>
+    private lateinit var activityScenario: ActivityScenario<SettingsActivity>
 
-    init {
+    @Before
+    fun setUp() {
         Intents.init()
         activityScenario =
             ActivityScenario.launch(SettingsActivity::class.java)
@@ -52,12 +54,12 @@ class SettingsActivityTest {
             hasExtra(Intent.EXTRA_TEXT, "https://practicum.yandex.ru/android-developer/"),
             hasType("text/plain")
         )
-        intended(getChooser(expectedIntent))
+        intended(expectedIntent)
     }
 
     @Test
     fun supportIntentOpensChooser() {
-        onView(withId(R.id.settings_activity_icon_support)).perform(click())
+        onView(withId(R.id.settings_activity_section_support)).perform(click())
 
         val expectedIntent = Matchers.allOf(
             hasAction(Intent.ACTION_SENDTO),
@@ -72,9 +74,7 @@ class SettingsActivityTest {
             )
         )
 
-        intended(
-            getChooser(expectedIntent)
-        )
+        intended( expectedIntent )
     }
 
     @Test

@@ -1,0 +1,83 @@
+package bes.max.playlistmaker.presentation.settings
+
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import bes.max.playlistmaker.app.App
+import bes.max.playlistmaker.R
+import bes.max.playlistmaker.app.DARK_THEME_PREFERENCES_KEY
+import bes.max.playlistmaker.app.SETTINGS_PREFERENCES
+import bes.max.playlistmaker.databinding.ActivitySettingsBinding
+
+class SettingsActivity : AppCompatActivity() {
+
+    private val binding by lazy {
+        ActivitySettingsBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        binding.backIcon.setOnClickListener { finish() }
+
+        binding.settingsActivitySectionShare.setOnClickListener {
+            startActivity(shareAppLinkIntent())
+        }
+
+        binding.settingsActivitySectionSupport.setOnClickListener {
+            startActivity(sendEmailIntent())
+        }
+
+        binding.settingsActivitySectionAgreement.setOnClickListener {
+            val openAgreementIntent = openUserAgreementIntent()
+            if (openAgreementIntent.resolveActivity(packageManager) != null)
+                startActivity(openAgreementIntent)
+        }
+
+        val darkThemePreference = getSharedPreferences(SETTINGS_PREFERENCES, Context.MODE_PRIVATE)
+        val isNightModeActiveDefault = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            resources.configuration.isNightModeActive
+        } else {
+            false
+        }
+        val switcherIsChecked = darkThemePreference.getBoolean(
+            DARK_THEME_PREFERENCES_KEY, isNightModeActiveDefault
+        )
+
+        binding.settingsActivityThemeSwitcher.isChecked = switcherIsChecked
+
+        binding.settingsActivityThemeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (application as App).switchTheme(checked)
+            darkThemePreference.edit()
+                .putBoolean(DARK_THEME_PREFERENCES_KEY, checked)
+                .apply()
+        }
+    }
+
+    private fun shareAppLinkIntent(): Intent =
+        Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, getString(R.string.link_for_app_share))
+            type = "text/plain"
+            Intent.createChooser(this, null)
+        }
+
+    private fun sendEmailIntent(): Intent =
+        Intent().apply {
+            action = Intent.ACTION_SENDTO
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_for_support)))
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_theme_for_support))
+            putExtra(Intent.EXTRA_TEXT, getString(R.string.email_text_for_support))
+            Intent.createChooser(this, null)
+        }
+
+    private fun openUserAgreementIntent(): Intent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse(getString(R.string.link_for_app_share))
+    )
+}
