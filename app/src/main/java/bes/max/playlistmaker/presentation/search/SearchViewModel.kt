@@ -1,12 +1,10 @@
 package bes.max.playlistmaker.presentation.search
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bes.max.playlistmaker.di.Creator
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.search.SearchHistoryInteractor
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase

@@ -11,7 +11,6 @@ class SettingsRepositoryImpl(
     override fun isNightModeActive(): Flow<Boolean> =
         settingsDao.isNightModeActive()
 
-
     override suspend fun setIsNightModeActive(isNightModeActive: Boolean) {
         settingsDao.setIsNightModeActive(isNightModeActive)
     }
