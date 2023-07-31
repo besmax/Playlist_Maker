@@ -26,7 +26,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private val viewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(context = this)
+        SearchViewModelFactory(context = applicationContext)
     }
 
     private val adapter = TrackListItemAdapter()

@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.data.dao
+package bes.max.playlistmaker.data.settings
 
 import android.content.Context
 import android.os.Build

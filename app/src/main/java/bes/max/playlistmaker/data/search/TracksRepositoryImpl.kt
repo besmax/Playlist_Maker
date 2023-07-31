@@ -1,8 +1,7 @@
-package bes.max.playlistmaker.data.repositories
+package bes.max.playlistmaker.data.search
 
 import bes.max.playlistmaker.data.network.NetworkClient
 import bes.max.playlistmaker.data.mappers.TrackDtoMapper
-import bes.max.playlistmaker.data.dao.SearchHistoryDao
 import bes.max.playlistmaker.data.dto.TrackSearchRequest
 import bes.max.playlistmaker.data.dto.TrackSearchResponse
 import bes.max.playlistmaker.domain.search.TracksRepository

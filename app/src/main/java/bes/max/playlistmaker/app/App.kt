@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.asLiveData
-import bes.max.playlistmaker.data.dao.SettingsDaoImpl
+import bes.max.playlistmaker.data.settings.SettingsDaoImpl
 import bes.max.playlistmaker.di.DataStoreModule
 import kotlinx.coroutines.launch
 

@@ -1,6 +1,5 @@
-package bes.max.playlistmaker.data.repositories
+package bes.max.playlistmaker.data.settings
 
-import bes.max.playlistmaker.data.dao.SettingsDao
 import bes.max.playlistmaker.domain.settings.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 

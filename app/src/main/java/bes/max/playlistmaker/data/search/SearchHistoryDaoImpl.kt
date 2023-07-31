@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.data.dao
+package bes.max.playlistmaker.data.search
 
 import android.content.Context
 import bes.max.playlistmaker.domain.models.Track

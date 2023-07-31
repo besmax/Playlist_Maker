@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.data.repositories
+package bes.max.playlistmaker.data.player
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer

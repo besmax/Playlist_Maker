@@ -11,7 +11,7 @@ class SettingsViewModelFactory(private val context: Context) : ViewModelProvider
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
-            return SettingsViewModel(creator.getSettingsInteractor(context)) as T
+            return SettingsViewModel(creator.getSettingsInteractor(context), creator.getSharingInteractor()) as T
         }
         throw IllegalArgumentException("Unknown ViewModel")
     }

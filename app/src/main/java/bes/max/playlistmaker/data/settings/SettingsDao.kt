@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.data.dao
+package bes.max.playlistmaker.data.settings
 
 import kotlinx.coroutines.flow.Flow
 

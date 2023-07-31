@@ -26,7 +26,7 @@ class PlayerActivity : AppCompatActivity() {
                     getString(R.string.activity_search_to_activity_player_track_as_json)
                 ))
             ),
-            context = this
+            context = applicationContext
         )
     }
 
