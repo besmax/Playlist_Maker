@@ -11,7 +11,8 @@ import bes.max.playlistmaker.domain.player.PlayerInteractor
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInteractor) : ViewModel() {
+class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInteractor) :
+    ViewModel() {
 
     val playerState = playerInteractor.state.asLiveData()
     val playingTime =
@@ -44,20 +45,17 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
         updateTimer()
     }
 
-    private fun getCurrentPlayerPositionAsNumber() = playerInteractor.getCurrentTime()
-
     private fun formatIntToFormattedTimeText(time: Int): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
     }
 
     private fun updateTimer() {
         val formattedText = formatIntToFormattedTimeText(
-            getCurrentPlayerPositionAsNumber()
+            playerInteractor.getCurrentTime()
         )
         when (playerState.value) {
             PlayerState.STATE_PLAYING -> {
-                playingTime.value =
-                    formattedText
+                playingTime.value = formattedText
                 handler.postDelayed(timerRunnable, TIMER_UPDATE_RATE)
             }
 
