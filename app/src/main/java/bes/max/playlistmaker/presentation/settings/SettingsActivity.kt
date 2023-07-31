@@ -1,21 +1,21 @@
 package bes.max.playlistmaker.presentation.settings
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import bes.max.playlistmaker.app.App
 import bes.max.playlistmaker.R
-import bes.max.playlistmaker.app.DARK_THEME_PREFERENCES_KEY
-import bes.max.playlistmaker.app.SETTINGS_PREFERENCES
 import bes.max.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
 
     private val binding by lazy {
         ActivitySettingsBinding.inflate(layoutInflater)
+    }
+
+    private val viewModel: SettingsViewModel by viewModels {
+        SettingsViewModelFactory(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,23 +38,12 @@ class SettingsActivity : AppCompatActivity() {
                 startActivity(openAgreementIntent)
         }
 
-        val darkThemePreference = getSharedPreferences(SETTINGS_PREFERENCES, Context.MODE_PRIVATE)
-        val isNightModeActiveDefault = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            resources.configuration.isNightModeActive
-        } else {
-            false
+        viewModel.isNightModeActive.observe(this) {
+            binding.settingsActivityThemeSwitcher.isChecked = it
         }
-        val switcherIsChecked = darkThemePreference.getBoolean(
-            DARK_THEME_PREFERENCES_KEY, isNightModeActiveDefault
-        )
 
-        binding.settingsActivityThemeSwitcher.isChecked = switcherIsChecked
-
-        binding.settingsActivityThemeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            (application as App).switchTheme(checked)
-            darkThemePreference.edit()
-                .putBoolean(DARK_THEME_PREFERENCES_KEY, checked)
-                .apply()
+        binding.settingsActivityThemeSwitcher.setOnCheckedChangeListener { _, checked ->
+            viewModel.setIsNightModeActive(checked)
         }
     }
 
