@@ -14,7 +14,10 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "SearchViewModel"
 
-class SearchViewModel(private val context: Context) : ViewModel() {
+class SearchViewModel(
+    private val searchInNetworkUseCase: SearchInNetworkUseCase,
+    private val searchHistoryInteractor: SearchHistoryInteractor
+    ) : ViewModel() {
 
     private val _searchStatus: MutableLiveData<SearchStatus> = MutableLiveData(SearchStatus.SearchNotStarted)
     val searchStatus: LiveData<SearchStatus> = _searchStatus!!
@@ -24,10 +27,6 @@ class SearchViewModel(private val context: Context) : ViewModel() {
 
     private val _historyTracks: MutableLiveData<List<Track>> = MutableLiveData(emptyList())
     val historyTracks: LiveData<List<Track>> = _historyTracks!!
-
-    private val creator = Creator(context)
-    private val searchInNetworkUseCase: SearchInNetworkUseCase = creator.getSearchInNetworkUseCase()
-    private val searchHistoryInteractor: SearchHistoryInteractor = creator.getSearchHistoryInteractor()
 
     fun searchTrack(searchRequest: String) {
         _searchStatus.value = SearchStatus.SearchLoading
