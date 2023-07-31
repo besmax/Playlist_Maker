@@ -2,7 +2,7 @@ package bes.max.playlistmaker.data.repositories
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import bes.max.playlistmaker.domain.api.Player
+import bes.max.playlistmaker.domain.player.Player
 import bes.max.playlistmaker.domain.models.PlayerState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

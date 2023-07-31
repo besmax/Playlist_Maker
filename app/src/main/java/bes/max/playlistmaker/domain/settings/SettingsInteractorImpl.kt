@@ -1,6 +1,5 @@
 package bes.max.playlistmaker.domain.settings
 
-import bes.max.playlistmaker.domain.api.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 
 class SettingsInteractorImpl(

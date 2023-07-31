@@ -1,6 +1,5 @@
 package bes.max.playlistmaker.data.network
 
-import bes.max.playlistmaker.data.NetworkClient
 import bes.max.playlistmaker.data.dto.Response
 import bes.max.playlistmaker.data.dto.TrackSearchRequest
 import retrofit2.Retrofit

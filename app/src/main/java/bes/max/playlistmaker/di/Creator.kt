@@ -8,7 +8,7 @@ import bes.max.playlistmaker.data.network.RetrofitNetworkClient
 import bes.max.playlistmaker.data.repositories.PlayerImpl
 import bes.max.playlistmaker.data.repositories.SettingsRepositoryImpl
 import bes.max.playlistmaker.data.repositories.TracksRepositoryImpl
-import bes.max.playlistmaker.domain.api.TracksRepository
+import bes.max.playlistmaker.domain.search.TracksRepository
 import bes.max.playlistmaker.domain.search.SearchHistoryInteractorImpl
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase
 import bes.max.playlistmaker.domain.settings.SettingsInteractor

@@ -1,7 +1,5 @@
 package bes.max.playlistmaker.domain.player
 
-import bes.max.playlistmaker.domain.api.Player
-
 class PlayerInteractorImpl (private val player: Player) : PlayerInteractor {
 
     override val state = player.playerState

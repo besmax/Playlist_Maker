@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.domain.api
+package bes.max.playlistmaker.domain.settings
 
 import kotlinx.coroutines.flow.Flow
 
