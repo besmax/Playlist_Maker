@@ -90,11 +90,12 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun bind(track: Track?) {
+        val roundedCorner = resources.getDimensionPixelSize(R.dimen.activity_player_album_cover_corner_radius)
         if (track != null) {
             Glide.with(this)
                 .load(track.bigCover)
                 .placeholder(R.drawable.ic_picture_not_found)
-                .transform(MultiTransformation(FitCenter(), RoundedCorners(8)))
+                .transform(MultiTransformation(FitCenter(), RoundedCorners(roundedCorner)))
                 .into(binding.activityPlayerAlbumCover)
 
             with(binding) {

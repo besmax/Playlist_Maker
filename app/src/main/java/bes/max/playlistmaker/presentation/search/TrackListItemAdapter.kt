@@ -45,7 +45,7 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
                         )
                     )
                 )
-                .centerCrop()
+
                 .into(binding.trackListItemTrackCover)
 
             binding.trackListItemTrackName.setText(model.trackName)
