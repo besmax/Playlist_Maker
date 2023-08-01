@@ -2,6 +2,7 @@ package bes.max.playlistmaker.presentation.player
 
 import android.os.Handler
 import android.os.Looper
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -15,8 +16,8 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
     ViewModel() {
 
     val playerState = playerInteractor.state.asLiveData()
-    val playingTime =
-        MutableLiveData<String>("00:00")
+    private val _playingTime = MutableLiveData<String>("00:00")
+    val playingTime: LiveData<String> = _playingTime
     private val handler = Handler(Looper.getMainLooper())
     private val timerRunnable = Runnable { updateTimer() }
 
@@ -55,7 +56,7 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
         )
         when (playerState.value) {
             PlayerState.STATE_PLAYING -> {
-                playingTime.value = formattedText
+                _playingTime.value = formattedText
                 handler.postDelayed(timerRunnable, TIMER_UPDATE_RATE)
             }
 
@@ -65,7 +66,7 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
 
             else -> {
                 handler.removeCallbacks(timerRunnable)
-                playingTime.value = DEFAULT_TIMER_TIME
+                _playingTime.value = DEFAULT_TIMER_TIME
             }
         }
     }
