@@ -36,7 +36,7 @@
         style="@style/search_activity_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:paddingVertical="8dp"
         app:endIconDrawable="@drawable/ic_clear_text"
         app:endIconMode="clear_text"
         app:hintEnabled="false"
