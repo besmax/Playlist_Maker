@@ -2,8 +2,6 @@ package bes.max.playlistmaker.presentation.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -30,16 +28,12 @@ class SearchActivity : AppCompatActivity() {
     private val adapter = TrackListItemAdapter()
     private val adapterForHistory = TrackListItemAdapter()
 
-    private val handler = Handler(Looper.getMainLooper())
-
-    private var isClickAllowed = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         val onElementClickAction = { track: Track ->
-            if (clickDebounce()) {
+            if (viewModel.clickDebounce()) {
                 viewModel.saveTrackToHistory(track)
                 val intent = Intent(this, PlayerActivity::class.java)
                 intent.putExtra(
@@ -221,18 +215,8 @@ class SearchActivity : AppCompatActivity() {
         return Gson().toJson(track)
     }
 
-    private fun clickDebounce(): Boolean {
-        val currentFlag = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return currentFlag
-    }
-
     companion object {
         private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
 }

@@ -25,6 +25,8 @@ class SearchViewModel(
 
     var savedSearchInputText = ""
 
+    private var isClickAllowed = true
+
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { searchTrack(savedSearchInputText) }
 
@@ -83,7 +85,17 @@ class SearchViewModel(
         }
     }
 
+    fun clickDebounce(): Boolean {
+        val currentFlag = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return currentFlag
+    }
+
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
