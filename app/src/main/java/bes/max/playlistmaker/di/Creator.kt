@@ -2,69 +2,52 @@ package bes.max.playlistmaker.di
 
 import android.content.Context
 import bes.max.playlistmaker.data.mappers.TrackDtoMapper
-import bes.max.playlistmaker.data.dao.SearchHistoryDaoImpl
+import bes.max.playlistmaker.data.search.SearchHistoryDaoImpl
+import bes.max.playlistmaker.data.settings.SettingsDaoImpl
 import bes.max.playlistmaker.data.network.RetrofitNetworkClient
-import bes.max.playlistmaker.data.repositories.PlayerImpl
-import bes.max.playlistmaker.data.repositories.TracksRepositoryImpl
-import bes.max.playlistmaker.domain.api.TracksRepository
-import bes.max.playlistmaker.domain.search.ClearHistoryUseCase
-import bes.max.playlistmaker.domain.search.GetTracksFromHistoryUseCase
-import bes.max.playlistmaker.domain.search.SaveTrackInHistoryUseCase
+import bes.max.playlistmaker.data.player.PlayerImpl
+import bes.max.playlistmaker.data.settings.SettingsRepositoryImpl
+import bes.max.playlistmaker.data.search.TracksRepositoryImpl
+import bes.max.playlistmaker.data.settings.ExternalNavigatorImpl
+import bes.max.playlistmaker.domain.search.TracksRepository
 import bes.max.playlistmaker.domain.search.SearchHistoryInteractorImpl
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase
+import bes.max.playlistmaker.domain.settings.ExternalNavigator
+import bes.max.playlistmaker.domain.settings.SettingsInteractor
+import bes.max.playlistmaker.domain.settings.SettingsInteractorImpl
+import bes.max.playlistmaker.domain.settings.SharingInteractor
+import bes.max.playlistmaker.domain.settings.SharingInteractorImpl
 
-class Creator(private val context: Context?) {
+class Creator(private val context: Context) {
 
-    private var tracksRepository: TracksRepository? = null
+    private val tracksRepository: TracksRepository
 
     init {
-        if (context != null) {
-            val networkClient = RetrofitNetworkClient()
-            val searchHistoryDao = SearchHistoryDaoImpl(context)
-            tracksRepository = TracksRepositoryImpl(networkClient, searchHistoryDao, TrackDtoMapper())
-        }
+        val networkClient = RetrofitNetworkClient()
+        val searchHistoryDao = SearchHistoryDaoImpl(context)
+        tracksRepository = TracksRepositoryImpl(networkClient, searchHistoryDao, TrackDtoMapper())
     }
 
-    fun getNewPlayerImpl()  = PlayerImpl()
+    fun getNewPlayerImpl() = PlayerImpl()
 
-    fun getTracksRepository(): TracksRepository? = tracksRepository
+    fun getSearchInNetworkUseCase() = SearchInNetworkUseCase(tracksRepository)
 
-    fun getSearchInNetworkUseCase(): SearchInNetworkUseCase {
-        lateinit var searchInNetworkUseCase: SearchInNetworkUseCase
-        if (tracksRepository != null) {
-            searchInNetworkUseCase = SearchInNetworkUseCase(tracksRepository!!)
-        }
-        return searchInNetworkUseCase
+    fun getSearchHistoryInteractor() = SearchHistoryInteractorImpl(tracksRepository)
+
+    fun getSettingsInteractor(context: Context): SettingsInteractor {
+        return SettingsInteractorImpl(
+            SettingsRepositoryImpl(
+                SettingsDaoImpl(context)
+            )
+        )
     }
 
-    fun getSaveTrackInHistoryUseCase(): SaveTrackInHistoryUseCase {
-        lateinit var saveTrackInHistoryUseCase: SaveTrackInHistoryUseCase
-        if (tracksRepository != null) {
-            saveTrackInHistoryUseCase = SaveTrackInHistoryUseCase(tracksRepository!!)
-        }
-        return saveTrackInHistoryUseCase
+    fun getExternalNavigator(): ExternalNavigator {
+        return ExternalNavigatorImpl(context)
     }
 
-    fun getGetTracksFromHistoryUseCase(): GetTracksFromHistoryUseCase {
-        lateinit var getTracksFromHistoryUseCase: GetTracksFromHistoryUseCase
-        if (tracksRepository != null) {
-            getTracksFromHistoryUseCase = GetTracksFromHistoryUseCase(tracksRepository!!)
-        }
-        return getTracksFromHistoryUseCase
+    fun getSharingInteractor(): SharingInteractor {
+        return SharingInteractorImpl(getExternalNavigator())
     }
-
-    fun getClearHistoryUseCase(): ClearHistoryUseCase {
-        lateinit var clearHistoryUseCase: ClearHistoryUseCase
-        if (tracksRepository != null) {
-            clearHistoryUseCase = ClearHistoryUseCase(tracksRepository!!)
-        }
-        return clearHistoryUseCase
-    }
-
-    fun getSearchHistoryInteractor() = SearchHistoryInteractorImpl(
-        getSaveTrackInHistoryUseCase(),
-        getGetTracksFromHistoryUseCase(),
-        getClearHistoryUseCase()
-    )
 
 }

@@ -3,20 +3,18 @@ package bes.max.playlistmaker.domain.search
 import bes.max.playlistmaker.domain.models.Track
 
 class SearchHistoryInteractorImpl(
-    private val saveTrackInHistoryUseCase: SaveTrackInHistoryUseCase,
-    private val getTracksFromHistoryUseCase: GetTracksFromHistoryUseCase,
-    private val clearHistoryUseCase: ClearHistoryUseCase
+    private val trackRepository: TracksRepository
 ) : SearchHistoryInteractor {
 
     override fun saveTrackToHistory(track: Track) {
-        saveTrackInHistoryUseCase.execute(track)
+        trackRepository.saveTrackInHistory(track)
     }
 
     override fun getTracksFromHistory(): List<Track> =
-        getTracksFromHistoryUseCase.execute()
-    
+        trackRepository.getTracksFromHistory()
+
 
     override fun clearHistory() {
-        clearHistoryUseCase.execute()
+        trackRepository.clearHistory()
     }
 }

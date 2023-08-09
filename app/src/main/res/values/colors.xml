@@ -13,6 +13,7 @@
 
     <color name="text_in_search_activity_placeholder">#FF000000</color>
     <color name="search_activity_progress_bar">#3772E7</color>
+    <color name="search_activity_edit_text_border">#FFFFFFFF</color>
 
     <color name="icons_main_screen">#1A1B22</color>
     <color name="main_screen_background">#3772E7</color>

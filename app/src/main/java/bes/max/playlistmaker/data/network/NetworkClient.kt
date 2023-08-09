@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.data
+package bes.max.playlistmaker.data.network
 
 import bes.max.playlistmaker.data.dto.Response
 

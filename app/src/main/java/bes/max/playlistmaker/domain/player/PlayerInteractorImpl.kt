@@ -1,33 +1,25 @@
 package bes.max.playlistmaker.domain.player
 
-import bes.max.playlistmaker.domain.api.Player
-
 class PlayerInteractorImpl (private val player: Player) : PlayerInteractor {
-
-    private val getCurrentPlayingTimeUseCase: GetCurrentPlayingTimeUseCase = GetCurrentPlayingTimeUseCase(player)
-    private val pauseTrackUseCase: PauseTrackUseCase = PauseTrackUseCase(player)
-    private val playTrackUseCase: PlayTrackUseCase = PlayTrackUseCase(player)
-    private val releasePlayerUseCase: ReleasePlayerUseCase = ReleasePlayerUseCase(player)
-    private val preparePlayerUseCase: PreparePlayerUseCase = PreparePlayerUseCase(player)
 
     override val state = player.playerState
 
     override fun preparePlayer(dataSourceUrl: String) {
-        preparePlayerUseCase.execute(dataSourceUrl)
+        player.preparePlayer(dataSourceUrl)
     }
 
     override fun play() {
-        playTrackUseCase.execute()
+        player.startPlayer()
     }
 
     override fun pause() {
-        pauseTrackUseCase.execute()
+        player.pausePlayer()
     }
 
     override fun release() {
-        releasePlayerUseCase.execute()
+        player.releasePlayer()
     }
 
     override fun getCurrentTime() =
-        getCurrentPlayingTimeUseCase.execute()
+        player.getCurrentPosition()
 }

@@ -5,7 +5,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivityPlayerBinding
-import bes.max.playlistmaker.domain.api.Player
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
 import com.bumptech.glide.Glide
@@ -22,11 +21,12 @@ class PlayerActivity : AppCompatActivity() {
 
     private val viewModel: PlayerViewModel by viewModels {
         PlayerViewModelFactory(
-            fromJsonToTrack(
+            track = fromJsonToTrack(
                 (intent.getStringExtra(
                     getString(R.string.activity_search_to_activity_player_track_as_json)
                 ))
-            )
+            ),
+            context = applicationContext
         )
     }
 
@@ -90,11 +90,12 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun bind(track: Track?) {
+        val roundedCorner = resources.getDimensionPixelSize(R.dimen.activity_player_album_cover_corner_radius)
         if (track != null) {
             Glide.with(this)
                 .load(track.bigCover)
                 .placeholder(R.drawable.ic_picture_not_found)
-                .transform(MultiTransformation(FitCenter(), RoundedCorners(8)))
+                .transform(MultiTransformation(FitCenter(), RoundedCorners(roundedCorner)))
                 .into(binding.activityPlayerAlbumCover)
 
             with(binding) {

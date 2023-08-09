@@ -2,8 +2,6 @@ package bes.max.playlistmaker.presentation.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,30 +17,23 @@ import com.google.gson.Gson
 
 class SearchActivity : AppCompatActivity() {
 
-    private var savedSearchInputText = ""
-
     private val binding by lazy {
         ActivitySearchBinding.inflate(layoutInflater)
     }
 
     private val viewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(context = this)
+        SearchViewModelFactory(context = applicationContext)
     }
 
     private val adapter = TrackListItemAdapter()
     private val adapterForHistory = TrackListItemAdapter()
-
-    private val handler = Handler(Looper.getMainLooper())
-    private val searchRunnable = Runnable { viewModel.searchTrack(savedSearchInputText) }
-
-    private var isClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         val onElementClickAction = { track: Track ->
-            if (clickDebounce()) {
+            if (viewModel.clickDebounce()) {
                 viewModel.saveTrackToHistory(track)
                 val intent = Intent(this, PlayerActivity::class.java)
                 intent.putExtra(
@@ -55,55 +46,38 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchActivityRecyclerViewTracks.adapter = adapter
         adapter.onListElementClick = onElementClickAction
-        adapterForHistory.listOfTracks = viewModel.historyTracks.value ?: emptyList()
+        adapterForHistory.listOfTracks = SearchScreenState.History.tracks
         adapterForHistory.onListElementClick = onElementClickAction
         binding.searchActivityHistoryRecyclerView.adapter = adapterForHistory
 
         binding.searchActivityTextInputLayout.setEndIconOnClickListener {
             binding.searchActivityEditText.text?.clear()
             hideKeyboard()
-            viewModel.clearTracks()
-            binding.searchActivityPlaceholder.visibility = View.GONE
         }
 
         binding.searchActivityEditText.setOnFocusChangeListener { _, hasFocus ->
-            showOrHideHistory(hasFocus)
+            if (hasFocus) viewModel.showHistory()
         }
 
-        binding.searchActivityEditText.setText(savedSearchInputText)
+        viewModel.screenState.observe(this) { state ->
+            showScreenContent(state)
+        }
+
+        binding.searchActivityEditText.setText(viewModel.savedSearchInputText)
 
         binding.searchActivityBackIcon.setOnClickListener { finish() }
 
-        viewModel.tracks.observe(this) {
-            if (!it.isNullOrEmpty()) adapter.listOfTracks = it
-        }
-
-        viewModel.searchStatus.observe(this) {
-            showPlaceHolder()
-        }
-
-        viewModel.historyTracks.observe(this) {
-            adapterForHistory.listOfTracks = viewModel.historyTracks.value ?: emptyList()
-        }
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (binding.searchActivityEditText.hasFocus() && s.isNullOrBlank()) {
-                    showOrHideHistory(binding.searchActivityEditText.hasFocus())
-                    viewModel.clearTracks()
-                } else {
-                    searchDebounce(s)
-                    showOrHideHistory()
-                }
+                viewModel.onSearchTextChanged(s, binding.searchActivityEditText.hasFocus())
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (binding.searchActivityEditText.hasFocus() && s.isNullOrBlank()) {
-                    showOrHideHistory(binding.searchActivityEditText.hasFocus())
-                    viewModel.clearTracks()
-                    adapter.listOfTracks = viewModel.tracks.value!!
+                if (s.isNullOrBlank()) {
+                    viewModel.showHistory()
                 }
             }
         }
@@ -124,13 +98,12 @@ class SearchActivity : AppCompatActivity() {
         super.onResume()
         if (binding.searchActivityEditText.text?.isNotEmpty() == true) {
             viewModel.searchTrack(binding.searchActivityEditText.text.toString())
-            adapter.listOfTracks = viewModel.tracks.value ?: emptyList()
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
-        outState.putString(SEARCH_INPUT_TEXT, savedSearchInputText)
+        outState.putString(SEARCH_INPUT_TEXT, viewModel.savedSearchInputText)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -138,30 +111,70 @@ class SearchActivity : AppCompatActivity() {
         savedInstanceState.getString(SEARCH_INPUT_TEXT)
     }
 
-    private fun showPlaceHolder() {
-        when (viewModel.searchStatus.value) {
-            SearchStatus.SearchError -> {
-                showError()
+    private fun showScreenContent(state: SearchScreenState) {
+        when (state) {
+            is SearchScreenState.Default -> {
+                showDefaultScreenState()
             }
 
-            SearchStatus.SearchNotFound -> {
+            is SearchScreenState.Loading -> {
+                showLoading()
+            }
+
+            is SearchScreenState.History -> {
+                adapterForHistory.listOfTracks = state.tracks
+                showHistory()
+            }
+
+            is SearchScreenState.Tracks -> {
+                adapter.listOfTracks = state.tracks
+                showTracks()
+            }
+
+            is SearchScreenState.TracksNotFound -> {
                 showNotFound()
             }
-            SearchStatus.SearchLoading -> {
-                binding.searchActivityPlaceholder.visibility = View.GONE
-                binding.searchActivityProgressBar.visibility = View.VISIBLE
-            }
 
-            SearchStatus.SearchNotStarted -> {
-                binding.searchActivityPlaceholder.visibility = View.GONE
-                binding.searchActivityPlaceholderButton.visibility = View.GONE
-                binding.searchActivityProgressBar.visibility = View.GONE
+            is SearchScreenState.SearchError -> {
+                showError()
             }
+        }
+    }
 
-            else -> {
-                binding.searchActivityPlaceholder.visibility = View.GONE
-                binding.searchActivityProgressBar.visibility = View.GONE
-            }
+    private fun showDefaultScreenState() {
+        with(binding) {
+            searchActivityPlaceholder.visibility = View.GONE
+            searchActivityPlaceholderButton.visibility = View.GONE
+            searchActivityProgressBar.visibility = View.GONE
+            searchActivityRecyclerViewTracks.visibility = View.GONE
+            searchActivityHistoryGroup.visibility = View.GONE
+        }
+    }
+
+    private fun showLoading() {
+        with(binding) {
+            searchActivityPlaceholder.visibility = View.GONE
+            searchActivityProgressBar.visibility = View.VISIBLE
+            searchActivityRecyclerViewTracks.visibility = View.GONE
+            searchActivityHistoryGroup.visibility = View.GONE
+        }
+    }
+
+    private fun showHistory() {
+        with(binding) {
+            searchActivityHistoryGroup.visibility =
+                if (adapterForHistory.listOfTracks.isNotEmpty()) View.VISIBLE
+                else View.GONE
+            searchActivityRecyclerViewTracks.visibility = View.GONE
+            searchActivityProgressBar.visibility = View.GONE
+        }
+    }
+
+    private fun showTracks() {
+        with(binding) {
+            searchActivityRecyclerViewTracks.visibility = View.VISIBLE
+            searchActivityHistoryGroup.visibility = View.GONE
+            searchActivityProgressBar.visibility = View.GONE
         }
     }
 
@@ -172,6 +185,8 @@ class SearchActivity : AppCompatActivity() {
             searchActivityPlaceholderText.setText(getString(R.string.search_activity_placeholder_text_not_found))
             searchActivityPlaceholderButton.visibility = View.GONE
             searchActivityProgressBar.visibility = View.GONE
+            searchActivityRecyclerViewTracks.visibility = View.GONE
+            searchActivityHistoryGroup.visibility = View.GONE
         }
     }
 
@@ -182,15 +197,9 @@ class SearchActivity : AppCompatActivity() {
             searchActivityPlaceholderText.setText(getString(R.string.search_activity_placeholder_text_error))
             searchActivityPlaceholderButton.visibility = View.VISIBLE
             searchActivityProgressBar.visibility = View.GONE
+            searchActivityRecyclerViewTracks.visibility = View.GONE
+            searchActivityHistoryGroup.visibility = View.GONE
         }
-    }
-
-    private fun showOrHideHistory(hasFocus: Boolean = false) {
-        viewModel.getTracksFromHistory()
-        adapterForHistory.notifyDataSetChanged()
-        binding.searchActivityHistoryGroup.visibility =
-            if (hasFocus && binding.searchActivityEditText.text.isNullOrEmpty() && adapterForHistory.listOfTracks.isNotEmpty()) View.VISIBLE
-            else View.GONE
     }
 
     private fun hideKeyboard() {
@@ -206,27 +215,8 @@ class SearchActivity : AppCompatActivity() {
         return Gson().toJson(track)
     }
 
-    private fun searchDebounce(s: CharSequence?) {
-        if (!s.isNullOrBlank()) {
-            savedSearchInputText = s.toString()
-            handler.removeCallbacks(searchRunnable)
-            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-        }
-    }
-
-    private fun clickDebounce(): Boolean {
-        val currentFlag = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
-        }
-        return currentFlag
-    }
-
     companion object {
         private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
 }
