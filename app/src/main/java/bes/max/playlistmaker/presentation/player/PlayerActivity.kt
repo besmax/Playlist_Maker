@@ -1,7 +1,6 @@
 package bes.max.playlistmaker.presentation.player
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivityPlayerBinding
@@ -12,6 +11,8 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -19,14 +20,13 @@ class PlayerActivity : AppCompatActivity() {
         ActivityPlayerBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: PlayerViewModel by viewModels {
-        PlayerViewModelFactory(
-            track = fromJsonToTrack(
+    private val viewModel: PlayerViewModel by viewModel {
+        parametersOf(
+            fromJsonToTrack(
                 (intent.getStringExtra(
                     getString(R.string.activity_search_to_activity_player_track_as_json)
                 ))
-            ),
-            context = applicationContext
+            )
         )
     }
 
@@ -90,7 +90,8 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun bind(track: Track?) {
-        val roundedCorner = resources.getDimensionPixelSize(R.dimen.activity_player_album_cover_corner_radius)
+        val roundedCorner =
+            resources.getDimensionPixelSize(R.dimen.activity_player_album_cover_corner_radius)
         if (track != null) {
             Glide.with(this)
                 .load(track.bigCover)

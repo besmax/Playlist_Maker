@@ -55,10 +55,6 @@ class SearchViewModel(
         }
     }
 
-//    fun clearTracks() {
-//        SearchScreenState.Tracks.tracks = emptyList()
-//    }
-
     fun saveTrackToHistory(track: Track) {
         searchHistoryInteractor.saveTrackToHistory(track)
         SearchScreenState.History.tracks = searchHistoryInteractor.getTracksFromHistory()

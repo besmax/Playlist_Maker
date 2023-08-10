@@ -14,6 +14,7 @@ import bes.max.playlistmaker.databinding.ActivitySearchBinding
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.player.PlayerActivity
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -21,9 +22,7 @@ class SearchActivity : AppCompatActivity() {
         ActivitySearchBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(context = applicationContext)
-    }
+    private val viewModel: SearchViewModel by viewModel()
 
     private val adapter = TrackListItemAdapter()
     private val adapterForHistory = TrackListItemAdapter()

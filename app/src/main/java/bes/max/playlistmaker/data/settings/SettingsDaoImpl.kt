@@ -3,18 +3,23 @@ package bes.max.playlistmaker.data.settings
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import bes.max.playlistmaker.di.DataStoreModule
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 
-class SettingsDaoImpl(private val context: Context) : SettingsDao {
+
+class SettingsDaoImpl(
+    private val context: Context,
+    private val preferencesDataStore: DataStore<Preferences>
+) : SettingsDao {
 
     override fun isNightModeActive(): Flow<Boolean> {
-        return DataStoreModule.preferencesDataStore?.data
+        return preferencesDataStore?.data
             ?.catch { exception ->
                 Log.e(
                     TAG,
@@ -27,7 +32,7 @@ class SettingsDaoImpl(private val context: Context) : SettingsDao {
     }
 
     override suspend fun setIsNightModeActive(isNightModeActive: Boolean) {
-        DataStoreModule.preferencesDataStore?.edit { preferences ->
+        preferencesDataStore?.edit { preferences ->
             preferences[DARK_THEME_PREFERENCES_KEY] = isNightModeActive
         }
     }

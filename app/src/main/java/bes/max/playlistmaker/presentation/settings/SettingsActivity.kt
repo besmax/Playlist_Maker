@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivitySettingsBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -12,9 +13,7 @@ class SettingsActivity : AppCompatActivity() {
         ActivitySettingsBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: SettingsViewModel by viewModels {
-        SettingsViewModelFactory(context = applicationContext)
-    }
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
