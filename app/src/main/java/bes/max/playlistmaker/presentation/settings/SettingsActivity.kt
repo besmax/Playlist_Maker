@@ -1,6 +1,7 @@
 package bes.max.playlistmaker.presentation.settings
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivitySettingsBinding
@@ -39,6 +40,10 @@ class SettingsActivity : AppCompatActivity() {
         binding.settingsActivityThemeSwitcher.setOnCheckedChangeListener { _, checked ->
             viewModel.setIsNightModeActive(checked)
         }
+
+        viewModel.showingToast.observe(this) {
+            showToast(it)
+        }
     }
 
     private fun sendEmailIntent() {
@@ -47,6 +52,14 @@ class SettingsActivity : AppCompatActivity() {
             getString(R.string.email_theme_for_support),
             getString(R.string.email_text_for_support)
         )
+    }
+
+    private fun showToast(stringRes: Int) {
+        try {
+            Toast.makeText(this, getString(stringRes), Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 }
