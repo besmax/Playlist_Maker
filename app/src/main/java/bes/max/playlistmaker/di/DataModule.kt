@@ -2,6 +2,8 @@ package bes.max.playlistmaker.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -17,6 +19,9 @@ import bes.max.playlistmaker.data.settings.SettingsDaoImpl
 import bes.max.playlistmaker.domain.settings.ExternalNavigator
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,37 +36,25 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 
 val dataModule = module {
 
-    factory {
-        Gson()
-    }
+    factoryOf(::Gson)
 
     single<DataStore<Preferences>> {
         androidContext().dataStore
     }
 
-    single<NetworkClient> {
-        RetrofitNetworkClient(iTunesSearchApiService = get())
-    }
+    singleOf(::RetrofitNetworkClient) bind NetworkClient::class
 
     single<SharedPreferences> {
         androidContext().getSharedPreferences(SHARED_PREF_KEY, 0)
     }
 
-    single<SearchHistoryDao> {
-        SearchHistoryDaoImpl(sharedPreferences = get(), gson = get())
-    }
+    singleOf(::SearchHistoryDaoImpl) bind SearchHistoryDao::class
 
-    factory {
-        TrackDtoMapper()
-    }
+    factoryOf(::TrackDtoMapper)
 
-    factory<ExternalNavigator> {
-        ExternalNavigatorImpl(context = androidContext())
-    }
+    factoryOf(::ExternalNavigatorImpl) bind ExternalNavigator::class
 
-    single<SettingsDao> {
-        SettingsDaoImpl(context = androidContext(), preferencesDataStore = get())
-    }
+    singleOf(::SettingsDaoImpl) bind SettingsDao::class
 
     single<ITunesSearchApiService> {
         Retrofit.Builder()
@@ -69,6 +62,17 @@ val dataModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ITunesSearchApiService::class.java)
+    }
+
+    factory {
+        MediaPlayer().apply {
+            setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .build()
+            )
+        }
     }
 
 }

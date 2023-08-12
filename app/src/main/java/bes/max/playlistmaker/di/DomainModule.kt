@@ -9,28 +9,20 @@ import bes.max.playlistmaker.domain.settings.SettingsInteractor
 import bes.max.playlistmaker.domain.settings.SettingsInteractorImpl
 import bes.max.playlistmaker.domain.settings.SharingInteractor
 import bes.max.playlistmaker.domain.settings.SharingInteractorImpl
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val domainModule = module {
 
-    factory<PlayerInteractor> {
-        PlayerInteractorImpl(player = get())
-    }
+    factoryOf(::PlayerInteractorImpl) bind PlayerInteractor::class
 
-    factory<SearchHistoryInteractor> {
-        SearchHistoryInteractorImpl(trackRepository = get())
-    }
+    factoryOf(::SearchHistoryInteractorImpl) bind SearchHistoryInteractor::class
 
-    factory {
-        SearchInNetworkUseCase(tracksRepository = get())
-    }
+    factoryOf(::SearchInNetworkUseCase)
 
-    factory<SettingsInteractor> {
-        SettingsInteractorImpl(settingsRepository = get())
-    }
+    factoryOf(::SettingsInteractorImpl) bind SettingsInteractor::class
 
-    factory<SharingInteractor> {
-        SharingInteractorImpl(externalNavigator = get())
-    }
+    factoryOf(::SharingInteractorImpl) bind SharingInteractor::class
 
 }

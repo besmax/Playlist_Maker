@@ -6,24 +6,17 @@ import bes.max.playlistmaker.data.settings.SettingsRepositoryImpl
 import bes.max.playlistmaker.domain.player.Player
 import bes.max.playlistmaker.domain.search.TracksRepository
 import bes.max.playlistmaker.domain.settings.SettingsRepository
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    single<SettingsRepository> {
-        SettingsRepositoryImpl(settingsDao = get())
-    }
+    singleOf(::SettingsRepositoryImpl) bind SettingsRepository::class
 
-    single<TracksRepository> {
-        TracksRepositoryImpl(
-            networkClient = get(),
-            searchHistoryDao = get(),
-            trackDtoMapper = get()
-        )
-    }
+    singleOf(::TracksRepositoryImpl) bind TracksRepository::class
 
-    factory<Player> {
-        PlayerImpl()
-    }
+    factoryOf(::PlayerImpl) bind Player::class
 
 }

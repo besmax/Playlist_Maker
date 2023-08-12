@@ -28,7 +28,7 @@ class SearchHistoryDaoImpl(
         }
         history.add(track)
         sharedPreferences.edit()
-            .putString(SHARED_PREF_KEY, Gson().toJson(history))
+            .putString(SHARED_PREF_KEY, gson.toJson(history))
             .apply()
     }
 
