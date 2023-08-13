@@ -35,6 +35,7 @@ class SettingsViewModel(
         } catch (e: Exception) {
             Log.e(TAG, e.toString())
             _showingToast.value = R.string.settings_implicit_intent_error
+            _showingToast.value = 0
         }
     }
 
