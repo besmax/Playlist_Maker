@@ -55,10 +55,12 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun showToast(stringRes: Int) {
-        try {
-            Toast.makeText(this, getString(stringRes), Toast.LENGTH_LONG).show()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if (stringRes != 0) {
+            try {
+                Toast.makeText(this, getString(stringRes), Toast.LENGTH_LONG).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

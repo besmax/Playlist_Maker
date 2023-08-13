@@ -16,7 +16,7 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
     override val playerState: StateFlow<PlayerState> = _playerState.asStateFlow()
 
     override fun preparePlayer(dataSourceUrl: String) {
-        with(mediaPlayer!!) {
+        with(mediaPlayer) {
             setDataSource(dataSourceUrl)
             prepareAsync()
             setOnPreparedListener { _playerState.value = PlayerState.STATE_PREPARED }
