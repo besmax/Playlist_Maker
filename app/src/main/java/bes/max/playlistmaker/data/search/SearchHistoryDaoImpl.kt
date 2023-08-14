@@ -1,21 +1,23 @@
 package bes.max.playlistmaker.data.search
 
-import android.content.Context
+import android.content.SharedPreferences
 import bes.max.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 
 private const val SHARED_PREF_KEY = "search_history_preferences_key"
 
-class SearchHistoryDaoImpl(context: Context) : SearchHistoryDao {
+class SearchHistoryDaoImpl(
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson
+) : SearchHistoryDao {
 
     private var history: MutableList<Track> = arrayListOf()
-    private val sharedPreferences = context.getSharedPreferences(SHARED_PREF_KEY, 0)
 
     override fun saveTrack(track: Track) {
         if (sharedPreferences.contains(SHARED_PREF_KEY)) {
             val jsonString = sharedPreferences.getString(SHARED_PREF_KEY, "")
             if (!jsonString.isNullOrBlank()) {
-                history = Gson().fromJson(jsonString, Array<Track>::class.java).toMutableList()
+                history = gson.fromJson(jsonString, Array<Track>::class.java).toMutableList()
                 if (history.contains(track)) {
                     history.remove(track)
                 }
@@ -26,7 +28,7 @@ class SearchHistoryDaoImpl(context: Context) : SearchHistoryDao {
         }
         history.add(track)
         sharedPreferences.edit()
-            .putString(SHARED_PREF_KEY, Gson().toJson(history))
+            .putString(SHARED_PREF_KEY, gson.toJson(history))
             .apply()
     }
 
@@ -35,7 +37,7 @@ class SearchHistoryDaoImpl(context: Context) : SearchHistoryDao {
         if (sharedPreferences.contains(SHARED_PREF_KEY)) {
             val jsonString = sharedPreferences.getString(SHARED_PREF_KEY, "")
             if (!jsonString.isNullOrBlank()) {
-                history = Gson().fromJson(jsonString, Array<Track>::class.java).toMutableList()
+                history = gson.fromJson(jsonString, Array<Track>::class.java).toMutableList()
             }
         }
         return history.toList()

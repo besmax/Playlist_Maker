@@ -2,21 +2,9 @@ package bes.max.playlistmaker.data.network
 
 import bes.max.playlistmaker.data.dto.Response
 import bes.max.playlistmaker.data.dto.TrackSearchRequest
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient : NetworkClient {
-
-    private val itunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val iTunesSearchApiService by lazy {
-        retrofit.create(ITunesSearchApiService::class.java)
-    }
+class RetrofitNetworkClient(private val iTunesSearchApiService: ITunesSearchApiService) :
+    NetworkClient {
 
     override suspend fun searchTracks(dto: Any): Response {
         return when (dto) {

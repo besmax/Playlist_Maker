@@ -7,13 +7,13 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivitySearchBinding
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.player.PlayerActivity
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -21,9 +21,7 @@ class SearchActivity : AppCompatActivity() {
         ActivitySearchBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(context = applicationContext)
-    }
+    private val viewModel: SearchViewModel by viewModel()
 
     private val adapter = TrackListItemAdapter()
     private val adapterForHistory = TrackListItemAdapter()
