@@ -58,7 +58,7 @@ class SearchViewModel(
     fun saveTrackToHistory(track: Track) {
         searchHistoryInteractor.saveTrackToHistory(track)
         SearchScreenState.History.tracks = searchHistoryInteractor.getTracksFromHistory()
-        if(_screenState.value == SearchScreenState.History) {
+        if (_screenState.value == SearchScreenState.History) {
             _screenState.value = SearchScreenState.History
         }
     }
