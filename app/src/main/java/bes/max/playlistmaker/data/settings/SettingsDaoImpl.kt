@@ -18,6 +18,7 @@ class SettingsDaoImpl(
     private val preferencesDataStore: DataStore<Preferences>
 ) : SettingsDao {
 
+    @Synchronized
     override fun isNightModeActive(): Flow<Boolean> {
         return preferencesDataStore?.data
             ?.catch { exception ->
@@ -31,6 +32,7 @@ class SettingsDaoImpl(
             } ?: emptyFlow()
     }
 
+    @Synchronized
     override suspend fun setIsNightModeActive(isNightModeActive: Boolean) {
         preferencesDataStore?.edit { preferences ->
             preferences[DARK_THEME_PREFERENCES_KEY] = isNightModeActive
