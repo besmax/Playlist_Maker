@@ -38,7 +38,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.settingsActivityThemeSwitcher.setOnCheckedChangeListener { _, checked ->
-            viewModel.setIsNightModeActive(checked)
+            viewModel.setIsNightModeActiveDebounce(checked)
         }
 
         viewModel.showingToast.observe(this) {
