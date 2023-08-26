@@ -1,12 +1,12 @@
 package bes.max.playlistmaker.presentation.mediateka
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlaylistBinding
+import bes.max.playlistmaker.presentation.mediateka.viewmodels.PlaylistViewModel
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
