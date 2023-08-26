@@ -1,26 +1,25 @@
-package bes.max.playlistmaker.presentation.mediateka
+package bes.max.playlistmaker.presentation.mediateka.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import bes.max.playlistmaker.R
-import bes.max.playlistmaker.databinding.FragmentPlaylistBinding
-import bes.max.playlistmaker.presentation.mediateka.viewmodels.PlaylistViewModel
+import bes.max.playlistmaker.databinding.FragmentFavoriteTracksBinding
+import bes.max.playlistmaker.presentation.mediateka.viewmodels.FavoriteTracksViewModel
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
+class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() {
 
-    private val playlistViewModel: PlaylistViewModel by viewModel()
+    private val favoriteTracksViewModel: FavoriteTracksViewModel by viewModel()
 
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentPlaylistBinding {
-        return FragmentPlaylistBinding.inflate(inflater, container, false)
+    ): FragmentFavoriteTracksBinding {
+        return FragmentFavoriteTracksBinding.inflate(inflater, container, false)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,16 +27,17 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
     }
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_playlist, container, false)
+        return inflater.inflate(R.layout.fragment_favorite_tracks, container, false)
     }
 
     companion object {
 
-        fun newInstance() = PlaylistFragment()
+        fun newInstance() = FavoriteTracksFragment()
 
     }
 

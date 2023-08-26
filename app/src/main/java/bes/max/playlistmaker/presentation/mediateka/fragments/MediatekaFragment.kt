@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.presentation.mediateka
+package bes.max.playlistmaker.presentation.mediateka.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentMediatekaBinding
+import bes.max.playlistmaker.presentation.mediateka.MediatekaViewPagerAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
