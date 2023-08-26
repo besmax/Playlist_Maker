@@ -10,11 +10,13 @@
     <color name="silver">#C0C0C0</color>
     <color name="gray">#E6E8EB</color>
 
-    <color name="text_in_search_activity_placeholder">#FFFFFFFF</color>
+    <color name="text_in_placeholder">#FFFFFFFF</color>
     <color name="search_activity_edit_text_border">#FF000000</color>
 
 
     <color name="icons_main_screen">#1A1B22</color>
     <color name="main_screen_background">#FF000000</color>
     <color name="settings_screen_icons">#AEAFB4</color>
+
+    <color name="mediateka_screen_tab_color">#FFFFFFFF</color>
 </resources>

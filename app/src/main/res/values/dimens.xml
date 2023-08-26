@@ -2,6 +2,7 @@
 <resources>
     <dimen name="back_arrow_size">16dp</dimen>
     <dimen name="ic_settings_size">16dp</dimen>
+    <dimen name="placeholder_top_margin">104dp</dimen>
     <dimen name="vertical_padding_settings_screen">20dp</dimen>
     <dimen name="horizontal_padding_settings_screen">16dp</dimen>
     <dimen name="ic_inside_edit_text_padding">-10dp</dimen>
@@ -9,7 +10,6 @@
     <dimen name="back_arrow_margin_start">16dp</dimen>
     <dimen name="search_activity_list_item_padding">8dp</dimen>
     <dimen name="search_activity_list_item_cover_size">45dp</dimen>
-    <dimen name="search_activity_placeholder_top_margin">104dp</dimen>
     <dimen name="search_activity_placeholder_horizontal_margin">24dp</dimen>
     <dimen name="search_activity_history_group_margin_top">24dp</dimen>
     <dimen name="search_activity_album_cover_corner_radius">2dp</dimen>
