@@ -42,5 +42,11 @@ class MediatekaFragment : BindingFragment<FragmentMediatekaBinding>() {
         tabMediator.detach()
     }
 
+    companion object {
+
+        fun newInstance() = MediatekaFragment()
+
+    }
+
 
 }

@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlaylistBinding
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
+
+    private val playlistViewModel: PlaylistViewModel by viewModel()
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -30,6 +33,12 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_playlist, container, false)
+    }
+
+    companion object {
+
+        fun newInstance() = PlaylistFragment()
+
     }
 
 }

@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentFavoriteTracksBinding
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() {
+
+    private val favoriteTracksViewModel: FavoriteTracksViewModel by viewModel()
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -30,6 +33,12 @@ class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() 
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_favorite_tracks, container, false)
+    }
+
+    companion object {
+
+        fun newInstance() = FavoriteTracksFragment()
+
     }
 
 }
