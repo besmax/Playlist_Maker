@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 
-
 class SettingsDaoImpl(
     private val context: Context,
     private val preferencesDataStore: DataStore<Preferences>

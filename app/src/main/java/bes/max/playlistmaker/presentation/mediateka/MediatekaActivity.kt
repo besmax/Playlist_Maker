@@ -6,7 +6,6 @@ import bes.max.playlistmaker.databinding.ActivityMediatekaBinding
 
 class MediatekaActivity : AppCompatActivity() {
 
-
     private val binding by lazy {
         ActivityMediatekaBinding.inflate(layoutInflater)
     }

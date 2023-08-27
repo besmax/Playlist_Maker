@@ -41,6 +41,10 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
         updateTimer()
     }
 
+    fun pausePlayer() {
+        playerInteractor.pause()
+    }
+
     fun releasePlayer() {
         playerInteractor.release()
         updateTimer()
