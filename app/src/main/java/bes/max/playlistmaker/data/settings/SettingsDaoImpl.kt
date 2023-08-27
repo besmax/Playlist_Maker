@@ -12,13 +12,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 
-
 class SettingsDaoImpl(
     private val context: Context,
     private val preferencesDataStore: DataStore<Preferences>
 ) : SettingsDao {
 
-    @Synchronized
     override fun isNightModeActive(): Flow<Boolean> {
         return preferencesDataStore?.data
             ?.catch { exception ->
@@ -32,7 +30,6 @@ class SettingsDaoImpl(
             } ?: emptyFlow()
     }
 
-    @Synchronized
     override suspend fun setIsNightModeActive(isNightModeActive: Boolean) {
         preferencesDataStore?.edit { preferences ->
             preferences[DARK_THEME_PREFERENCES_KEY] = isNightModeActive

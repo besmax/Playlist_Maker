@@ -21,13 +21,6 @@ class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() 
         return FragmentFavoriteTracksBinding.inflate(inflater, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,9 +29,7 @@ class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() 
     }
 
     companion object {
-
         fun newInstance() = FavoriteTracksFragment()
-
     }
 
 }

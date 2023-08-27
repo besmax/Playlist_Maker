@@ -7,8 +7,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import bes.max.playlistmaker.presentation.mediateka.fragments.FavoriteTracksFragment
 import bes.max.playlistmaker.presentation.mediateka.fragments.PlaylistFragment
 
-class MediatekaViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
-    override fun getItemCount(): Int = 2
+private const val FRAGMENT_QTY = 2
+
+class MediatekaViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(fragmentManager, lifecycle) {
+    override fun getItemCount(): Int = FRAGMENT_QTY
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {

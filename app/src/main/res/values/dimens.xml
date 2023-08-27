@@ -23,5 +23,9 @@
     <dimen name="activity_player_margin_end">16dp</dimen>
     <dimen name="activity_player_album_cover_corner_radius">8dp</dimen>
 
+    <dimen name="settings_screen_section_vertical_padding">16dp</dimen>
+
+
+
 
 </resources>

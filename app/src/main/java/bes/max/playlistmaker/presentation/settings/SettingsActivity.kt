@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivitySettingsBinding
+import bes.max.playlistmaker.presentation.utils.setClickListenersForAllViews
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
@@ -21,15 +22,15 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.backIcon.setOnClickListener { finish() }
 
-        binding.settingsActivitySectionShare.setOnClickListener {
+        binding.settingsActivitySectionShare.setClickListenersForAllViews {
             viewModel.shareApp(getString(R.string.link_for_app_share))
         }
 
-        binding.settingsActivitySectionSupport.setOnClickListener {
+        binding.settingsActivitySectionSupport.setClickListenersForAllViews {
             sendEmailIntent()
         }
 
-        binding.settingsActivitySectionAgreement.setOnClickListener {
+        binding.settingsActivitySectionAgreement.setClickListenersForAllViews {
             viewModel.openUserAgreement(getString(R.string.link_for_app_share))
         }
 

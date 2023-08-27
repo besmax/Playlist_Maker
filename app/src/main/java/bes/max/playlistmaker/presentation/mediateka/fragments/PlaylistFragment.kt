@@ -21,13 +21,6 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
         return FragmentPlaylistBinding.inflate(inflater, container, false)
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,9 +29,7 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
     }
 
     companion object {
-
         fun newInstance() = PlaylistFragment()
-
     }
 
 }

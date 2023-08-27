@@ -24,11 +24,15 @@ class MediatekaFragment : BindingFragment<FragmentMediatekaBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.fragmentMediatekaViewpager.adapter = MediatekaViewPagerAdapter(parentFragmentManager, lifecycle)
-        tabMediator = TabLayoutMediator(binding.fragmentMediatekaTablayout, binding.fragmentMediatekaViewpager) { tab, position ->
+        binding.fragmentMediatekaViewpager.adapter =
+            MediatekaViewPagerAdapter(parentFragmentManager, lifecycle)
+        tabMediator = TabLayoutMediator(
+            binding.fragmentMediatekaTablayout,
+            binding.fragmentMediatekaViewpager
+        ) { tab, position ->
             when (position) {
                 0 -> tab.text = getString(R.string.fragment_mediateka_tab_title_favorite_tracks)
-                1 -> tab.text =getString(R.string.fragment_mediateka_tab_title_playlist)
+                1 -> tab.text = getString(R.string.fragment_mediateka_tab_title_playlist)
             }
         }
         tabMediator.attach()
@@ -44,10 +48,7 @@ class MediatekaFragment : BindingFragment<FragmentMediatekaBinding>() {
     }
 
     companion object {
-
         fun newInstance() = MediatekaFragment()
-
     }
-
 
 }
