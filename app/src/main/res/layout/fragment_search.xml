@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".presentation.search.SearchFragment">
 
-
     <TextView
         android:id="@+id/search_screen_title"
         style="@style/screen_title_textview"
@@ -53,8 +52,8 @@
         android:id="@+id/search_screen_recycler_view_tracks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/search_activity_recycler_view_horizontal_padding"
         android:layout_marginTop="24dp"
+        android:paddingHorizontal="@dimen/search_activity_recycler_view_horizontal_padding"
         android:paddingBottom="24dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,8 +99,8 @@
             android:id="@+id/search_screen_history_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/search_activity_recycler_view_horizontal_padding"
             android:layout_marginTop="8dp"
+            android:paddingHorizontal="@dimen/search_activity_recycler_view_horizontal_padding"
             android:paddingBottom="24dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:reverseLayout="true"
@@ -167,18 +166,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_screen_placeholder_text" />
 
-    <ProgressBar android:id="@+id/search_screen_progress_bar"
+    <ProgressBar
+        android:id="@+id/search_screen_progress_bar"
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_gravity="center"
-        android:indeterminateTint="@color/search_activity_progress_bar"
         android:indeterminate="true"
+        android:indeterminateTint="@color/search_activity_progress_bar"
         android:visibility="gone"
-        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:visibility="visible"/>
+        app:layout_constraintVertical_bias="0.4"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

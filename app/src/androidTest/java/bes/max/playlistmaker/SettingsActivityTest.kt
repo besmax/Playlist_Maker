@@ -47,7 +47,7 @@ class SettingsActivityTest {
 
     @Test
     fun shareIntentOpensChooser() {
-        onView(withId(R.id.settings_activity_icon_share)).perform(click())
+        onView(withId(R.id.settings_screen_icon_share)).perform(click())
 
         val expectedIntent = Matchers.allOf(
             hasAction(Intent.ACTION_SEND),
@@ -59,7 +59,7 @@ class SettingsActivityTest {
 
     @Test
     fun supportIntentOpensChooser() {
-        onView(withId(R.id.settings_activity_section_support)).perform(click())
+        onView(withId(R.id.settings_screen_section_support)).perform(click())
 
         val expectedIntent = Matchers.allOf(
             hasAction(Intent.ACTION_SENDTO),
@@ -79,7 +79,7 @@ class SettingsActivityTest {
 
     @Test
     fun openAgreementIntentOpensLink() {
-        onView(withId(R.id.settings_activity_icon_agreement)).perform(click())
+        onView(withId(R.id.settings_screen_icon_agreement)).perform(click())
 
         intended(
             allOf(
