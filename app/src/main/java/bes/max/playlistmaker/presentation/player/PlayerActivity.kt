@@ -2,6 +2,8 @@ package bes.max.playlistmaker.presentation.player
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.navigation.navArgument
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivityPlayerBinding
 import bes.max.playlistmaker.domain.models.PlayerState
@@ -23,9 +25,7 @@ class PlayerActivity : AppCompatActivity() {
     private val viewModel: PlayerViewModel by viewModel {
         parametersOf(
             fromJsonToTrack(
-                (intent.getStringExtra(
-                    getString(R.string.activity_search_to_activity_player_track_as_json)
-                ))
+                intent.getStringExtra(ARGS_TRACK)
             )
         )
     }
@@ -110,6 +110,12 @@ class PlayerActivity : AppCompatActivity() {
                 activityPlayerCountry.text = track.country
             }
         }
+    }
+
+    companion object {
+        private const val ARGS_TRACK = "args_track"
+        fun createTrackArg(track: String): Bundle =
+            bundleOf(ARGS_TRACK to track)
     }
 
 }

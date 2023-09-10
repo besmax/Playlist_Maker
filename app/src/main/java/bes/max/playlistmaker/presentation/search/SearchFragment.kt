@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentSearchBinding
 import bes.max.playlistmaker.domain.models.Track
@@ -30,19 +32,19 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         return FragmentSearchBinding.inflate(inflater, container, false)
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val onElementClickAction = { track: Track ->
             if (searchViewModel.clickDebounce()) {
                 searchViewModel.saveTrackToHistory(track)
-                //TODO change with navController
-                val intent = Intent(requireContext(), PlayerActivity::class.java)
-                intent.putExtra(
-                    getString(R.string.activity_search_to_activity_player_track_as_json),
-                    convertTrackToJson(track)
+
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_playerActivity,
+                    PlayerActivity.createTrackArg(convertTrackToJson(track))
                 )
-                startActivity(intent)
             }
         }
 
@@ -67,18 +69,18 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchViewModel.onSearchTextChanged(s, binding.searchScreenEditText.hasFocus())
+                if (!s.toString().isNullOrBlank()) searchViewModel.onSearchTextChanged(s, binding.searchScreenEditText.hasFocus())
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (s.isNullOrBlank()) {
+                if (s.toString().isNullOrBlank()) {
                     searchViewModel.showHistory()
                 }
             }
         }
         binding.searchScreenEditText.addTextChangedListener(textWatcher)
 
-        binding.searchScreenHistoryButton.setOnClickListener {
+        binding.searchScreenPlaceholderButton.setOnClickListener {
             if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
                 searchViewModel.searchTrack(binding.searchScreenEditText.text.toString())
             }
@@ -206,7 +208,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun hideKeyboard() {
-
         val inputMethodManager =
             activity?.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
         val view = requireActivity().currentFocus

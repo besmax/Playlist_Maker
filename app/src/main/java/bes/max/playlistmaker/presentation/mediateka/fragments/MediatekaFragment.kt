@@ -25,7 +25,7 @@ class MediatekaFragment : BindingFragment<FragmentMediatekaBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.fragmentMediatekaViewpager.adapter =
-            MediatekaViewPagerAdapter(parentFragmentManager, lifecycle)
+            MediatekaViewPagerAdapter(childFragmentManager, lifecycle)
         tabMediator = TabLayoutMediator(
             binding.fragmentMediatekaTablayout,
             binding.fragmentMediatekaViewpager
@@ -37,18 +37,11 @@ class MediatekaFragment : BindingFragment<FragmentMediatekaBinding>() {
         }
         tabMediator.attach()
 
-        binding.fragmentMediatekaBackIcon.setOnClickListener {
-            requireActivity().finish()
-        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         tabMediator.detach()
-    }
-
-    companion object {
-        fun newInstance() = MediatekaFragment()
     }
 
 }
