@@ -25,7 +25,7 @@ class MediatekaFragment : BindingFragment<FragmentMediatekaBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.fragmentMediatekaViewpager.adapter =
-            MediatekaViewPagerAdapter(childFragmentManager, lifecycle)
+            MediatekaViewPagerAdapter(this)
         tabMediator = TabLayoutMediator(
             binding.fragmentMediatekaTablayout,
             binding.fragmentMediatekaViewpager

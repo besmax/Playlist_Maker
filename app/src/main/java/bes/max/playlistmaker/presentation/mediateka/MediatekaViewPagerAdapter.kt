@@ -9,8 +9,8 @@ import bes.max.playlistmaker.presentation.mediateka.fragments.PlaylistFragment
 
 private const val FRAGMENT_QTY = 2
 
-class MediatekaViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
-    FragmentStateAdapter(fragmentManager, lifecycle) {
+class MediatekaViewPagerAdapter(parentFragment: Fragment) :
+    FragmentStateAdapter(parentFragment) {
     override fun getItemCount(): Int = FRAGMENT_QTY
 
     override fun createFragment(position: Int): Fragment {
