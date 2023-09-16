@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.player.PlayerActivity">
+    tools:context=".presentation.player.PlayerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             app:layout_constraintGuide_end="@dimen/activity_player_margin_end" />
 
         <ImageButton
-            android:id="@+id/activity_player_back_arrow"
+            android:id="@+id/player_screen_back_arrow"
             style="@style/toolbar_back_arrow"
             android:layout_marginStart="4dp"
             android:layout_marginTop="20dp"
@@ -37,18 +37,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/activity_player_album_cover"
+            android:id="@+id/player_screen_album_cover"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/activity_player_additional_horizontal_margin"
             android:layout_marginTop="48dp"
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_back_arrow"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_back_arrow"
             tools:src="@drawable/ic_picture_not_found" />
 
         <TextView
-            android:id="@+id/activity_player_track_name"
+            android:id="@+id/player_screen_track_name"
             style="@style/activity_player_text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,11 +58,11 @@
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_album_cover"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_album_cover"
             tools:text="Yesterday (Remastered 2009)" />
 
         <TextView
-            android:id="@+id/activity_player_track_author"
+            android:id="@+id/player_screen_track_author"
             style="@style/activity_player_text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,44 +72,44 @@
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_track_name"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_track_name"
             tools:text="The Beatles" />
 
         <ImageView
-            android:id="@+id/activity_player_button_add"
+            android:id="@+id/player_screen_button_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="@dimen/activity_player_margin_top_small_buttons"
             android:src="@drawable/ic_player_add"
-            app:layout_constraintEnd_toStartOf="@id/activity_player_button_play"
+            app:layout_constraintEnd_toStartOf="@id/player_screen_button_play"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_track_author" />
+            app:layout_constraintTop_toBottomOf="@id/player_screen_track_author" />
 
         <ImageView
-            android:id="@+id/activity_player_button_play"
+            android:id="@+id/player_screen_button_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:src="@drawable/ic_player_play"
-            app:layout_constraintEnd_toStartOf="@id/activity_player_button_like"
-            app:layout_constraintStart_toEndOf="@id/activity_player_button_add"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_track_author" />
+            app:layout_constraintEnd_toStartOf="@id/player_screen_button_like"
+            app:layout_constraintStart_toEndOf="@id/player_screen_button_add"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_track_author" />
 
         <ImageView
-            android:id="@+id/activity_player_button_like"
+            android:id="@+id/player_screen_button_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_player_margin_top_small_buttons"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_player_like"
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
-            app:layout_constraintStart_toEndOf="@id/activity_player_button_play"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_track_author" />
+            app:layout_constraintStart_toEndOf="@id/player_screen_button_play"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_track_author" />
 
         <TextView
-            android:id="@+id/activity_player_time_counter"
+            android:id="@+id/player_screen_time_counter"
             style="@style/activity_player_text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,131 +117,131 @@
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
             app:layout_constraintTag="players_under_buttons"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_button_play"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_button_play"
             tools:text="0:30" />
 
         <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/activity_player_barrier_before_details"
+            android:id="@+id/player_screen_barrier_before_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
             app:constraint_referenced_tags="players_under_buttons" />
 
         <TextView
-            android:id="@+id/activity_player_duration_title"
+            android:id="@+id/player_screen_duration_title"
             style="@style/activity_player_text_titles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_player_margin_before_text_bottom_section"
             android:paddingBottom="@dimen/activity_player_padding_between_text_bottom_section"
             android:text="@string/activity_player_duration_title"
-            app:layout_constraintEnd_toStartOf="@id/activity_player_duration"
+            app:layout_constraintEnd_toStartOf="@id/player_screen_duration"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_barrier_before_details" />
+            app:layout_constraintTop_toBottomOf="@id/player_screen_barrier_before_details" />
 
         <TextView
-            android:id="@+id/activity_player_duration"
+            android:id="@+id/player_screen_duration"
             style="@style/activity_player_text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_player_margin_before_text_bottom_section"
             android:paddingBottom="@dimen/activity_player_padding_between_text_bottom_section"
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
-            app:layout_constraintStart_toEndOf="@id/activity_player_duration_title"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_barrier_before_details"
+            app:layout_constraintStart_toEndOf="@id/player_screen_duration_title"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_barrier_before_details"
             tools:text="5:35" />
 
         <TextView
-            android:id="@+id/activity_player_album_title"
+            android:id="@+id/player_screen_album_title"
             style="@style/activity_player_text_titles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/activity_player_padding_between_text_bottom_section"
             android:text="@string/activity_player_album_title"
-            app:layout_constraintEnd_toStartOf="@id/activity_player_album"
+            app:layout_constraintEnd_toStartOf="@id/player_screen_album"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_duration_title" />
+            app:layout_constraintTop_toBottomOf="@id/player_screen_duration_title" />
 
         <TextView
-            android:id="@+id/activity_player_album"
+            android:id="@+id/player_screen_album"
             style="@style/activity_player_text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/activity_player_padding_between_text_bottom_section"
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
-            app:layout_constraintStart_toEndOf="@id/activity_player_album_title"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_duration"
+            app:layout_constraintStart_toEndOf="@id/player_screen_album_title"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_duration"
             tools:text="Yesterday (Remastered 2009)" />
 
         <TextView
-            android:id="@+id/activity_player_year_title"
+            android:id="@+id/player_screen_year_title"
             style="@style/activity_player_text_titles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/activity_player_padding_between_text_bottom_section"
             android:text="@string/activity_player_year_title"
-            app:layout_constraintEnd_toStartOf="@id/activity_player_year"
+            app:layout_constraintEnd_toStartOf="@id/player_screen_year"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_album_title" />
+            app:layout_constraintTop_toBottomOf="@id/player_screen_album_title" />
 
         <TextView
-            android:id="@+id/activity_player_year"
+            android:id="@+id/player_screen_year"
             style="@style/activity_player_text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/activity_player_padding_between_text_bottom_section"
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
-            app:layout_constraintStart_toEndOf="@id/activity_player_year_title"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_album"
+            app:layout_constraintStart_toEndOf="@id/player_screen_year_title"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_album"
             tools:text="1965" />
 
         <TextView
-            android:id="@+id/activity_player_genre_title"
+            android:id="@+id/player_screen_genre_title"
             style="@style/activity_player_text_titles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/activity_player_padding_between_text_bottom_section"
             android:text="@string/activity_player_genre_title"
-            app:layout_constraintEnd_toStartOf="@id/activity_player_genre"
+            app:layout_constraintEnd_toStartOf="@id/player_screen_genre"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_year_title" />
+            app:layout_constraintTop_toBottomOf="@id/player_screen_year_title" />
 
         <TextView
-            android:id="@+id/activity_player_genre"
+            android:id="@+id/player_screen_genre"
             style="@style/activity_player_text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/activity_player_padding_between_text_bottom_section"
-            app:layout_constraintBaseline_toBaselineOf="@id/activity_player_genre_title"
+            app:layout_constraintBaseline_toBaselineOf="@id/player_screen_genre_title"
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
-            app:layout_constraintStart_toEndOf="@id/activity_player_genre_title"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_year"
+            app:layout_constraintStart_toEndOf="@id/player_screen_genre_title"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_year"
             tools:text="Rock" />
 
         <TextView
-            android:id="@+id/activity_player_country_title"
+            android:id="@+id/player_screen_country_title"
             style="@style/activity_player_text_titles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_player_country_title"
-            app:layout_constraintEnd_toStartOf="@id/activity_player_country"
+            app:layout_constraintEnd_toStartOf="@id/player_screen_country"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_genre_title" />
+            app:layout_constraintTop_toBottomOf="@id/player_screen_genre_title" />
 
         <TextView
-            android:id="@+id/activity_player_country"
+            android:id="@+id/player_screen_country"
             style="@style/activity_player_text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBaseline_toBaselineOf="@id/activity_player_country_title"
+            app:layout_constraintBaseline_toBaselineOf="@id/player_screen_country_title"
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
-            app:layout_constraintStart_toEndOf="@id/activity_player_country_title"
-            app:layout_constraintTop_toBottomOf="@id/activity_player_genre"
+            app:layout_constraintStart_toEndOf="@id/player_screen_country_title"
+            app:layout_constraintTop_toBottomOf="@id/player_screen_genre"
             tools:text="England" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

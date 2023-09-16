@@ -1,6 +1,5 @@
 package bes.max.playlistmaker.presentation.search
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,12 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentSearchBinding
 import bes.max.playlistmaker.domain.models.Track
-import bes.max.playlistmaker.presentation.player.PlayerActivity
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,11 +37,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         val onElementClickAction = { track: Track ->
             if (searchViewModel.clickDebounce()) {
                 searchViewModel.saveTrackToHistory(track)
-
-                findNavController().navigate(
-                    R.id.action_searchFragment_to_playerActivity,
-                    PlayerActivity.createTrackArg(convertTrackToJson(track))
-                )
+                val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(convertTrackToJson(track))
+                findNavController().navigate(action)
             }
         }
 
