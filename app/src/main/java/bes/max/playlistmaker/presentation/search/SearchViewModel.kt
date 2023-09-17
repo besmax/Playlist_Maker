@@ -36,6 +36,10 @@ class SearchViewModel(
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
+    fun cancelSearch() {
+        handler.removeCallbacks(searchRunnable)
+    }
+
     fun searchTrack(searchRequest: String) {
         _screenState.value = SearchScreenState.Loading
         viewModelScope.launch {

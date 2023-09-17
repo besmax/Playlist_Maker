@@ -59,8 +59,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             showScreenContent(state)
         }
 
-        binding.searchScreenEditText.setText(searchViewModel.savedSearchInputText)
-
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -70,6 +68,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString().isNullOrBlank()) {
+                    searchViewModel.cancelSearch()
                     searchViewModel.showHistory()
                 }
             }
