@@ -84,7 +84,9 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     override fun onStop() {
         super.onStop()
-        playerViewModel.pausePlayer()
+        if (playerViewModel.playerState.value == PlayerState.STATE_PLAYING) {
+            playerViewModel.pausePlayer()
+        }
     }
 
     override fun onDestroyView() {
