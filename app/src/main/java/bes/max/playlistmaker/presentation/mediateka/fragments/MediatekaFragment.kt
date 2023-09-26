@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentMediatekaBinding
 import bes.max.playlistmaker.presentation.mediateka.MediatekaViewPagerAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MediatekaFragment : BindingFragment<FragmentMediatekaBinding>() {
@@ -24,8 +26,10 @@ class MediatekaFragment : BindingFragment<FragmentMediatekaBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = true
+
         binding.fragmentMediatekaViewpager.adapter =
-            MediatekaViewPagerAdapter(parentFragmentManager, lifecycle)
+            MediatekaViewPagerAdapter(this)
         tabMediator = TabLayoutMediator(
             binding.fragmentMediatekaTablayout,
             binding.fragmentMediatekaViewpager
@@ -37,18 +41,11 @@ class MediatekaFragment : BindingFragment<FragmentMediatekaBinding>() {
         }
         tabMediator.attach()
 
-        binding.fragmentMediatekaBackIcon.setOnClickListener {
-            requireActivity().finish()
-        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         tabMediator.detach()
-    }
-
-    companion object {
-        fun newInstance() = MediatekaFragment()
     }
 
 }

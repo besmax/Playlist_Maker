@@ -26,20 +26,34 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
     }
 
     override fun startPlayer() {
-        if (_playerState.value == PlayerState.STATE_PREPARED || _playerState.value == PlayerState.STATE_PAUSED) {
-            mediaPlayer.start()
-            _playerState.value = PlayerState.STATE_PLAYING
+        try {
+            if (_playerState.value == PlayerState.STATE_PREPARED || _playerState.value == PlayerState.STATE_PAUSED) {
+                mediaPlayer.start()
+                _playerState.value = PlayerState.STATE_PLAYING
+            }
+        } catch (e: IllegalStateException) {
+            Log.e(TAG, "exception in startPlayer() ${e.toString()}")
         }
+
     }
 
     override fun pausePlayer() {
-        mediaPlayer.pause()
-        _playerState.value = PlayerState.STATE_PAUSED
+        try {
+            mediaPlayer.pause()
+            _playerState.value = PlayerState.STATE_PAUSED
+        } catch (e: IllegalStateException) {
+            Log.e(TAG, "exception in pausePlayer() ${e.toString()}")
+        }
+
     }
 
     override fun releasePlayer() {
-        mediaPlayer.release()
-        _playerState.value = PlayerState.STATE_DEFAULT
+        try {
+            mediaPlayer.release()
+            _playerState.value = PlayerState.STATE_DEFAULT
+        } catch (e: IllegalStateException) {
+            Log.e(TAG, "exception in releasePlayer() ${e.toString()}")
+        }
     }
 
     override fun getCurrentPosition(): Int {

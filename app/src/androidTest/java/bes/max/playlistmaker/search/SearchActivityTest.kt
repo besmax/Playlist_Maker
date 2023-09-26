@@ -53,9 +53,9 @@ class SearchActivityTest {
 
     @Test
     fun shouldShowHistoryWhenEdiTextIsFocused() {
-        onView(withId(R.id.search_activity_edit_text)).perform(click())
+        onView(withId(R.id.search_screen_edit_text)).perform(click())
 
-        onView(withId(R.id.search_activity_history_scroll_view)).check(matches(isDisplayed()))
+        onView(withId(R.id.search_screen_history_scroll_view)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -65,11 +65,11 @@ class SearchActivityTest {
 
     @Test
     fun clickOnItemInSearchResultOpensPlayer() {
-        onView(withId(R.id.search_activity_edit_text)).perform(typeText("kovacs digging"))
+        onView(withId(R.id.search_screen_edit_text)).perform(typeText("kovacs digging"))
 
         sleep(3000)
 
-        onView(withId(R.id.search_activity_recycler_view_tracks)).perform(
+        onView(withId(R.id.search_screen_recycler_view_tracks)).perform(
             RecyclerViewActions.actionOnItem<TrackListItemAdapter.TrackViewHolder>(
                 hasDescendant(withText("Diggin'")), click()
             )
