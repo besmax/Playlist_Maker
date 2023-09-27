@@ -5,12 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import bes.max.playlistmaker.domain.models.Resource
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.search.SearchHistoryInteractor
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase
 import bes.max.playlistmaker.presentation.utils.debounce
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val TAG = "SearchViewModel"
 
@@ -47,48 +50,80 @@ class SearchViewModel(
     fun searchTrack(searchRequest: String) {
         _screenState.value = SearchScreenState.Loading
         viewModelScope.launch {
-            try {
-                val tracks = searchInNetworkUseCase.execute(searchRequest)
-                if (tracks.isNullOrEmpty()) {
-                    _screenState.postValue(SearchScreenState.TracksNotFound)
-                    Log.w(TAG, "List from remote is empty in fun searchTrack")
-                } else {
-                    SearchScreenState.Tracks.tracks = tracks
-                    _screenState.postValue(SearchScreenState.Tracks)
+            searchInNetworkUseCase.execute(searchRequest).collect { response ->
+                when (response) {
+                    is Resource.Error -> {
+                        _screenState.postValue(SearchScreenState.SearchError)
+                        Log.w(
+                            TAG,
+                            "Error in fun searchTrack in SearchViewModel: ${response.message}"
+                        )
+                    }
+
+                    is Resource.Success -> {
+                        if (response.data.isNullOrEmpty()) {
+                            _screenState.postValue(SearchScreenState.TracksNotFound)
+                            Log.w(
+                                TAG,
+                                "List from remote is empty in fun searchTrack in SearchViewModel"
+                            )
+                        } else {
+                            SearchScreenState.Tracks.tracks = response.data
+                            _screenState.postValue(SearchScreenState.Tracks)
+                        }
+                    }
                 }
-            } catch (e: Exception) {
-                _screenState.postValue(SearchScreenState.SearchError)
-                Log.e(TAG, "Error Exception in fun searchTrack: ${e.toString()}")
+
             }
         }
     }
 
     fun saveTrackToHistory(track: Track) {
-        searchHistoryInteractor.saveTrackToHistory(track)
-        SearchScreenState.History.tracks = searchHistoryInteractor.getTracksFromHistory()
-        if (_screenState.value == SearchScreenState.History) {
-            _screenState.value = SearchScreenState.History
+        viewModelScope.launch(Dispatchers.IO) {
+            searchHistoryInteractor.saveTrackToHistory(track)
+            withContext(Dispatchers.Main) {
+                searchHistoryInteractor.getTracksFromHistory().collect() {
+                    SearchScreenState.History.tracks = it
+                }
+                if (_screenState.value == SearchScreenState.History) {
+                    _screenState.value = SearchScreenState.History
+                }
+            }
         }
     }
 
     fun showHistory() {
-        SearchScreenState.History.tracks = searchHistoryInteractor.getTracksFromHistory()
-        _screenState.value = SearchScreenState.History
+        viewModelScope.launch(Dispatchers.IO) {
+            searchHistoryInteractor.getTracksFromHistory().collect() {
+                SearchScreenState.History.tracks = it
+            }
+            withContext(Dispatchers.Main) {
+                _screenState.value = SearchScreenState.History
+            }
+        }
     }
 
     fun clearHistory() {
-        searchHistoryInteractor.clearHistory()
-        _screenState.value = SearchScreenState.Default
-        SearchScreenState.History.tracks = emptyList()
+        viewModelScope.launch(Dispatchers.IO) {
+            searchHistoryInteractor.clearHistory()
+            withContext(Dispatchers.Main) {
+                _screenState.value = SearchScreenState.Default
+                SearchScreenState.History.tracks = emptyList()
+            }
+        }
     }
 
     fun onSearchTextChanged(searchText: CharSequence?, isFocused: Boolean) {
-        if (searchText.isNullOrBlank() && isFocused) {
-            cancelSearch()
-            SearchScreenState.History.tracks = searchHistoryInteractor.getTracksFromHistory()
-            _screenState.value = SearchScreenState.History
-        } else {
-            searchDebounce(searchText.toString())
+        viewModelScope.launch {
+            if (searchText.isNullOrBlank() && isFocused) {
+                cancelSearch()
+                searchHistoryInteractor.getTracksFromHistory().collect() {
+                    SearchScreenState.History.tracks = it
+                }
+                _screenState.value = SearchScreenState.History
+            } else {
+                searchDebounce(searchText.toString())
+            }
         }
     }
 
