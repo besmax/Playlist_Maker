@@ -1,7 +1,5 @@
 package bes.max.playlistmaker.presentation.search
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.search.SearchHistoryInteractor
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase
+import bes.max.playlistmaker.presentation.utils.debounce
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 private const val TAG = "SearchViewModel"
@@ -23,21 +23,25 @@ class SearchViewModel(
         MutableLiveData(SearchScreenState.Default)
     val screenState: LiveData<SearchScreenState> = _screenState
 
-    var savedSearchInputText = ""
+    private var searchJob: Job? = null
 
-    private var isClickAllowed = true
-
-    private val handler = Handler(Looper.getMainLooper())
-    private val searchRunnable = Runnable { searchTrack(savedSearchInputText) }
 
     private fun searchDebounce(searchText: String) {
-        savedSearchInputText = searchText
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        val debounceSearch = debounce<String>(
+            delayMillis = SEARCH_DEBOUNCE_DELAY,
+            coroutineScope = viewModelScope,
+            useLastParam = true,
+            action = { searchQuery ->
+                searchTrack(searchQuery)
+            }
+        )
+        searchJob = viewModelScope.launch {
+            debounceSearch.invoke(searchText)
+        }
     }
 
     fun cancelSearch() {
-        handler.removeCallbacks(searchRunnable)
+        searchJob?.cancel()
     }
 
     fun searchTrack(searchRequest: String) {
@@ -80,6 +84,7 @@ class SearchViewModel(
 
     fun onSearchTextChanged(searchText: CharSequence?, isFocused: Boolean) {
         if (searchText.isNullOrBlank() && isFocused) {
+            cancelSearch()
             SearchScreenState.History.tracks = searchHistoryInteractor.getTracksFromHistory()
             _screenState.value = SearchScreenState.History
         } else {
@@ -87,17 +92,7 @@ class SearchViewModel(
         }
     }
 
-    fun clickDebounce(): Boolean {
-        val currentFlag = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return currentFlag
-    }
-
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

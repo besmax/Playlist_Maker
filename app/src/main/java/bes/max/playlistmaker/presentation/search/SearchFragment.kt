@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentSearchBinding
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import bes.max.playlistmaker.presentation.utils.debounce
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,19 +38,24 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
         requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = true
 
-        val onElementClickAction = { track: Track ->
-            if (searchViewModel.clickDebounce()) {
+        val onElementClickAction = debounce<Track>(
+            delayMillis = CLICK_DEBOUNCE_DELAY,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = false,
+            action = { track ->
                 searchViewModel.saveTrackToHistory(track)
                 val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(convertTrackToJson(track))
                 findNavController().navigate(action)
             }
-        }
+        )
 
         setUpRecyclers(onElementClickAction)
 
         binding.searchScreenTextInputLayout.setEndIconOnClickListener {
             binding.searchScreenEditText.text?.clear()
             hideKeyboard()
+            searchViewModel.cancelSearch()
+            searchViewModel.showHistory()
         }
 
         binding.searchScreenEditText.setOnFocusChangeListener { _, hasFocus ->
@@ -92,11 +99,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
             searchViewModel.searchTrack(binding.searchScreenEditText.text.toString())
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_INPUT_TEXT, searchViewModel.savedSearchInputText)
     }
 
     private fun showScreenContent(state: SearchScreenState) {
@@ -163,6 +165,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 else View.GONE
             searchScreenRecyclerViewTracks.visibility = View.GONE
             searchScreenProgressBar.visibility = View.GONE
+            searchScreenPlaceholder.visibility = View.GONE
         }
     }
 
@@ -171,6 +174,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchScreenRecyclerViewTracks.visibility = View.VISIBLE
             searchScreenHistoryGroup.visibility = View.GONE
             searchScreenProgressBar.visibility = View.GONE
+            searchScreenPlaceholder.visibility = View.GONE
         }
     }
 
@@ -212,6 +216,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     companion object {
-        private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
 }
