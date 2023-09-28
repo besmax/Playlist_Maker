@@ -27,9 +27,10 @@ class SearchViewModel(
     val screenState: LiveData<SearchScreenState> = _screenState
 
     private var searchJob: Job? = null
+    private var latestSearchText = ""
 
 
-    private fun searchDebounce(searchText: String) {
+    fun searchDebounce(searchText: String) {
         val debounceSearch = debounce<String>(
             delayMillis = SEARCH_DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
@@ -38,8 +39,11 @@ class SearchViewModel(
                 searchTrack(searchQuery)
             }
         )
-        searchJob = viewModelScope.launch {
-            debounceSearch.invoke(searchText)
+        if (latestSearchText != searchText) {
+            latestSearchText = searchText
+            searchJob = viewModelScope.launch {
+                debounceSearch(searchText)
+            }
         }
     }
 
@@ -109,20 +113,6 @@ class SearchViewModel(
             withContext(Dispatchers.Main) {
                 _screenState.value = SearchScreenState.Default
                 SearchScreenState.History.tracks = emptyList()
-            }
-        }
-    }
-
-    fun onSearchTextChanged(searchText: CharSequence?, isFocused: Boolean) {
-        viewModelScope.launch {
-            if (searchText.isNullOrBlank() && isFocused) {
-                cancelSearch()
-                searchHistoryInteractor.getTracksFromHistory().collect() {
-                    SearchScreenState.History.tracks = it
-                }
-                _screenState.value = SearchScreenState.History
-            } else {
-                searchDebounce(searchText.toString())
             }
         }
     }

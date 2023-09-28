@@ -70,7 +70,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!s.toString().isNullOrBlank()) searchViewModel.onSearchTextChanged(s, binding.searchScreenEditText.hasFocus())
+                if (!s.toString().isNullOrBlank()) searchViewModel.searchDebounce(s.toString())
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -97,7 +97,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun onResume() {
         super.onResume()
         if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
-            searchViewModel.searchTrack(binding.searchScreenEditText.text.toString())
+            searchViewModel.searchDebounce(binding.searchScreenEditText.text.toString())
         }
     }
 

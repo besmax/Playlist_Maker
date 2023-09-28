@@ -1,7 +1,5 @@
 package bes.max.playlistmaker.presentation.settings
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +10,7 @@ import bes.max.playlistmaker.R
 import bes.max.playlistmaker.domain.models.EmailData
 import bes.max.playlistmaker.domain.settings.SettingsInteractor
 import bes.max.playlistmaker.domain.settings.SharingInteractor
+import bes.max.playlistmaker.presentation.utils.debounce
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -25,10 +24,6 @@ class SettingsViewModel(
 
     val isNightModeActive = settingsInteractor.isNightModeActive().asLiveData(Dispatchers.IO)
 
-    private var switcherChecked = true
-    private val handler = Handler(Looper.getMainLooper())
-    private val setNightModeRunnable =  Runnable { setIsNightModeActive(switcherChecked) }
-
     private fun setIsNightModeActive(isNightModeActive: Boolean) {
         viewModelScope.launch {
             settingsInteractor.setIsNightModeActive(isNightModeActive)
@@ -36,9 +31,15 @@ class SettingsViewModel(
     }
 
     fun setIsNightModeActiveDebounce(isNightModeActive: Boolean) {
-        switcherChecked = isNightModeActive
-        handler.removeCallbacks(setNightModeRunnable)
-        handler.postDelayed(setNightModeRunnable, SET_NIGHT_MODE_DELAY)
+        val debounceSwitch = debounce<Boolean>(
+            delayMillis = SET_NIGHT_MODE_DELAY,
+            coroutineScope = viewModelScope,
+            useLastParam = false,
+            action = {
+                setIsNightModeActive(it)
+            }
+        )
+        debounceSwitch.invoke(isNightModeActive)
     }
 
     fun shareApp(link: String) {
@@ -82,7 +83,7 @@ class SettingsViewModel(
 
     companion object {
         private const val TAG = "SettingsViewModel"
-        private const val SET_NIGHT_MODE_DELAY = 200L
+        private const val SET_NIGHT_MODE_DELAY = 100L
     }
 
 }
