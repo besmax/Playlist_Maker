@@ -1,7 +1,5 @@
 package bes.max.playlistmaker.presentation.player
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -71,7 +69,7 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
             }
 
             PlayerState.STATE_PAUSED -> {
-            timerJob?.cancel()
+                timerJob?.cancel()
             }
 
             else -> {

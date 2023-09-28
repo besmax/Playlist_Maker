@@ -25,6 +25,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private val searchViewModel: SearchViewModel by viewModel()
     private val adapter = TrackListItemAdapter()
     private val adapterForHistory = TrackListItemAdapter()
+    private var textWatcher: TextWatcher? = null
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -50,6 +51,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         )
 
         setUpRecyclers(onElementClickAction)
+        setTextWatcher()
 
         binding.searchScreenTextInputLayout.setEndIconOnClickListener {
             binding.searchScreenEditText.text?.clear()
@@ -66,25 +68,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             showScreenContent(state)
         }
 
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!s.toString().isNullOrBlank()) searchViewModel.searchDebounce(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if (s.toString().isNullOrBlank()) {
-                    searchViewModel.cancelSearch()
-                    searchViewModel.showHistory()
-                }
-            }
-        }
-        binding.searchScreenEditText.addTextChangedListener(textWatcher)
-
         binding.searchScreenPlaceholderButton.setOnClickListener {
             if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
-                searchViewModel.searchTrack(binding.searchScreenEditText.text.toString())
+                searchViewModel.searchDebounce(binding.searchScreenEditText.text.toString())
             }
         }
 
@@ -99,6 +85,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
             searchViewModel.searchDebounce(binding.searchScreenEditText.text.toString())
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        textWatcher = null
     }
 
     private fun showScreenContent(state: SearchScreenState) {
@@ -137,6 +128,24 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         adapterForHistory.listOfTracks = SearchScreenState.History.tracks
         adapterForHistory.onListElementClick = onElementClickAction
         binding.searchScreenHistoryRecyclerView.adapter = adapterForHistory
+    }
+
+    private fun setTextWatcher() {
+        textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!s.toString().isNullOrBlank()) searchViewModel.searchDebounce(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString().isNullOrBlank()) {
+                    searchViewModel.cancelSearch()
+                    searchViewModel.showHistory()
+                }
+            }
+        }
+        binding.searchScreenEditText.addTextChangedListener(textWatcher)
     }
 
     private fun showDefaultScreenState() {

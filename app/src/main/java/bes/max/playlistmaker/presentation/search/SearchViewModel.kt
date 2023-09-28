@@ -9,9 +9,9 @@ import bes.max.playlistmaker.domain.models.Resource
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.search.SearchHistoryInteractor
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase
-import bes.max.playlistmaker.presentation.utils.debounce
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -31,18 +31,15 @@ class SearchViewModel(
 
 
     fun searchDebounce(searchText: String) {
-        val debounceSearch = debounce<String>(
-            delayMillis = SEARCH_DEBOUNCE_DELAY,
-            coroutineScope = viewModelScope,
-            useLastParam = true,
-            action = { searchQuery ->
-                searchTrack(searchQuery)
-            }
-        )
+        if (searchJob?.isCompleted != true) {
+            searchJob?.cancel()
+        }
+
         if (latestSearchText != searchText) {
             latestSearchText = searchText
             searchJob = viewModelScope.launch {
-                debounceSearch(searchText)
+                delay(SEARCH_DEBOUNCE_DELAY)
+                searchTrack(searchText)
             }
         }
     }
@@ -51,7 +48,7 @@ class SearchViewModel(
         searchJob?.cancel()
     }
 
-    fun searchTrack(searchRequest: String) {
+    private fun searchTrack(searchRequest: String) {
         _screenState.value = SearchScreenState.Loading
         viewModelScope.launch {
             searchInNetworkUseCase.execute(searchRequest).collect { response ->
