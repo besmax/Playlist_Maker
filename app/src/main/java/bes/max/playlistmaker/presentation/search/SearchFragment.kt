@@ -83,7 +83,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun onResume() {
         super.onResume()
         if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
-            searchViewModel.searchDebounce(binding.searchScreenEditText.text.toString())
+            binding.searchScreenTextInputLayout.isEndIconVisible = true
         }
     }
 
