@@ -108,7 +108,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             Glide.with(this)
                 .load(track.bigCover)
                 .placeholder(R.drawable.ic_picture_not_found)
-                .transform(MultiTransformation(FitCenter(), RoundedCorners(roundedCorner)))
+                .transform(MultiTransformation(RoundedCorners(roundedCorner)))
                 .into(binding.playerScreenAlbumCover)
 
             with(binding) {
