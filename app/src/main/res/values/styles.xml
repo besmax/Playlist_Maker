@@ -120,4 +120,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="settings_screen_switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="android:paddingVertical">@dimen/settings_screen_section_vertical_padding</item>
+        <item name="android:lineHeight">18sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="thumbTint">@color/settings_switch_color_thumb</item>
+        <item name="trackTint">@color/settings_screen_switch_track</item>
+    </style>
+
 </resources>
