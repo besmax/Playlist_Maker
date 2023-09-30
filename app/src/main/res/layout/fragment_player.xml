@@ -24,12 +24,12 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/activity_player_margin_end" />
 
-        <ImageButton
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/player_screen_back_arrow"
             style="@style/toolbar_back_arrow"
             android:layout_marginStart="4dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/ic_arrow_back"
+            app:navigationIcon="@drawable/ic_arrow_back"
             app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"

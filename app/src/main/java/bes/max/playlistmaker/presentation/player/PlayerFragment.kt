@@ -47,7 +47,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
         bind(playerViewModel.track)
 
-        binding.playerScreenBackArrow.setOnClickListener {
+        binding.playerScreenBackArrow.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
 
