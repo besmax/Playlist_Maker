@@ -32,6 +32,7 @@
     android:id="@+id/bottom_navigation_view"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
+    app:itemTextAppearanceActive="@style/bottom_navigation_text"
     app:itemBackground="@color/bottom_navigation_background"
     app:itemIconTint="@color/bottom_nav_view"
     app:itemTextColor="@color/bottom_nav_view"
