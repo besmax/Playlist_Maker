@@ -40,7 +40,10 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = false
+        with(requireActivity()) {
+            requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = false
+            requireViewById<View>(R.id.bottom_navigation_view_line_above).isVisible = false
+        }
 
         bind(playerViewModel.track)
 

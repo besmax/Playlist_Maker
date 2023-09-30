@@ -37,7 +37,10 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = true
+        with(requireActivity()) {
+            requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = true
+            requireViewById<View>(R.id.bottom_navigation_view_line_above).isVisible = true
+        }
 
         val onElementClickAction = debounce<Track>(
             delayMillis = CLICK_DEBOUNCE_DELAY,

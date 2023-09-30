@@ -28,5 +28,8 @@
     <color name="bottom_navigation_background">#FFFFFFFF</color>
     <color name="bottom_navigation_icon_checked">#3772E7</color>
     <color name="bottom_navigation_icon_unchecked">#FF000000</color>
+    <color name="bottom_navigation_line_above">#E6E8EB</color>
+
+
 
 </resources>
