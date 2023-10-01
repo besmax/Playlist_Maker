@@ -1,5 +1,6 @@
 package bes.max.playlistmaker.presentation.player
 
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +13,9 @@ import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlayerBinding
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
-import bes.max.playlistmaker.presentation.search.TrackListItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
@@ -55,22 +54,20 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             when (it) {
                 PlayerState.STATE_PLAYING -> {
                     binding.playerScreenButtonPlay.isEnabled = true
-                    binding.playerScreenButtonPlay.setImageDrawable(getDrawable(requireContext(), R.drawable.ic_player_pause))
                 }
 
                 PlayerState.STATE_PAUSED -> {
                     binding.playerScreenButtonPlay.isEnabled = true
-                    binding.playerScreenButtonPlay.setImageDrawable(getDrawable(requireContext(), R.drawable.ic_player_play))
                 }
 
                 PlayerState.STATE_PREPARED -> {
+                    binding.playerScreenButtonPlay.setImageResource(R.drawable.ic_player_play)
                     binding.playerScreenButtonPlay.isEnabled = true
-                    binding.playerScreenButtonPlay.setImageDrawable(getDrawable(requireContext(), R.drawable.ic_player_play))
                 }
 
                 else -> {
+                    binding.playerScreenButtonPlay.setImageResource(R.drawable.ic_player_play)
                     binding.playerScreenButtonPlay.isEnabled = false
-                    binding.playerScreenButtonPlay.setImageDrawable(getDrawable(requireContext(), R.drawable.ic_player_play))
                 }
             }
         }
@@ -81,6 +78,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
         binding.playerScreenButtonPlay.setOnClickListener {
             playerViewModel.playbackControl()
+            playPauseAnimation()
         }
 
     }
@@ -95,6 +93,26 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     override fun onDestroyView() {
         super.onDestroyView()
         playerViewModel.releasePlayer()
+    }
+
+    private fun playPauseAnimation() {
+        if (playerViewModel.playerState.value == PlayerState.STATE_PLAYING) {
+            binding.playerScreenButtonPlay.setImageDrawable(
+                getDrawable(
+                    requireContext(),
+                    R.drawable.avd_play_to_pause
+                )
+            )
+        } else {
+            binding.playerScreenButtonPlay.setImageDrawable(
+                getDrawable(
+                    requireContext(),
+                    R.drawable.avd_pause_to_play
+                )
+            )
+        }
+        val avdPlayToPause = binding.playerScreenButtonPlay.drawable as AnimatedVectorDrawable
+        avdPlayToPause.start()
     }
 
 

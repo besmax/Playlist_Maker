@@ -1,0 +1,24 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt" >
+<aapt:attr name="android:drawable">
+<vector
+    android:height="48dp"
+    android:width="48dp"
+    android:viewportHeight="24"
+    android:viewportWidth="24" >
+</vector>
+</aapt:attr>
+
+<target android:name="v" >
+<aapt:attr name="android:animation">
+    <set>
+        <objectAnimator
+            android:duration="3000"
+            android:propertyName="pathData"
+            android:valueFrom="@string/play"
+            android:valueTo="@string/pause"
+            android:valueType="pathType"/>
+    </set>
+</aapt:attr>
+</target>
+    </animated-vector>
