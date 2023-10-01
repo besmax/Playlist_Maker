@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentSearchBinding
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import bes.max.playlistmaker.presentation.utils.debounce
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,6 +25,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private val searchViewModel: SearchViewModel by viewModel()
     private val adapter = TrackListItemAdapter()
     private val adapterForHistory = TrackListItemAdapter()
+    private var textWatcher: TextWatcher? = null
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -34,21 +37,30 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = true
+        with(requireActivity()) {
+            requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = true
+            requireViewById<View>(R.id.bottom_navigation_view_line_above).isVisible = true
+        }
 
-        val onElementClickAction = { track: Track ->
-            if (searchViewModel.clickDebounce()) {
+        val onElementClickAction = debounce<Track>(
+            delayMillis = CLICK_DEBOUNCE_DELAY,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = false,
+            action = { track ->
                 searchViewModel.saveTrackToHistory(track)
                 val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(convertTrackToJson(track))
                 findNavController().navigate(action)
             }
-        }
+        )
 
         setUpRecyclers(onElementClickAction)
+        setTextWatcher()
 
         binding.searchScreenTextInputLayout.setEndIconOnClickListener {
             binding.searchScreenEditText.text?.clear()
             hideKeyboard()
+            searchViewModel.cancelSearch()
+            searchViewModel.showHistory()
         }
 
         binding.searchScreenEditText.setOnFocusChangeListener { _, hasFocus ->
@@ -59,25 +71,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             showScreenContent(state)
         }
 
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!s.toString().isNullOrBlank()) searchViewModel.onSearchTextChanged(s, binding.searchScreenEditText.hasFocus())
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if (s.toString().isNullOrBlank()) {
-                    searchViewModel.cancelSearch()
-                    searchViewModel.showHistory()
-                }
-            }
-        }
-        binding.searchScreenEditText.addTextChangedListener(textWatcher)
-
         binding.searchScreenPlaceholderButton.setOnClickListener {
             if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
-                searchViewModel.searchTrack(binding.searchScreenEditText.text.toString())
+                searchViewModel.searchDebounce(binding.searchScreenEditText.text.toString())
             }
         }
 
@@ -90,13 +86,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun onResume() {
         super.onResume()
         if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
-            searchViewModel.searchTrack(binding.searchScreenEditText.text.toString())
+            binding.searchScreenTextInputLayout.isEndIconVisible = true
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_INPUT_TEXT, searchViewModel.savedSearchInputText)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        textWatcher = null
     }
 
     private fun showScreenContent(state: SearchScreenState) {
@@ -137,6 +133,24 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         binding.searchScreenHistoryRecyclerView.adapter = adapterForHistory
     }
 
+    private fun setTextWatcher() {
+        textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!s.toString().isNullOrBlank()) searchViewModel.searchDebounce(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString().isNullOrBlank()) {
+                    searchViewModel.cancelSearch()
+                    searchViewModel.showHistory()
+                }
+            }
+        }
+        binding.searchScreenEditText.addTextChangedListener(textWatcher)
+    }
+
     private fun showDefaultScreenState() {
         with(binding) {
             searchScreenPlaceholder.visibility = View.GONE
@@ -163,6 +177,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 else View.GONE
             searchScreenRecyclerViewTracks.visibility = View.GONE
             searchScreenProgressBar.visibility = View.GONE
+            searchScreenPlaceholder.visibility = View.GONE
         }
     }
 
@@ -171,6 +186,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchScreenRecyclerViewTracks.visibility = View.VISIBLE
             searchScreenHistoryGroup.visibility = View.GONE
             searchScreenProgressBar.visibility = View.GONE
+            searchScreenPlaceholder.visibility = View.GONE
         }
     }
 
@@ -212,6 +228,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     companion object {
-        private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
 }

@@ -1,14 +1,16 @@
 package bes.max.playlistmaker.presentation.player
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.player.PlayerInteractor
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -18,8 +20,7 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
     val playerState = playerInteractor.state.asLiveData()
     private val _playingTime = MutableLiveData<String>("00:00")
     val playingTime: LiveData<String> = _playingTime
-    private val handler = Handler(Looper.getMainLooper())
-    private val timerRunnable = Runnable { updateTimer() }
+    private var timerJob: Job? = null
 
     init {
         playerInteractor.preparePlayer(track.previewUrl ?: "")
@@ -61,22 +62,25 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
         when (playerState.value) {
             PlayerState.STATE_PLAYING -> {
                 _playingTime.value = formattedText
-                handler.postDelayed(timerRunnable, TIMER_UPDATE_RATE)
+                timerJob = viewModelScope.launch {
+                    delay(TIMER_UPDATE_RATE)
+                    updateTimer()
+                }
             }
 
             PlayerState.STATE_PAUSED -> {
-                handler.removeCallbacks(timerRunnable)
+                timerJob?.cancel()
             }
 
             else -> {
-                handler.removeCallbacks(timerRunnable)
+                timerJob?.cancel()
                 _playingTime.value = DEFAULT_TIMER_TIME
             }
         }
     }
 
     companion object {
-        private const val TIMER_UPDATE_RATE = 500L
+        private const val TIMER_UPDATE_RATE = 300L
         private const val DEFAULT_TIMER_TIME = "00:00"
     }
 

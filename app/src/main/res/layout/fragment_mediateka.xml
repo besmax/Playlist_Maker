@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/fragment_mediateka_title"
         style="@style/screen_title_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/fragment_mediateka_title"
+        app:title="@string/fragment_mediateka_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,6 +21,7 @@
         android:paddingVertical="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabTextAppearance="@style/tab_layout_text"
         app:tabTextColor="@color/mediateka_screen_tab_color"
         app:tabIndicatorColor="@color/mediateka_screen_tab_color"
         app:layout_constraintEnd_toEndOf="parent"

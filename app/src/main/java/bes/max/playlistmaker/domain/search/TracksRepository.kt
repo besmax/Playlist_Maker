@@ -1,14 +1,16 @@
 package bes.max.playlistmaker.domain.search
 
 import bes.max.playlistmaker.domain.models.Track
+import bes.max.playlistmaker.domain.models.Resource
+import kotlinx.coroutines.flow.Flow
 
 interface TracksRepository {
 
-    suspend fun searchTracks(searchRequest: String) : List<Track>
+    suspend fun searchTracks(searchRequest: String) : Flow<Resource<List<Track>>>
 
     fun saveTrackInHistory(track: Track)
 
-    fun getTracksFromHistory() : List<Track>
+    fun getTracksFromHistory() : Flow<List<Track>>
 
     fun clearHistory()
 }

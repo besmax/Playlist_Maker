@@ -8,13 +8,13 @@
     android:layout_height="match_parent"
     tools:context=".presentation.search.SearchFragment">
 
-    <TextView
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/search_screen_title"
         style="@style/screen_title_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/search_activity_title"
+        app:title="@string/search_activity_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

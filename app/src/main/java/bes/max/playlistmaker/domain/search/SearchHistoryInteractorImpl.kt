@@ -1,6 +1,8 @@
 package bes.max.playlistmaker.domain.search
 
 import bes.max.playlistmaker.domain.models.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 
 class SearchHistoryInteractorImpl(
     private val trackRepository: TracksRepository
@@ -10,7 +12,7 @@ class SearchHistoryInteractorImpl(
         trackRepository.saveTrackInHistory(track)
     }
 
-    override fun getTracksFromHistory(): List<Track> =
+    override fun getTracksFromHistory(): Flow<List<Track>> =
         trackRepository.getTracksFromHistory()
 
 

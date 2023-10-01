@@ -29,7 +29,12 @@ class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = true
+        with(requireActivity()) {
+            requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = true
+            requireViewById<View>(R.id.bottom_navigation_view_line_above).isVisible = true
+        }
+
+
 
         binding.settingsScreenSectionShare.setClickListenersForAllViews {
             viewModel.shareApp(getString(R.string.link_for_app_share))
