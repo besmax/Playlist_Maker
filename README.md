@@ -13,8 +13,8 @@
 - DataStore
 
 ## Скриншоты экранов
-### Главный экран
-<img src="https://github.com/besmax/Playlist_Maker/assets/88286767/7d2e299b-e51c-423c-aa0a-102d9f4eab52"  width="270" height="600" alt="main screen">
+### Стартовый экран
+<img src="![image](https://github.com/besmax/Playlist_Maker/assets/88286767/27009cf5-d4c2-43c6-9d29-f02fa7b2b919)"  width="270" height="600" alt="main screen">
 
 ### Экран поиска с историей поиска (10 последних открытых песен)
 <img src="https://github.com/besmax/Playlist_Maker/assets/88286767/192162a0-25da-493d-8fa5-fa4667d6b897"  width="270" height="600" alt="History on Search screen">
