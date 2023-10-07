@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.presentation.mediateka.fragments
+package bes.max.playlistmaker.presentation.mediateka
 
 import android.os.Bundle
 import android.view.LayoutInflater

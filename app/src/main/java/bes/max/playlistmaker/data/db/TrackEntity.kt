@@ -34,5 +34,9 @@ data class TrackEntity(
     val bigCover: String,
 
     @ColumnInfo("track_year")
-    val year: String
+    val year: String,
+
+    @ColumnInfo("adding_date")
+    val addingDate: Long
+
 )

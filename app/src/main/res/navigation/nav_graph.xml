@@ -16,8 +16,12 @@
     </fragment>
     <fragment
         android:id="@+id/mediatekaFragment"
-        android:name="bes.max.playlistmaker.presentation.mediateka.fragments.MediatekaFragment"
-        android:label="MediatekaFragment" />
+        android:name="bes.max.playlistmaker.presentation.mediateka.MediatekaFragment"
+        android:label="MediatekaFragment" >
+        <action
+            android:id="@+id/action_mediatekaFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="bes.max.playlistmaker.presentation.settings.SettingsFragment"
@@ -30,5 +34,14 @@
         <argument
             android:name="track"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteTracksFragment"
+        android:name="bes.max.playlistmaker.presentation.mediateka.favorite.FavoriteTracksFragment"
+        android:label="fragment_favorite_tracks"
+        tools:layout="@layout/fragment_favorite_tracks" >
+        <action
+            android:id="@+id/action_favoriteTracksFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
     </fragment>
 </navigation>

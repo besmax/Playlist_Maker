@@ -88,14 +88,14 @@ class PlayerViewModel(
         }
     }
 
-    private fun addToFavorite(track: Track) {
+    fun addToFavorite(track: Track) {
         viewModelScope.launch(Dispatchers.IO) {
             favoriteTracksInteractor.addTrackToFavorite(track)
             _isFavorite.postValue(true)
         }
     }
 
-    private fun deleteFromFavorite(track: Track) {
+    fun deleteFromFavorite(track: Track) {
         viewModelScope.launch(Dispatchers.IO) {
             favoriteTracksInteractor.deleteTrackFromFavorite(track)
             _isFavorite.postValue(false)

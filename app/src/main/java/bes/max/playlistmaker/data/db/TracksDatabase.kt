@@ -3,8 +3,8 @@ package bes.max.playlistmaker.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 
-@Database(version = 1, entities = [TrackEntity::class])
+@Database(version = 2, entities = [TrackEntity::class], exportSchema = false)
 abstract class TracksDatabase : RoomDatabase() {
 
-    abstract fun favoriteTracksDao() : FavoriteTracksDao
+    abstract fun favoriteTracksDao(): FavoriteTracksDao
 }

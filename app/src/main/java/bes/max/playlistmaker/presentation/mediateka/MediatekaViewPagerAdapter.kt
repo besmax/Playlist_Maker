@@ -2,8 +2,8 @@ package bes.max.playlistmaker.presentation.mediateka
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import bes.max.playlistmaker.presentation.mediateka.fragments.FavoriteTracksFragment
-import bes.max.playlistmaker.presentation.mediateka.fragments.PlaylistFragment
+import bes.max.playlistmaker.presentation.mediateka.favorite.FavoriteTracksFragment
+import bes.max.playlistmaker.presentation.mediateka.playlist.PlaylistFragment
 
 private const val FRAGMENT_QTY = 2
 

@@ -81,6 +81,7 @@ val dataModule = module {
 
     single<FavoriteTracksDao> {
         Room.databaseBuilder(androidContext(), TracksDatabase::class.java, "database")
+            .fallbackToDestructiveMigration()
             .build().favoriteTracksDao()
     }
 

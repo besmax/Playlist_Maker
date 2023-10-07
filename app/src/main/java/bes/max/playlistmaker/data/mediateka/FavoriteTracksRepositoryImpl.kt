@@ -20,7 +20,7 @@ class FavoriteTracksRepositoryImpl(
     }
 
     override suspend fun getAllFavoriteTracks(): Flow<List<Track>> = flow {
-        val tracks = dao.getAllFavoriteTracks().map { convertor.map(it) }
+        val tracks = dao.getAllFavoriteTracks().sortedBy { it.addingDate }.map { convertor.map(it) }
         emit(tracks)
     }
 

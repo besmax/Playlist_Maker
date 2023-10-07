@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.presentation.mediateka.viewmodels
+package bes.max.playlistmaker.presentation.mediateka.playlist
 
 import androidx.lifecycle.ViewModel
 

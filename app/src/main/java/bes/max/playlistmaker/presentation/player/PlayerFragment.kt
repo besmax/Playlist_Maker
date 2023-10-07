@@ -76,13 +76,21 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             binding.playerScreenTimeCounter.text = playingTimeString
         }
         playerViewModel.isFavorite.observe(viewLifecycleOwner) {
-            binding.playerScreenButtonLike.setImageResource(if (it) R.drawable.ic_player_like_active
-            else R.drawable.ic_player_like)
+            binding.playerScreenButtonLike.setImageResource(
+                if (it) R.drawable.ic_player_like_active
+                else R.drawable.ic_player_like
+            )
         }
 
         binding.playerScreenButtonPlay.setOnClickListener {
             playerViewModel.playbackControl()
             playPauseAnimation()
+        }
+
+        binding.playerScreenButtonLike.setOnClickListener {
+            if (playerViewModel.isFavorite.value == true) playerViewModel.deleteFromFavorite(
+                playerViewModel.track
+            ) else playerViewModel.addToFavorite(playerViewModel.track)
         }
 
     }
