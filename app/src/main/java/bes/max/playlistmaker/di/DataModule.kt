@@ -7,6 +7,10 @@ import android.media.MediaPlayer
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.room.Room
+import bes.max.playlistmaker.data.db.FavoriteTracksDao
+import bes.max.playlistmaker.data.db.TracksDatabase
+import bes.max.playlistmaker.data.mappers.TrackDbMapper
 import bes.max.playlistmaker.data.mappers.TrackDtoMapper
 import bes.max.playlistmaker.data.network.ITunesSearchApiService
 import bes.max.playlistmaker.data.network.NetworkClient
@@ -74,5 +78,12 @@ val dataModule = module {
             )
         }
     }
+
+    single<FavoriteTracksDao> {
+        Room.databaseBuilder(androidContext(), TracksDatabase::class.java, "database")
+            .build().favoriteTracksDao()
+    }
+
+    factoryOf(::TrackDbMapper)
 
 }

@@ -9,6 +9,8 @@ import bes.max.playlistmaker.domain.settings.SettingsInteractor
 import bes.max.playlistmaker.domain.settings.SettingsInteractorImpl
 import bes.max.playlistmaker.domain.settings.SharingInteractor
 import bes.max.playlistmaker.domain.settings.SharingInteractorImpl
+import bes.max.playlistmaker.domain.mediateka.FavoriteTracksInteractor
+import bes.max.playlistmaker.domain.mediateka.FavoriteTracksInteractorImpl
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -24,5 +26,7 @@ val domainModule = module {
     factoryOf(::SettingsInteractorImpl) bind SettingsInteractor::class
 
     factoryOf(::SharingInteractorImpl) bind SharingInteractor::class
+
+    factoryOf(::FavoriteTracksInteractorImpl) bind FavoriteTracksInteractor::class
 
 }

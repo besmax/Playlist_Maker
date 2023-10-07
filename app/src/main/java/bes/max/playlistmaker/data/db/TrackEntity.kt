@@ -9,7 +9,7 @@ data class TrackEntity(
     @PrimaryKey @ColumnInfo("track_id")
     val trackId: Long,
 
-    @ColumnInfo("track_id")
+    @ColumnInfo("track_name")
     val trackName: String,
 
     @ColumnInfo("track_artist")
