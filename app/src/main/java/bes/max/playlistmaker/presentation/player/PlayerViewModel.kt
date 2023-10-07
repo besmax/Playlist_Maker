@@ -5,25 +5,34 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import bes.max.playlistmaker.domain.mediateka.FavoriteTracksInteractor
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.player.PlayerInteractor
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInteractor) :
+class PlayerViewModel(
+    val track: Track,
+    private val playerInteractor: PlayerInteractor,
+    private val favoriteTracksInteractor: FavoriteTracksInteractor
+) :
     ViewModel() {
 
     val playerState = playerInteractor.state.asLiveData()
     private val _playingTime = MutableLiveData<String>("00:00")
     val playingTime: LiveData<String> = _playingTime
     private var timerJob: Job? = null
+    private val _isFavorite = MutableLiveData(false)
+    val isFavorite: LiveData<Boolean> = _isFavorite
 
     init {
         playerInteractor.preparePlayer(track.previewUrl ?: "")
+        checkIsFavorite()
     }
 
     fun playbackControl() {
@@ -75,6 +84,28 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
             else -> {
                 timerJob?.cancel()
                 _playingTime.value = DEFAULT_TIMER_TIME
+            }
+        }
+    }
+
+    private fun addToFavorite(track: Track) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteTracksInteractor.addTrackToFavorite(track)
+            _isFavorite.postValue(true)
+        }
+    }
+
+    private fun deleteFromFavorite(track: Track) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteTracksInteractor.deleteTrackFromFavorite(track)
+            _isFavorite.postValue(false)
+        }
+    }
+
+    private fun checkIsFavorite() {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteTracksInteractor.getAllIdsOfFavoriteTracks().collect() {
+                _isFavorite.postValue(it.contains(track.trackId))
             }
         }
     }

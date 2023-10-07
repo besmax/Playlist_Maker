@@ -75,6 +75,10 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         playerViewModel.playingTime.observe(viewLifecycleOwner) { playingTimeString ->
             binding.playerScreenTimeCounter.text = playingTimeString
         }
+        playerViewModel.isFavorite.observe(viewLifecycleOwner) {
+            binding.playerScreenButtonLike.setImageResource(if (it) R.drawable.ic_player_like_active
+            else R.drawable.ic_player_like)
+        }
 
         binding.playerScreenButtonPlay.setOnClickListener {
             playerViewModel.playbackControl()
