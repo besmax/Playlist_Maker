@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentMediatekaBinding
-import bes.max.playlistmaker.presentation.mediateka.MediatekaViewPagerAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayoutMediator
