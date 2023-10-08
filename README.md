@@ -1,5 +1,6 @@
 # Playlist_Maker
 Учебный проект с обучения Яндекс-Практикум. Приложение для поиска песен, позволяет искать песни в базе iTunes и прослушивать 30 секундный отрезок.
+Есть возможность добавления и удаление песен в избранное.
 
 ## Используемые технологии и инструменты
 - Clean Archicture
@@ -14,7 +15,7 @@
 
 ## Скриншоты экранов
 ### Стартовый экран
-<img src="https://github.com/besmax/Playlist_Maker/assets/88286767/27009cf5-d4c2-43c6-9d29-f02fa7b2b919"  width="270" height="600" alt="main screen">
+<img src="https://github.com/besmax/Playlist_Maker/assets/88286767/8a2ac5a5-46df-436a-adf2-18aa9b7690f5"  width="270" height="600" alt="main screen">
 
 ### Экран поиска с историей поиска (10 последних открытых песен)
 <img src="https://github.com/besmax/Playlist_Maker/assets/88286767/192162a0-25da-493d-8fa5-fa4667d6b897"  width="270" height="600" alt="History on Search screen">
