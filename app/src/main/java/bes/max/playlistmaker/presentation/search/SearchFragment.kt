@@ -90,6 +90,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        binding.searchScreenEditText.text?.clear()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         textWatcher = null

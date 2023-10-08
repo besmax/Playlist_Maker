@@ -34,24 +34,4 @@ class MainActivityTest {
         Intents.release()
     }
 
-    @Test
-    fun searchButtonOpensSearchActivity() {
-        onView(withId(R.id.button_search)).perform(click())
-
-        intending(hasComponent(hasShortClassName(".SearchActivity")))
-    }
-
-    @Test
-    fun settingsButtonOpensSettingsActivity() {
-        onView(withId(R.id.button_settings)).perform(click())
-
-        intending(hasComponent(hasShortClassName(".SettingsActivity")))
-    }
-
-    @Test
-    fun mediatekaButtonOpensMediatekaActivity() {
-        onView(withId(R.id.button_mediateka)).perform(click())
-
-        intending(hasComponent(hasShortClassName(".MediatekaActivity")))
-    }
 }

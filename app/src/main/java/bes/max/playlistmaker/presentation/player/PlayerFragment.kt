@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -75,10 +77,24 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         playerViewModel.playingTime.observe(viewLifecycleOwner) { playingTimeString ->
             binding.playerScreenTimeCounter.text = playingTimeString
         }
+        playerViewModel.isFavorite.observe(viewLifecycleOwner) {
+            binding.playerScreenButtonLike.setImageResource(
+                if (it) R.drawable.ic_player_like_active
+                else R.drawable.ic_player_like
+            )
+        }
 
         binding.playerScreenButtonPlay.setOnClickListener {
             playerViewModel.playbackControl()
             playPauseAnimation()
+        }
+
+        binding.playerScreenButtonLike.setOnClickListener {
+            if (playerViewModel.isFavorite.value == true) playerViewModel.deleteFromFavorite(
+                playerViewModel.track
+            ) else playerViewModel.addToFavorite(playerViewModel.track)
+
+            scaleAnimation(binding.playerScreenButtonLike)
         }
 
     }
@@ -93,6 +109,31 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     override fun onDestroyView() {
         super.onDestroyView()
         playerViewModel.releasePlayer()
+    }
+
+    private fun scaleAnimation(view: View) {
+        val animIncrease = ScaleAnimation(
+            1f, 1.1f,
+            1f, 1.1f,
+            Animation.RELATIVE_TO_SELF, 1f,
+            Animation.RELATIVE_TO_SELF, 1f
+        ).apply {
+            fillAfter = true
+            duration = 250
+        }
+
+        val animDecrease = ScaleAnimation(
+            1.1f, 1f,
+            1.1f, 1f,
+            Animation.RELATIVE_TO_SELF, 1f,
+            Animation.RELATIVE_TO_SELF, 1f
+        ).apply {
+            fillAfter = true
+            duration = 250
+        }
+
+        view.startAnimation(animIncrease)
+        view.startAnimation(animDecrease)
     }
 
     private fun playPauseAnimation() {
