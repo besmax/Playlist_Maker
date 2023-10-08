@@ -19,12 +19,12 @@ class FavoriteTracksRepositoryImpl(
         dao.deleteTrack(convertor.map(track))
     }
 
-    override suspend fun getAllFavoriteTracks(): Flow<List<Track>> = flow {
-        val tracks = dao.getAllFavoriteTracks().sortedBy { it.addingDate }.map { convertor.map(it) }
+    override fun getAllFavoriteTracks(): Flow<List<Track>> = flow {
+        val tracks = dao.getAllFavoriteTracks().map { convertor.map(it) }
         emit(tracks)
     }
 
-    override suspend fun getAllIdsOfFavoriteTracks(): Flow<List<Long>> = flow {
+    override fun getAllIdsOfFavoriteTracks(): Flow<List<Long>> = flow {
         emit(dao.getAllIdsOfFavoriteTracks())
     }
 }
