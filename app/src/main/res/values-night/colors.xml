@@ -10,6 +10,7 @@
     <color name="silver">#C0C0C0</color>
     <color name="gray">#E6E8EB</color>
 
+
     <color name="text_in_placeholder">#FFFFFFFF</color>
     <color name="search_activity_edit_text_border">#FF000000</color>
 
@@ -25,5 +26,5 @@
 
     <color name="black_white">#FFFFFFFF</color>
 
-
+    <color name="white_black">#1A1B22</color>
 </resources>

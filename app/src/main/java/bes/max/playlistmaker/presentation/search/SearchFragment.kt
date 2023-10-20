@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
@@ -16,7 +15,6 @@ import bes.max.playlistmaker.databinding.FragmentSearchBinding
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import bes.max.playlistmaker.presentation.utils.debounce
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,11 +34,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        with(requireActivity()) {
-            requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = true
-            requireViewById<View>(R.id.bottom_navigation_view_line_above).isVisible = true
-        }
 
         val onElementClickAction = debounce<Track>(
             delayMillis = CLICK_DEBOUNCE_DELAY,
