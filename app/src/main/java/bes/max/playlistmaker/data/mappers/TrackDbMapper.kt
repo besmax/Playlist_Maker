@@ -1,6 +1,6 @@
 package bes.max.playlistmaker.data.mappers
 
-import bes.max.playlistmaker.data.db.TrackEntity
+import bes.max.playlistmaker.data.db.entities.TrackEntity
 import bes.max.playlistmaker.domain.models.Track
 
 class TrackDbMapper {

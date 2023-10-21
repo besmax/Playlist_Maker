@@ -1,9 +1,10 @@
-package bes.max.playlistmaker.domain.mediateka
+package bes.max.playlistmaker.domain.mediateka.favorite
 
 import bes.max.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
-interface FavoriteTracksInteractor {
+interface FavoriteTracksRepository {
+
 
     suspend fun addTrackToFavorite(track: Track)
 
@@ -12,4 +13,5 @@ interface FavoriteTracksInteractor {
     fun getAllFavoriteTracks() : Flow<List<Track>>
 
     fun getAllIdsOfFavoriteTracks() : Flow<List<Long>>
+
 }

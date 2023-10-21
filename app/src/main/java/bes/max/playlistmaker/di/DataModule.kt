@@ -8,10 +8,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import bes.max.playlistmaker.data.db.FavoriteTracksDao
+import bes.max.playlistmaker.data.db.dao.FavoriteTracksDao
 import bes.max.playlistmaker.data.db.TracksDatabase
+import bes.max.playlistmaker.data.db.dao.PlaylistsDao
 import bes.max.playlistmaker.data.mappers.TrackDbMapper
 import bes.max.playlistmaker.data.mappers.TrackDtoMapper
+import bes.max.playlistmaker.data.mediateka.ImageDaoImpl
 import bes.max.playlistmaker.data.network.ITunesSearchApiService
 import bes.max.playlistmaker.data.network.NetworkClient
 import bes.max.playlistmaker.data.network.RetrofitNetworkClient
@@ -20,11 +22,14 @@ import bes.max.playlistmaker.data.search.SearchHistoryDaoImpl
 import bes.max.playlistmaker.data.settings.ExternalNavigatorImpl
 import bes.max.playlistmaker.data.settings.SettingsDao
 import bes.max.playlistmaker.data.settings.SettingsDaoImpl
+import bes.max.playlistmaker.domain.mediateka.playlist.ImageDao
 import bes.max.playlistmaker.domain.settings.ExternalNavigator
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.withOptions
+import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -60,6 +65,8 @@ val dataModule = module {
 
     singleOf(::SettingsDaoImpl) bind SettingsDao::class
 
+    singleOf(::ImageDaoImpl) bind ImageDao::class
+
     single<ITunesSearchApiService> {
         Retrofit.Builder()
             .baseUrl(ITUNES_BASE_URL)
@@ -79,10 +86,20 @@ val dataModule = module {
         }
     }
 
-    single<FavoriteTracksDao> {
+    single {
         Room.databaseBuilder(androidContext(), TracksDatabase::class.java, "database")
             .fallbackToDestructiveMigration()
-            .build().favoriteTracksDao()
+            .build()
+    }
+
+    single<FavoriteTracksDao> {
+        val database = get<TracksDatabase>()
+        database.favoriteTracksDao()
+    }
+
+    single<PlaylistsDao> {
+        val database = get<TracksDatabase>()
+        database.playlistDao()
     }
 
     factoryOf(::TrackDbMapper)

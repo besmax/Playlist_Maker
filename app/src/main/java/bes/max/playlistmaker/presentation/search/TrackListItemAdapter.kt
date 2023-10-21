@@ -19,8 +19,8 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val layoutInspector = LayoutInflater.from(parent.context)
-        return TrackViewHolder(TrackListItemBinding.inflate(layoutInspector, parent, false))
+        val layoutInflater = LayoutInflater.from(parent.context)
+        return TrackViewHolder(TrackListItemBinding.inflate(layoutInflater, parent, false))
     }
 
     override fun getItemCount(): Int = listOfTracks.size

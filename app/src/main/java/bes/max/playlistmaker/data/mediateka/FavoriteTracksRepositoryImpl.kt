@@ -1,8 +1,8 @@
 package bes.max.playlistmaker.data.mediateka
 
-import bes.max.playlistmaker.data.db.FavoriteTracksDao
+import bes.max.playlistmaker.data.db.dao.FavoriteTracksDao
 import bes.max.playlistmaker.data.mappers.TrackDbMapper
-import bes.max.playlistmaker.domain.mediateka.FavoriteTracksRepository
+import bes.max.playlistmaker.domain.mediateka.favorite.FavoriteTracksRepository
 import bes.max.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
