@@ -71,6 +71,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
         binding.newPlaylistScreenButton.setOnClickListener {
             savePlaylist()
+            findNavController().navigateUp()
         }
 
         defaultDrawable = binding.newPlaylistScreenPlaylistCover.drawable
@@ -117,10 +118,12 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
     }
 
     private fun savePlaylist() {
+        val name = binding.newPlaylistScreenNameInput.text.toString()
         newPlaylistViewModel.createPlaylist(
-            name = binding.newPlaylistScreenNameInput.text.toString(),
+            name = name,
             description = binding.newPlaylistScreenDescriptionInput.text.toString(),
         )
+        findNavController().previousBackStackEntry?.savedStateHandle?.set("playlistName", "$name")
     }
 
     companion object {

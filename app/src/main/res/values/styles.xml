@@ -150,4 +150,22 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="playlist_screen_dialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">@style/playlist_screen_dialog_font_style</item>
+        <!-- Background Color-->
+        <item name="android:background">@color/black_white</item>
+        <!-- Text Color for title and message -->
+        <item name="colorOnSurface">@color/white_black</item>
+    </style>
+
+    <style name="playlist_screen_dialog_font_style" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textAppearance">@style/playlist_screen_dialog_font</item>
+    </style>
+
+    <style name="playlist_screen_dialog_font" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/white_black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

@@ -41,7 +41,7 @@ class ImageDaoImpl(
         preferencesDataStore.data.catch { exception ->
             Log.e(TAG, "Error during getting DataStore: ${exception.toString()}")
         }.collect { number = it[IMAGE_PREFERENCES_KEY] ?: 0 }
-        if (number == 0) number = 1
+        number += 1
         setNumberForCover(number)
         return number
     }

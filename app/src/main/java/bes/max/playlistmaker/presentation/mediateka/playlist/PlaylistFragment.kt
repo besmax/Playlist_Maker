@@ -1,14 +1,20 @@
 package bes.max.playlistmaker.presentation.mediateka.playlist
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlaylistBinding
 import bes.max.playlistmaker.presentation.mediateka.MediatekaFragmentDirections
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
@@ -42,6 +48,11 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
                 is PlaylistScreenState.Loading -> showLoading()
             }
         }
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("playlistName")
+            ?.observe(viewLifecycleOwner) { playlistName ->
+                showPlaylistCreatedMessage(playlistName)
+            }
     }
 
     override fun onResume() {
@@ -71,6 +82,20 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
             playlistScreenPlaceholder.visibility = View.GONE
             playlistScreenRecyclerView.visibility = View.GONE
             playlistScreenProgressBar.visibility = View.VISIBLE
+        }
+    }
+
+    private fun showPlaylistCreatedMessage(playlistName: String) {
+        if (!playlistName.isNullOrBlank()) {
+            lifecycleScope.launch {
+                val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.playlist_screen_dialog)
+                    .setTitle(getString(R.string.playlist_screen_dialog, playlistName))
+                    .show()
+                dialog.window?.setGravity(Gravity.BOTTOM)
+                delay(2000)
+                dialog.dismiss()
+                findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("playlistName")
+            }
         }
     }
 

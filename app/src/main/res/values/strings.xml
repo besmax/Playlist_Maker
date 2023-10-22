@@ -49,4 +49,6 @@
 
     <string name="newplaylist_screen_dialog_title">Завершить создание плейлиста?</string>
     <string name="newplaylist_screen_dialog_message">Все несохраненные данные будут потеряны</string>
+
+    <string name="playlist_screen_dialog">Плейлист %1$s создан!</string>
 </resources>
