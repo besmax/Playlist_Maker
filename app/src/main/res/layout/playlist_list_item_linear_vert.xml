@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/search_activity_list_item_padding">
+
+    <ImageView
+        android:id="@+id/playlist_cover"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_picture_not_found" />
+
+    <TextView
+        android:id="@+id/playlist_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ys_display_regular"
+        android:padding="4dp"
+        android:textColor="@color/black_white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/playlist_cover"
+        app:layout_constraintTop_toTopOf="@id/playlist_cover"
+        tools:text="Name of playlist" />
+
+    <TextView
+        android:id="@+id/tracks_qty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ys_display_regular"
+        android:padding="4dp"
+        android:textColor="@color/black_white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/playlist_cover"
+        app:layout_constraintTop_toBottomOf="@id/playlist_name"
+        tools:text="999 tracks" />
+
+    />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

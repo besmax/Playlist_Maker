@@ -6,12 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import bes.max.playlistmaker.domain.mediateka.favorite.FavoriteTracksInteractor
+import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
 import bes.max.playlistmaker.domain.models.PlayerState
+import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.player.PlayerInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -19,7 +22,8 @@ import java.util.Locale
 class PlayerViewModel(
     val track: Track,
     private val playerInteractor: PlayerInteractor,
-    private val favoriteTracksInteractor: FavoriteTracksInteractor
+    private val favoriteTracksInteractor: FavoriteTracksInteractor,
+    private val playlistInteractor: PlaylistInteractor
 ) :
     ViewModel() {
 
@@ -29,10 +33,13 @@ class PlayerViewModel(
     private var timerJob: Job? = null
     private val _isFavorite = MutableLiveData(false)
     val isFavorite: LiveData<Boolean> = _isFavorite
+    private val _playlists: MutableLiveData<List<Playlist>> = MutableLiveData()
+    val playlists: LiveData<List<Playlist>> = _playlists
 
     init {
         playerInteractor.preparePlayer(track.previewUrl ?: "")
         checkIsFavorite()
+        getPlaylists()
     }
 
     fun playbackControl() {
@@ -106,6 +113,14 @@ class PlayerViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             favoriteTracksInteractor.getAllIdsOfFavoriteTracks().collect() {
                 _isFavorite.postValue(it.contains(track.trackId))
+            }
+        }
+    }
+
+    fun getPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor.getAllPlaylists().collect {
+                _playlists.postValue(it)
             }
         }
     }

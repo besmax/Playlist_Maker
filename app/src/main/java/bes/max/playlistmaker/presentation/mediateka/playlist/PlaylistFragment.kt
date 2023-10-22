@@ -20,7 +20,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
 
     private val playlistViewModel: PlaylistViewModel by viewModel()
-    private var adapter: PlaylistItemAdapter? = PlaylistItemAdapter()
+    private var adapter: PlaylistItemAdapter? =
+        PlaylistItemAdapter(listType = PlaylistItemAdapter.GRID_LIST)
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -33,7 +34,8 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.playlistScreenButton.setOnClickListener {
-            val action = MediatekaFragmentDirections.actionMediatekaFragmentToNewPlaylistFragment2()
+            val action =
+                MediatekaFragmentDirections.actionMediatekaFragmentToNewPlaylistFragment2(null)
             findNavController().navigate(action)
         }
         binding.playlistScreenRecyclerView.adapter = adapter
@@ -88,9 +90,10 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
     private fun showPlaylistCreatedMessage(playlistName: String) {
         if (!playlistName.isNullOrBlank()) {
             lifecycleScope.launch {
-                val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.playlist_screen_dialog)
-                    .setTitle(getString(R.string.playlist_screen_dialog, playlistName))
-                    .show()
+                val dialog =
+                    MaterialAlertDialogBuilder(requireContext(), R.style.playlist_screen_dialog)
+                        .setTitle(getString(R.string.playlist_screen_dialog, playlistName))
+                        .show()
                 dialog.window?.setGravity(Gravity.BOTTOM)
                 delay(2000)
                 dialog.dismiss()
