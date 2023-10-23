@@ -8,8 +8,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import bes.max.playlistmaker.data.db.dao.FavoriteTracksDao
 import bes.max.playlistmaker.data.db.TracksDatabase
+import bes.max.playlistmaker.data.db.dao.FavoriteTracksDao
 import bes.max.playlistmaker.data.db.dao.PlaylistsDao
 import bes.max.playlistmaker.data.mappers.TrackDbMapper
 import bes.max.playlistmaker.data.mappers.TrackDtoMapper
@@ -28,8 +28,6 @@ import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.withOptions
-import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
