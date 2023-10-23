@@ -6,6 +6,7 @@ import bes.max.playlistmaker.data.mappers.PlaylistDbMapper
 import bes.max.playlistmaker.domain.mediateka.playlist.ImageDao
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistRepository
 import bes.max.playlistmaker.domain.models.Playlist
+import bes.max.playlistmaker.domain.models.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -28,17 +29,30 @@ class PlaylistRepositoryImpl(
         }
     }
 
-    override suspend fun updatePlaylist(playlist: Playlist) {
-        withContext(Dispatchers.IO) {
-            playlistsDao.updatePlaylist(PlaylistDbMapper.map(playlist))
-        }
-    }
-
     override fun getAllPlaylists(): Flow<List<Playlist>> = flow {
         val playlistEntities = playlistsDao.getAllPlaylists()
         emit(playlistEntities.map { PlaylistDbMapper.map(it) })
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun saveCover(uri: Uri): Uri = imageDao.saveImage(uri)
+    override suspend fun saveCover(uri: Uri): Uri = withContext(Dispatchers.IO) {
+        imageDao.saveImage(uri)
+    }
 
+    override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist): Flow<Boolean> =
+        flow {
+            var updatedTracks = mutableListOf<Track>()
+            if (playlist.tracks != null) {
+                updatedTracks = playlist.tracks.toMutableList()
+            }
+            var result = !updatedTracks.contains(track)
+            if (result) {
+                updatedTracks.add(track)
+                val updatedPlaylist = playlist.copy(
+                    tracks = updatedTracks.toList(),
+                    tracksNumber = playlist.tracksNumber + 1
+                )
+                playlistsDao.updatePlaylist(PlaylistDbMapper.map(updatedPlaylist))
+            }
+            emit(result)
+        }.flowOn(Dispatchers.IO)
 }

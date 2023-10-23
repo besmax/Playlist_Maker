@@ -16,7 +16,7 @@ object PlaylistDbMapper {
             description = playlistEntity.description,
             coverPath = playlistEntity.coverPath,
             tracks = Gson().fromJson(playlistEntity.tracks, typeToken),
-            tracksNumber = playlistEntity.tracksNumber
+            tracksNumber = playlistEntity.tracksNumber ?: 0
         )
 
     fun map(playlist: Playlist): PlaylistEntity =

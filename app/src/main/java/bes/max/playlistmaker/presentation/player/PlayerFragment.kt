@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -86,6 +87,11 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
                     binding.playerScreenButtonPlay.isEnabled = false
                 }
             }
+        }
+
+        playerViewModel.isPlaylistAdded.observe(viewLifecycleOwner) { isAddedPair ->
+            if(isAddedPair.first) showTrackAddedToast(isAddedPair.second)
+            else showTrackNotAddedToast(isAddedPair.second)
         }
 
         playerViewModel.playingTime.observe(viewLifecycleOwner) { playingTimeString ->
@@ -234,14 +240,32 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
                 }
             }
 
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
         }
 
     private fun preparePlaylistRecyclerView() {
-        playlistsAdapter = PlaylistItemAdapter(listType = PlaylistItemAdapter.LINEAR_VERTICAL_LIST)
+        playlistsAdapter = PlaylistItemAdapter(
+            listType = PlaylistItemAdapter.LINEAR_VERTICAL_LIST,
+            doOnClick = { playlist ->
+                playerViewModel.addTrackToPlaylist(playerViewModel.track, playlist)
+            }
+        )
         binding.playlistsBottomSheetRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.playlistsBottomSheetRecyclerView.adapter = playlistsAdapter
+    }
+
+    private fun showTrackAddedToast(playlistName: String) {
+        val trackName = playerViewModel.track.trackName
+        Toast.makeText(requireContext(), getString(R.string.player_screen_toast_added, trackName, playlistName), Toast.LENGTH_LONG)
+            .show()
+    }
+
+    private fun showTrackNotAddedToast(playlistName: String) {
+        val trackName = playerViewModel.track.trackName
+        Toast.makeText(requireContext(), getString(R.string.player_screen_toast_not_added, trackName, playlistName), Toast.LENGTH_LONG)
+            .show()
     }
 
 

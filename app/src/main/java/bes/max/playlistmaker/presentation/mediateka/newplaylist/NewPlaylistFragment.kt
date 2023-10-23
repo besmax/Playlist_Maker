@@ -10,13 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentNewPlaylistBinding
-import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,10 +25,14 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
     private var textWatcher: TextWatcher? = null
     private val newPlaylistViewModel: NewPlaylistViewModel by viewModel()
+    private val safeArgs: NewPlaylistFragmentArgs by navArgs()
 
     private var defaultDrawable: Drawable? = null
 
-        private val imagePicker =
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+
+    private val imagePicker =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 binding.newPlaylistScreenPlaylistCover.setImageURI(uri)
@@ -66,6 +69,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
         }
 
         binding.newPlaylistScreenPlaylistCover.setOnClickListener {
+            requestPermissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
             imagePicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
@@ -122,6 +126,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
         newPlaylistViewModel.createPlaylist(
             name = name,
             description = binding.newPlaylistScreenDescriptionInput.text.toString(),
+            trackArg = safeArgs.track,
         )
         findNavController().previousBackStackEntry?.savedStateHandle?.set("playlistName", "$name")
     }

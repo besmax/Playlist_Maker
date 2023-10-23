@@ -2,6 +2,7 @@ package bes.max.playlistmaker.domain.mediateka.playlist
 
 import android.net.Uri
 import bes.max.playlistmaker.domain.models.Playlist
+import bes.max.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistInteractorImpl(
@@ -17,5 +18,9 @@ class PlaylistInteractorImpl(
 
     override suspend fun saveCover(uri: Uri): Uri =
         playlistRepository.saveCover(uri)
+
+    override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) =
+        playlistRepository.addTrackToPlaylist(track, playlist)
+
 
 }

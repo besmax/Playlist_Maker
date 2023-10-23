@@ -11,8 +11,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.lifecycle.asLiveData
 import bes.max.playlistmaker.domain.mediateka.playlist.ImageDao
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import java.io.File
 import java.io.FileOutputStream
 
@@ -26,25 +30,25 @@ class ImageDaoImpl(
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
-        val number = getNumberForCover()
+
+        var number = getNumberForCover()
+        number++
+        setNumberForCover(number)
         val file = File(filePath, "cover_$number.jpg")
         val inputStream = context.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        Log.d(TAG, "file saved with uri: ${file.toUri()}")
         return file.toUri()
     }
 
-    private suspend fun getNumberForCover(): Int {
-        var number = 0
-        preferencesDataStore.data.catch { exception ->
-            Log.e(TAG, "Error during getting DataStore: ${exception.toString()}")
-        }.collect { number = it[IMAGE_PREFERENCES_KEY] ?: 0 }
-        number += 1
-        setNumberForCover(number)
-        return number
+    private suspend fun getNumberForCover() : Int {
+        val preferences = preferencesDataStore.data.firstOrNull()
+        return preferences?.get(IMAGE_PREFERENCES_KEY) ?: 0
     }
+
 
     private suspend fun setNumberForCover(number: Int) {
         preferencesDataStore.edit { preferences ->

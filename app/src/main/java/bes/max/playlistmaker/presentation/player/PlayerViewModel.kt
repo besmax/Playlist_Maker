@@ -35,6 +35,8 @@ class PlayerViewModel(
     val isFavorite: LiveData<Boolean> = _isFavorite
     private val _playlists: MutableLiveData<List<Playlist>> = MutableLiveData()
     val playlists: LiveData<List<Playlist>> = _playlists
+    private val _isPlaylistAdded: MutableLiveData<Pair<Boolean, String>> = MutableLiveData()
+    val isPlaylistAdded: LiveData<Pair<Boolean, String>> = _isPlaylistAdded
 
     init {
         playerInteractor.preparePlayer(track.previewUrl ?: "")
@@ -121,6 +123,15 @@ class PlayerViewModel(
         viewModelScope.launch {
             playlistInteractor.getAllPlaylists().collect {
                 _playlists.postValue(it)
+            }
+        }
+    }
+
+    fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+        viewModelScope.launch {
+            playlistInteractor.addTrackToPlaylist(track, playlist).collect() {
+                _isPlaylistAdded.postValue(Pair(it, playlist.name))
+                _isPlaylistAdded.postValue(Pair(false, playlist.name))
             }
         }
     }

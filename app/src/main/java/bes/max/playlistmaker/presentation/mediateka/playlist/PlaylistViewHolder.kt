@@ -12,16 +12,16 @@ class PlaylistViewHolder(private val binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: Playlist) {
-
         when (binding) {
             is PlaylistListItemGridBinding -> {
                 with(binding) {
                     val coverUri = model.coverPath?.toUri()
-                    if (coverUri != null) playlistCover.setImageURI(coverUri)
+                    if (model.coverPath != null) playlistCover.setImageURI(coverUri)
                     else playlistCover.setImageResource(R.drawable.ic_picture_not_found)
                     playlistName.text = model.name
-                    val trackQty = model.tracksNumber.toString()
-                    tracksQty.text = if (trackQty != "null") trackQty else "0"
+                    val trackQty =
+                        if (model.tracksNumber.toString() != "null") model.tracksNumber.toString() else "0"
+                    tracksQty.text = itemView.context.getString(R.string.number_of_tracks, trackQty)
                 }
             }
 
@@ -31,13 +31,12 @@ class PlaylistViewHolder(private val binding: ViewBinding) :
                     if (coverUri != null) playlistCover.setImageURI(coverUri)
                     else playlistCover.setImageResource(R.drawable.ic_picture_not_found)
                     playlistName.text = model.name
-                    val trackQty = model.tracksNumber.toString()
-                    tracksQty.text = if (trackQty != "null") trackQty else "0"
+                    val trackQty =
+                        if (model.tracksNumber.toString() != "null") model.tracksNumber.toString() else "0"
+                    tracksQty.text = itemView.context.getString(R.string.number_of_tracks, trackQty)
                 }
             }
         }
-
-
     }
 
 }

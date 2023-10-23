@@ -31,6 +31,8 @@
     <string name="activity_player_genre_title">Жанр</string>
     <string name="activity_player_country_title">Страна</string>
     <string name="activity_search_to_activity_player_track_as_json">TRACK_JSON</string>
+    <string name="player_screen_toast_added">Трек %1$s добавлен в плэйлист %2$s</string>
+    <string name="player_screen_toast_not_added">Трек %1$s уже добавлен в плэйлист %2$s</string>
 
     <string name="fragment_mediateka_title">Медиатека</string>
     <string name="fragment_favorite_tracks_placeholder_text">Ваша медиатека пуста</string>
@@ -52,4 +54,8 @@
 
     <string name="playlist_screen_dialog">Плейлист %1$s создан!</string>
     <string name="add_to_playlist">Добавить в плейлист</string>
+
+    <string name="number_of_tracks">%1$s треков</string>
+
+
 </resources>
