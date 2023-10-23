@@ -1,20 +1,19 @@
 package bes.max.playlistmaker.presentation.mediateka.playlist
 
 import android.os.Bundle
-import android.view.Gravity
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlaylistBinding
 import bes.max.playlistmaker.presentation.mediateka.MediatekaFragmentDirections
 import bes.max.playlistmaker.presentation.utils.BindingFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
@@ -89,16 +88,20 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
 
     private fun showPlaylistCreatedMessage(playlistName: String) {
         if (!playlistName.isNullOrBlank()) {
-            lifecycleScope.launch {
-                val dialog =
-                    MaterialAlertDialogBuilder(requireContext(), R.style.playlist_screen_dialog)
-                        .setTitle(getString(R.string.playlist_screen_dialog, playlistName))
-                        .show()
-                dialog.window?.setGravity(Gravity.BOTTOM)
-                delay(2000)
-                dialog.dismiss()
-                findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("playlistName")
-            }
+            val snackbar = Snackbar.make(
+                requireActivity().findViewById(android.R.id.content),
+                getString(R.string.playlist_screen_dialog, playlistName),
+                Snackbar.LENGTH_LONG
+            )
+            val view = snackbar.view
+            view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black_white))
+            val textView =
+                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+            textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+            textView.ellipsize = TextUtils.TruncateAt.END
+            snackbar.show()
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("playlistName")
+
         }
     }
 
