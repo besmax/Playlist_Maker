@@ -35,7 +35,7 @@
         android:gravity="center"
         android:textColor="@color/text_in_placeholder"
         android:textSize="19sp"
-        android:text="@string/fragment_favorite_tracks_placeholder_text"
+        android:text="@string/favorite_tracks_screen_placeholder_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/favorite_screen_tracks_placeholder_image"

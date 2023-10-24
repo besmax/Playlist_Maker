@@ -30,8 +30,8 @@ class MediatekaFragment : BindingFragment<FragmentMediatekaBinding>() {
             binding.fragmentMediatekaViewpager
         ) { tab, position ->
             when (position) {
-                0 -> tab.text = getString(R.string.fragment_mediateka_tab_title_favorite_tracks)
-                1 -> tab.text = getString(R.string.fragment_mediateka_tab_title_playlist)
+                0 -> tab.text = getString(R.string.mediateka_screen_tab_title_favorite_tracks)
+                1 -> tab.text = getString(R.string.mediateka_screen_tab_title_playlist)
             }
         }
         tabMediator.attach()

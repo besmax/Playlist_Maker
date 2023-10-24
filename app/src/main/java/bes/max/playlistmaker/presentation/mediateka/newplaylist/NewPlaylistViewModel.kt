@@ -24,7 +24,6 @@ class NewPlaylistViewModel(
                 coverUriInStorage = saveImageToPrivateStorage(coverUri!!)
                 Log.d(TAG, coverUriInStorage.toString())
             }
-            Log.d(TAG, "coverUri = ${coverUri.toString()}")
             val playlist = Playlist(
                 name = name,
                 description = description,
