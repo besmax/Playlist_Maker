@@ -35,9 +35,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         parametersOf(fromJsonToTrack(safeArgs.track))
     }
 
-    private val bottomSheetBehavior: BottomSheetBehavior<LinearLayout> by lazy {
-        BottomSheetBehavior.from(binding.playlistsBottomSheet)
-    }
+    private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
 
     private var playlistsAdapter: PlaylistItemAdapter? = null
 
@@ -54,10 +52,10 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         bind(playerViewModel.track)
 
         preparePlaylistRecyclerView()
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet)
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
 
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-        bottomSheetBehavior.addBottomSheetCallback(getCallbackForBottomSheetState())
+        bottomSheetBehavior?.addBottomSheetCallback(getCallbackForBottomSheetState())
 
         binding.playerScreenBackArrow.setNavigationOnClickListener {
             findNavController().navigateUp()
@@ -90,7 +88,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
 
         playerViewModel.isPlaylistAdded.observe(viewLifecycleOwner) { isAddedPair ->
-            if(isAddedPair.first) showTrackAddedToast(isAddedPair.second)
+            if (isAddedPair.first) showTrackAddedToast(isAddedPair.second)
             else showTrackNotAddedToast(isAddedPair.second)
         }
 
@@ -111,8 +109,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
         binding.playerScreenButtonAdd.setOnClickListener {
             scaleAnimation(binding.playerScreenButtonAdd)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-            binding.overlay.visibility = View.VISIBLE
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         }
 
         binding.playerScreenButtonLike.setOnClickListener {
@@ -126,7 +123,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             val trackArg = Gson().toJson(playerViewModel.track)
             val action =
                 PlayerFragmentDirections.actionPlayerFragmentToNewPlaylistFragment(trackArg)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             findNavController().navigate(action)
         }
 
@@ -147,6 +143,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     override fun onDestroyView() {
         super.onDestroyView()
         playerViewModel.releasePlayer()
+        playlistsAdapter = null
     }
 
     private fun scaleAnimation(view: View) {
@@ -230,12 +227,12 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
 
                 when (newState) {
-                    BottomSheetBehavior.STATE_HIDDEN -> {
-                        binding.overlay.visibility = View.GONE
+                    BottomSheetBehavior.STATE_EXPANDED,  BottomSheetBehavior.STATE_HALF_EXPANDED -> {
+                        binding.overlay.visibility = View.VISIBLE
                     }
 
                     else -> {
-                        binding.overlay.visibility = View.VISIBLE
+                        binding.overlay.visibility = View.GONE
                     }
                 }
             }
@@ -249,6 +246,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             listType = PlaylistItemAdapter.LINEAR_VERTICAL_LIST,
             doOnClick = { playlist ->
                 playerViewModel.addTrackToPlaylist(playerViewModel.track, playlist)
+                playerViewModel.getPlaylists()
             }
         )
         binding.playlistsBottomSheetRecyclerView.layoutManager =
@@ -258,13 +256,21 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private fun showTrackAddedToast(playlistName: String) {
         val trackName = playerViewModel.track.trackName
-        Toast.makeText(requireContext(), getString(R.string.player_screen_toast_added, trackName, playlistName), Toast.LENGTH_LONG)
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.player_screen_toast_added, trackName, playlistName),
+            Toast.LENGTH_LONG
+        )
             .show()
     }
 
     private fun showTrackNotAddedToast(playlistName: String) {
         val trackName = playerViewModel.track.trackName
-        Toast.makeText(requireContext(), getString(R.string.player_screen_toast_not_added, trackName, playlistName), Toast.LENGTH_LONG)
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.player_screen_toast_not_added, trackName, playlistName),
+            Toast.LENGTH_LONG
+        )
             .show()
     }
 

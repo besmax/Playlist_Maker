@@ -2,7 +2,6 @@ package bes.max.playlistmaker.domain.search
 
 import bes.max.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 
 class SearchHistoryInteractorImpl(
     private val trackRepository: TracksRepository
