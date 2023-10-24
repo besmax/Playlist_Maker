@@ -19,8 +19,9 @@
     <TextView
         android:id="@+id/track_list_item_track_name"
         style="@style/search_activity_list_item_track_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toTopOf="@id/track_list_item_artist_name"
         app:layout_constraintEnd_toStartOf="@id/track_list_item_right_arrow"
         app:layout_constraintHorizontal_bias="0.0"
@@ -33,6 +34,8 @@
         style="@style/search_activity_list_item_track_time_artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/track_list_item_track_time"
         app:layout_constraintStart_toEndOf="@id/track_list_item_track_cover"
@@ -42,12 +45,15 @@
     <TextView
         android:id="@+id/track_list_item_track_time"
         style="@style/search_activity_list_item_track_time_artist"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="100"
+        android:layout_marginEnd="8dp"
         android:drawableStart="@drawable/ic_circle_between_text"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/track_list_item_artist_name"
-        app:layout_constraintTop_toBottomOf="@+id/track_list_item_track_name"
+        app:layout_constraintStart_toEndOf="@id/track_list_item_artist_name"
+        app:layout_constraintEnd_toStartOf="@id/track_list_item_right_arrow"
+        app:layout_constraintTop_toBottomOf="@id/track_list_item_track_name"
         tools:text="00:00" />
 
     <ImageView
@@ -57,6 +63,7 @@
         android:paddingEnd="16dp"
         android:src="@drawable/ic_arrow"
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

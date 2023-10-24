@@ -69,7 +69,7 @@
             <TextView
                 android:id="@+id/player_screen_track_author"
                 style="@style/activity_player_text_content"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="12dp"
