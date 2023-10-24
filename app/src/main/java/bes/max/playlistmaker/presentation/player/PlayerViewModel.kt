@@ -39,8 +39,8 @@ class PlayerViewModel(
     val isPlaylistAdded: LiveData<Pair<Boolean, String>> = _isPlaylistAdded
 
     init {
-        playerInteractor.preparePlayer(track.previewUrl ?: "")
-        checkIsFavorite()
+        preparePreparePlayer()
+
         getPlaylists()
     }
 
@@ -59,6 +59,11 @@ class PlayerViewModel(
         }
         updateTimer()
     }
+
+   fun preparePreparePlayer() {
+       playerInteractor.preparePlayer(track.previewUrl ?: "")
+       checkIsFavorite()
+   }
 
     fun pausePlayer() {
         playerInteractor.pause()

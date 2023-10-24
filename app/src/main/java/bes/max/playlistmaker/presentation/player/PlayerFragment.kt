@@ -91,6 +91,9 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             if (isAddedPair.first) showTrackAddedToast(isAddedPair.second)
             else showTrackNotAddedToast(isAddedPair.second)
         }
+        if (!safeArgs.playlist.isNullOrBlank()) {
+            showTrackAddedToast(safeArgs.playlist!!)
+        }
 
         playerViewModel.playingTime.observe(viewLifecycleOwner) { playingTimeString ->
             binding.playerScreenTimeCounter.text = playingTimeString

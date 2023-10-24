@@ -28,6 +28,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
     private val safeArgs: NewPlaylistFragmentArgs by navArgs()
 
     private var defaultDrawable: Drawable? = null
+    private var playlistName: String? = null
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
@@ -75,7 +76,10 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
         binding.newPlaylistScreenButton.setOnClickListener {
             savePlaylist()
-            findNavController().navigateUp()
+            val action = NewPlaylistFragmentDirections.actionNewPlaylistFragmentToPlayerFragment(
+                track = safeArgs.track ?: "", playlist = playlistName
+            )
+            findNavController().navigate(action)
         }
 
         defaultDrawable = binding.newPlaylistScreenPlaylistCover.drawable
@@ -87,6 +91,10 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
     }
 
     private fun showSaveBeforeExitDialog() {
+        val action = NewPlaylistFragmentDirections.actionNewPlaylistFragmentToPlayerFragment(
+            track = safeArgs.track ?: "",
+            playlist = playlistName
+        )
         if (!binding.newPlaylistScreenNameInput.text.isNullOrBlank() ||
             !binding.newPlaylistScreenDescriptionInput.text.isNullOrBlank() ||
             binding.newPlaylistScreenPlaylistCover.drawable != defaultDrawable
@@ -99,11 +107,12 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
                 }
                 .setPositiveButton(getString(R.string.Complete)) { dialog, _ ->
                     dialog.dismiss()
-                    findNavController().navigateUp()
+
+                    findNavController().navigate(action)
                 }
                 .show()
         } else {
-            findNavController().navigateUp()
+            findNavController().navigate(action)
         }
     }
 
@@ -128,7 +137,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
             description = binding.newPlaylistScreenDescriptionInput.text.toString(),
             trackArg = safeArgs.track,
         )
-        findNavController().previousBackStackEntry?.savedStateHandle?.set("playlistName", "$name")
+        playlistName = name
     }
 
     companion object {
