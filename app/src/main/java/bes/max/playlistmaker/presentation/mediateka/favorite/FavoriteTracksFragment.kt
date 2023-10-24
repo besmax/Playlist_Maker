@@ -38,7 +38,7 @@ class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() 
             useLastParam = false,
             action = { track ->
                 val action = MediatekaFragmentDirections.actionMediatekaFragmentToPlayerFragment(
-                    convertTrackToJson(track), null
+                    convertTrackToJson(track)
                 )
                 findNavController().navigate(action)
             }

@@ -39,13 +39,7 @@
             app:argType="string" />
         <action
             android:id="@+id/action_playerFragment_to_newPlaylistFragment"
-            app:destination="@id/newPlaylistFragment"
-            app:popUpTo="@id/playerFragment"
-            app:popUpToInclusive="true" />
-        <argument
-            android:name="playlist"
-            app:argType="string"
-            app:nullable="true" />
+            app:destination="@id/newPlaylistFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteTracksFragment"
@@ -66,11 +60,5 @@
             android:name="track"
             app:argType="string"
             app:nullable="true" />
-        <action
-            android:id="@+id/action_newPlaylistFragment_to_playerFragment"
-            app:destination="@id/playerFragment"
-            app:launchSingleTop="false"
-            app:popUpTo="@id/newPlaylistFragment"
-            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

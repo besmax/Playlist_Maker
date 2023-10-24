@@ -80,7 +80,7 @@
         <item name="android:maxWidth">180dp</item>
         <item name="android:textSize">11sp</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textColor">@color/gray_text</item>
+        <item name="android:textColor">@color/yp_gray</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
         <item name="android:paddingStart">8dp</item>
@@ -125,7 +125,7 @@
 
     <style name="activity_player_text_titles">
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textColor">@color/gray_text</item>
+        <item name="android:textColor">@color/yp_gray</item>
         <item name="android:textSize">13sp</item>
     </style>
 

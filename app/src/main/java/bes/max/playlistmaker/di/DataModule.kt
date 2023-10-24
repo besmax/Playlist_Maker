@@ -73,7 +73,7 @@ val dataModule = module {
             .create(ITunesSearchApiService::class.java)
     }
 
-    factory {
+    single {
         MediaPlayer().apply {
             setAudioAttributes(
                 AudioAttributes.Builder()

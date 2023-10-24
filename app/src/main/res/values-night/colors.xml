@@ -16,7 +16,6 @@
 
 
     <color name="icons_main_screen">#1A1B22</color>
-    <color name="settings_screen_icons">#AEAFB4</color>
 
     <color name="bottom_navigation_background">#1A1B22</color>
     <color name="bottom_navigation_icon_unchecked">#FFFFFFFF</color>

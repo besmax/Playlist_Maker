@@ -21,7 +21,7 @@ val repositoryModule = module {
 
     singleOf(::TracksRepositoryImpl) bind TracksRepository::class
 
-    factoryOf(::PlayerImpl) bind Player::class
+    singleOf(::PlayerImpl) bind Player::class
 
     singleOf(::FavoriteTracksRepositoryImpl) bind FavoriteTracksRepository::class
 

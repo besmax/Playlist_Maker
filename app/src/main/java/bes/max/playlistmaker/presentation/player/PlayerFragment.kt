@@ -82,7 +82,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
                 else -> {
                     binding.playerScreenButtonPlay.setImageResource(R.drawable.ic_player_play)
-                    binding.playerScreenButtonPlay.isEnabled = false
                 }
             }
         }
@@ -90,9 +89,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         playerViewModel.isPlaylistAdded.observe(viewLifecycleOwner) { isAddedPair ->
             if (isAddedPair.first) showTrackAddedToast(isAddedPair.second)
             else showTrackNotAddedToast(isAddedPair.second)
-        }
-        if (!safeArgs.playlist.isNullOrBlank()) {
-            showTrackAddedToast(safeArgs.playlist!!)
         }
 
         playerViewModel.playingTime.observe(viewLifecycleOwner) { playingTimeString ->
@@ -143,8 +139,8 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         playerViewModel.releasePlayer()
         playlistsAdapter = null
     }
@@ -249,7 +245,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             listType = PlaylistItemAdapter.LINEAR_VERTICAL_LIST,
             doOnClick = { playlist ->
                 playerViewModel.addTrackToPlaylist(playerViewModel.track, playlist)
-                playerViewModel.getPlaylists()
+                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
             }
         )
         binding.playlistsBottomSheetRecyclerView.layoutManager =
