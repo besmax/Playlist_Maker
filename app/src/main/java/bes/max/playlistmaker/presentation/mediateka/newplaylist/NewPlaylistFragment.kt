@@ -2,6 +2,7 @@ package bes.max.playlistmaker.presentation.mediateka.newplaylist
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,6 +18,7 @@ import androidx.navigation.fragment.navArgs
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentNewPlaylistBinding
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -35,7 +37,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
     private val imagePicker =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                binding.newPlaylistScreenPlaylistCover.setImageURI(uri)
+                setImageToView(uri)
                 newPlaylistViewModel.saveImageToPrivateStorage(uri)
             } else {
                 Log.d(TAG, "No image selected for playlist cover")
@@ -129,6 +131,14 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
             trackArg = safeArgs.track,
         )
         findNavController().previousBackStackEntry?.savedStateHandle?.set("playlistName", name)
+    }
+
+    private fun setImageToView(uri: Uri) {
+        Glide.with(binding.root)
+            .load(uri)
+            .centerCrop()
+            .placeholder(R.drawable.ic_picture_not_found)
+            .into(binding.newPlaylistScreenPlaylistCover)
     }
 
     companion object {
