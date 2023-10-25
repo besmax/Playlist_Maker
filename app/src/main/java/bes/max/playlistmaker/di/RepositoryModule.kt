@@ -10,7 +10,6 @@ import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistRepository
 import bes.max.playlistmaker.domain.player.Player
 import bes.max.playlistmaker.domain.search.TracksRepository
 import bes.max.playlistmaker.domain.settings.SettingsRepository
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
