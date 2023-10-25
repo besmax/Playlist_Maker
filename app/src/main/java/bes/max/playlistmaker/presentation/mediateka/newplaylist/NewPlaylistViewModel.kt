@@ -16,14 +16,11 @@ class NewPlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
-    var coverUri: Uri? = null
-
     private val savedCoverUri = MutableLiveData<Uri>()
 
     fun createPlaylist(name: String, description: String? = null, trackArg: String? = null) {
         val track = trackArg.let { Gson().fromJson(it, Track::class.java) }
         viewModelScope.launch {
-
             val playlist = Playlist(
                 name = name,
                 description = description,
@@ -31,8 +28,7 @@ class NewPlaylistViewModel(
                 tracks = if (track != null) listOf(track) else null,
                 tracksNumber = if (track != null) 1 else 0
             )
-            val insertedId = playlistInteractor.createPlaylist(playlist)
-            Log.d(TAG, "Inserted in playlist_table with ID $insertedId") //TODO delete
+            playlistInteractor.createPlaylist(playlist)
         }
     }
 

@@ -39,7 +39,6 @@ class PlayerViewModel(
 
     init {
         preparePlayer()
-
         getPlaylists()
     }
 

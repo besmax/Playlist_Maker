@@ -17,10 +17,17 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
 
     override fun preparePlayer(dataSourceUrl: String) {
         with(mediaPlayer) {
-            setDataSource(dataSourceUrl)
-            prepareAsync()
-            setOnPreparedListener { _playerState.value = PlayerState.STATE_PREPARED }
-            setOnCompletionListener { _playerState.value = PlayerState.STATE_PREPARED }
+            try {
+                setDataSource(dataSourceUrl)
+                prepareAsync()
+                setOnPreparedListener { _playerState.value = PlayerState.STATE_PREPARED }
+                setOnCompletionListener { _playerState.value = PlayerState.STATE_PREPARED }
+            } catch (e: Exception) {
+                setDataSource(dataSourceUrl)
+                prepareAsync()
+                setOnPreparedListener { _playerState.value = PlayerState.STATE_PREPARED }
+                setOnCompletionListener { _playerState.value = PlayerState.STATE_PREPARED }
+            }
         }
 
     }
@@ -49,7 +56,7 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
 
     override fun releasePlayer() {
         try {
-            mediaPlayer.release()
+            mediaPlayer.reset()
             _playerState.value = PlayerState.STATE_DEFAULT
         } catch (e: IllegalStateException) {
             Log.e(TAG, "exception in releasePlayer() ${e.toString()}")
