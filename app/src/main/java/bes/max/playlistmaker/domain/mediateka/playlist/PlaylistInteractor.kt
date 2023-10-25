@@ -9,7 +9,7 @@ interface PlaylistInteractor {
 
     fun getAllPlaylists() : Flow<List<Playlist>>
 
-    suspend fun createPlaylist(playlist: Playlist)
+    suspend fun createPlaylist(playlist: Playlist) : Long
 
     suspend fun saveCover(uri: Uri): Uri
 

@@ -12,5 +12,5 @@ abstract class TracksDatabase : RoomDatabase() {
 
     abstract fun favoriteTracksDao(): FavoriteTracksDao
 
-    abstract fun playlistDao(): PlaylistsDao
+    abstract fun playlistsDao(): PlaylistsDao
 }

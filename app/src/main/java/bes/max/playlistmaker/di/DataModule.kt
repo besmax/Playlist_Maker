@@ -97,7 +97,7 @@ val dataModule = module {
 
     single<PlaylistsDao> {
         val database = get<TracksDatabase>()
-        database.playlistDao()
+        database.playlistsDao()
     }
 
     factoryOf(::TrackDbMapper)

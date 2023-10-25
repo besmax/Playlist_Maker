@@ -2,6 +2,7 @@ package bes.max.playlistmaker.presentation.mediateka.newplaylist
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import bes.max.playlistmaker.R
@@ -36,7 +38,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 binding.newPlaylistScreenPlaylistCover.setImageURI(uri)
-                newPlaylistViewModel.coverUri = uri
+                newPlaylistViewModel.saveImageToPrivateStorage(uri)
             } else {
                 Log.d(TAG, "No image selected for playlist cover")
             }
@@ -75,7 +77,6 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
         binding.newPlaylistScreenButton.setOnClickListener {
             savePlaylist()
-
             findNavController().navigateUp()
         }
 
@@ -100,7 +101,6 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
                 }
                 .setPositiveButton(getString(R.string.Complete)) { dialog, _ ->
                     dialog.dismiss()
-
                     findNavController().navigateUp()
                 }
                 .show()
@@ -130,6 +130,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
             description = binding.newPlaylistScreenDescriptionInput.text.toString(),
             trackArg = safeArgs.track,
         )
+        findNavController().previousBackStackEntry?.savedStateHandle?.set("playlistName", name)
     }
 
     companion object {

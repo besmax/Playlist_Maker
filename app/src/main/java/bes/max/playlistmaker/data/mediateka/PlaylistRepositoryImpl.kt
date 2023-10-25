@@ -17,11 +17,10 @@ class PlaylistRepositoryImpl(
     private val playlistsDao: PlaylistsDao,
     private val imageDao: ImageDao
 ) : PlaylistRepository {
-    override suspend fun addPlaylist(playlist: Playlist) {
-        withContext(Dispatchers.IO) {
-            playlistsDao.insertPlaylist(PlaylistDbMapper.map(playlist))
-        }
+    override suspend fun addPlaylist(playlist: Playlist): Long = withContext(Dispatchers.IO) {
+        playlistsDao.insertPlaylist(PlaylistDbMapper.map(playlist))
     }
+
 
     override suspend fun deletePlaylist(playlist: Playlist) {
         withContext(Dispatchers.IO) {
@@ -31,11 +30,11 @@ class PlaylistRepositoryImpl(
 
     override fun getAllPlaylists(): Flow<List<Playlist>> = flow {
         val playlistEntities = playlistsDao.getAllPlaylists()
-        emit(playlistEntities.map { PlaylistDbMapper.map(it) })
+        emit(playlistEntities.map { playlistEntity -> PlaylistDbMapper.map(playlistEntity) })
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun saveCover(uri: Uri): Uri = withContext(Dispatchers.IO) {
-        imageDao.saveImage(uri)
+    override suspend fun saveCover(uri: Uri): Uri {
+        return imageDao.saveImage(uri)
     }
 
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist): Flow<Boolean> =

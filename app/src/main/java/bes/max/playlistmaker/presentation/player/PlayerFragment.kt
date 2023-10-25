@@ -108,6 +108,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
         binding.playerScreenButtonAdd.setOnClickListener {
             scaleAnimation(binding.playerScreenButtonAdd)
+            playerViewModel.getPlaylists()
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         }
 
@@ -125,6 +126,10 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             findNavController().navigate(action)
         }
 
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("playlistName")
+            ?.observe(viewLifecycleOwner) { playlistName ->
+                showTrackAddedToast(playlistName)
+            }
     }
 
     override fun onResume() {
@@ -226,7 +231,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
 
                 when (newState) {
-                    BottomSheetBehavior.STATE_EXPANDED,  BottomSheetBehavior.STATE_HALF_EXPANDED -> {
+                    BottomSheetBehavior.STATE_EXPANDED, BottomSheetBehavior.STATE_HALF_EXPANDED -> {
                         binding.overlay.visibility = View.VISIBLE
                     }
 

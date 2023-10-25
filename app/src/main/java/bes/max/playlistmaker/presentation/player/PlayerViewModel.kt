@@ -14,7 +14,6 @@ import bes.max.playlistmaker.domain.player.PlayerInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -39,7 +38,7 @@ class PlayerViewModel(
     val isPlaylistAdded: LiveData<Pair<Boolean, String>> = _isPlaylistAdded
 
     init {
-        preparePreparePlayer()
+        preparePlayer()
 
         getPlaylists()
     }
@@ -60,7 +59,7 @@ class PlayerViewModel(
         updateTimer()
     }
 
-   fun preparePreparePlayer() {
+   private fun preparePlayer() {
        playerInteractor.preparePlayer(track.previewUrl ?: "")
        checkIsFavorite()
    }

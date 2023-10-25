@@ -102,7 +102,7 @@
             android:id="@+id/new_playlist_screen_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="44dp"
+            android:minHeight="56dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="32dp"
             android:backgroundTint="@color/newplaylist_button"
