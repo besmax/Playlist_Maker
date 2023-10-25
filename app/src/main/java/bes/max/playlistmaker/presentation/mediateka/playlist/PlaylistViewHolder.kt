@@ -7,6 +7,7 @@ import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.PlaylistListItemGridBinding
 import bes.max.playlistmaker.databinding.PlaylistListItemLinearVertBinding
 import bes.max.playlistmaker.domain.models.Playlist
+import com.bumptech.glide.Glide
 
 class PlaylistViewHolder(private val binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -16,8 +17,11 @@ class PlaylistViewHolder(private val binding: ViewBinding) :
             is PlaylistListItemGridBinding -> {
                 with(binding) {
                     val coverUri = model.coverPath?.toUri()
-                    if (model.coverPath != null) playlistCover.setImageURI(coverUri)
-                    else playlistCover.setImageResource(R.drawable.ic_picture_not_found)
+                    Glide.with(binding.root)
+                        .load(coverUri)
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_picture_not_found)
+                        .into(playlistCover)
                     playlistName.text = model.name
                     val trackQty =
                         if (model.tracksNumber.toString() != "null") model.tracksNumber.toString() else "0"
@@ -28,8 +32,11 @@ class PlaylistViewHolder(private val binding: ViewBinding) :
             is PlaylistListItemLinearVertBinding -> {
                 with(binding) {
                     val coverUri = model.coverPath?.toUri()
-                    if (coverUri != null) playlistCover.setImageURI(coverUri)
-                    else playlistCover.setImageResource(R.drawable.ic_picture_not_found)
+                    Glide.with(binding.root)
+                        .load(coverUri)
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_picture_not_found)
+                        .into(playlistCover)
                     playlistName.text = model.name
                     val trackQty =
                         if (model.tracksNumber.toString() != "null") model.tracksNumber.toString() else "0"
