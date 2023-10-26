@@ -30,6 +30,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
     private val safeArgs: NewPlaylistFragmentArgs by navArgs()
 
     private var defaultDrawable: Drawable? = null
+    private var imageUri: Uri? = null
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
@@ -38,7 +39,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 setImageToView(uri)
-                newPlaylistViewModel.saveImageToPrivateStorage(uri)
+                imageUri = uri
             } else {
                 Log.d(TAG, "No image selected for playlist cover")
             }
@@ -129,6 +130,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
             name = name,
             description = binding.newPlaylistScreenDescriptionInput.text.toString(),
             trackArg = safeArgs.track,
+            uri = imageUri
         )
         findNavController().previousBackStackEntry?.savedStateHandle?.set("playlistName", name)
     }
