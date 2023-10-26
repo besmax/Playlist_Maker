@@ -93,7 +93,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
             !binding.newPlaylistScreenDescriptionInput.text.isNullOrBlank() ||
             binding.newPlaylistScreenPlaylistCover.drawable != defaultDrawable
         ) {
-            MaterialAlertDialogBuilder(requireContext())
+            val alert = MaterialAlertDialogBuilder(requireContext(), R.style.Theme_MyApp_Dialog_Alert)
                 .setTitle(getString(R.string.newplaylist_screen_dialog_title))
                 .setMessage(getString(R.string.newplaylist_screen_dialog_message))
                 .setNeutralButton(getString(R.string.Cancel)) { dialog, _ ->
@@ -103,7 +103,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
                     dialog.dismiss()
                     findNavController().navigateUp()
                 }
-                .show()
+            alert.show()
         } else {
             findNavController().navigateUp()
         }
