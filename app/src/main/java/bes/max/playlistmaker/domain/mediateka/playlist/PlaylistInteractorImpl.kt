@@ -10,10 +10,11 @@ class PlaylistInteractorImpl(
 ) : PlaylistInteractor {
 
     override fun getAllPlaylists(): Flow<List<Playlist>> =
-         playlistRepository.getAllPlaylists()
+        playlistRepository.getAllPlaylists()
 
-    override suspend fun createPlaylist(playlist: Playlist): Long =
+    override suspend fun createPlaylist(playlist: Playlist) {
         playlistRepository.addPlaylist(playlist)
+    }
 
 
     override suspend fun saveCover(uri: Uri): Uri =
