@@ -1,7 +1,6 @@
 package bes.max.playlistmaker.presentation.mediateka.newplaylist
 
 import android.net.Uri
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
@@ -9,7 +8,6 @@ import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class NewPlaylistViewModel(
