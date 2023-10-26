@@ -87,8 +87,12 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
 
         playerViewModel.isPlaylistAdded.observe(viewLifecycleOwner) { isAddedPair ->
-            if (isAddedPair.first) showTrackAddedToast(isAddedPair.second)
-            else showTrackNotAddedToast(isAddedPair.second)
+            if (isAddedPair.first) {
+                showTrackAddedToast(isAddedPair.second)
+            }
+            else {
+                showTrackNotAddedToast(isAddedPair.second)
+            }
         }
 
         playerViewModel.playingTime.observe(viewLifecycleOwner) { playingTimeString ->
@@ -250,7 +254,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             listType = PlaylistItemAdapter.LINEAR_VERTICAL_LIST,
             doOnClick = { playlist ->
                 playerViewModel.addTrackToPlaylist(playerViewModel.track, playlist)
-                bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
             }
         )
         binding.playlistsBottomSheetRecyclerView.layoutManager =
@@ -260,6 +263,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private fun showTrackAddedToast(playlistName: String) {
         val trackName = playerViewModel.track.trackName
+        bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
         Toast.makeText(
             requireContext(),
             getString(R.string.player_screen_toast_added, trackName, playlistName),
