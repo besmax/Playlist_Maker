@@ -18,9 +18,7 @@ class PlaylistRepositoryImpl(
     private val imageDao: ImageDao
 ) : PlaylistRepository {
     override suspend fun addPlaylist(playlist: Playlist) {
-        withContext(Dispatchers.IO) {
-            playlistsDao.insertPlaylist(PlaylistDbMapper.map(playlist))
-        }
+        playlistsDao.insertPlaylist(PlaylistDbMapper.map(playlist))
     }
 
 
