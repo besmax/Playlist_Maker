@@ -8,9 +8,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import bes.max.playlistmaker.data.db.TracksDatabase
-import bes.max.playlistmaker.data.db.dao.FavoriteTracksDao
+import bes.max.playlistmaker.data.db.AppDatabase
+import bes.max.playlistmaker.data.db.dao.PlaylistTrackDao
 import bes.max.playlistmaker.data.db.dao.PlaylistsDao
+import bes.max.playlistmaker.data.db.dao.TrackDao
 import bes.max.playlistmaker.data.mappers.TrackDbMapper
 import bes.max.playlistmaker.data.mappers.TrackDtoMapper
 import bes.max.playlistmaker.data.mediateka.ImageDaoImpl
@@ -85,19 +86,24 @@ val dataModule = module {
     }
 
     single {
-        Room.databaseBuilder(androidContext(), TracksDatabase::class.java, "database")
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database")
             .fallbackToDestructiveMigration()
             .build()
     }
 
-    single<FavoriteTracksDao> {
-        val database = get<TracksDatabase>()
-        database.favoriteTracksDao()
+    single<TrackDao> {
+        val database = get<AppDatabase>()
+        database.trackDao()
     }
 
     single<PlaylistsDao> {
-        val database = get<TracksDatabase>()
+        val database = get<AppDatabase>()
         database.playlistsDao()
+    }
+
+    single<PlaylistTrackDao> {
+        val database = get<AppDatabase>()
+        database.playlistTrackDao()
     }
 
     factoryOf(::TrackDbMapper)

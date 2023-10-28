@@ -67,6 +67,13 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
         setTextWatcher()
 
+        newPlaylistViewModel.screenState.observe(viewLifecycleOwner) { screenState ->
+            when(screenState) {
+                is NewPlaylistScreenState.Created -> findNavController().navigateUp()
+                else -> {}
+            }
+        }
+
         binding.newPlaylistScreenBackArrow.setNavigationOnClickListener {
             showSaveBeforeExitDialog()
         }
@@ -78,7 +85,6 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
         binding.newPlaylistScreenButton.setOnClickListener {
             savePlaylist()
-            findNavController().navigateUp()
         }
 
         defaultDrawable = binding.newPlaylistScreenPlaylistCover.drawable

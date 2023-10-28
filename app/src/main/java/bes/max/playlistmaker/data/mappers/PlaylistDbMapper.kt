@@ -15,10 +15,7 @@ object PlaylistDbMapper {
             name = playlistEntity.name,
             description = playlistEntity.description,
             coverPath = playlistEntity.coverPath,
-            tracks = if (playlistEntity.tracks.isNullOrEmpty()) emptyList() else Gson().fromJson(
-                playlistEntity.tracks,
-                typeToken
-            ),
+            tracks = null,
             tracksNumber = playlistEntity.tracksNumber
         )
 
@@ -28,7 +25,6 @@ object PlaylistDbMapper {
             name = playlist.name,
             description = playlist.description,
             coverPath = playlist.coverPath,
-            tracks = if (playlist.tracks.isNullOrEmpty()) null else Gson().toJson(playlist.tracks),
             tracksNumber = playlist.tracksNumber
         )
 

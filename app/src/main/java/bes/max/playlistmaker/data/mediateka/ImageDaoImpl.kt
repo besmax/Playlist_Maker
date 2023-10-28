@@ -12,7 +12,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import bes.max.playlistmaker.domain.mediateka.playlist.ImageDao
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
@@ -22,7 +24,7 @@ class ImageDaoImpl(
 ) : ImageDao {
 
     override suspend fun saveImage(uri: Uri): Uri {
-        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), folderName)
+        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), FOLDER_NAME)
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
@@ -33,9 +35,11 @@ class ImageDaoImpl(
         val file = File(filePath, "cover_$number.jpg")
         val inputStream = context.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
+
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+
         Log.d(TAG, "file saved with uri: ${file.toUri()}")
         return file.toUri()
     }
@@ -55,6 +59,6 @@ class ImageDaoImpl(
     companion object {
         private const val TAG = "ImageDaoImpl"
         private val IMAGE_PREFERENCES_KEY = intPreferencesKey("image_preference_key")
-        private const val folderName = "playlistcovers"
+        private const val FOLDER_NAME = "playlistcovers"
     }
 }

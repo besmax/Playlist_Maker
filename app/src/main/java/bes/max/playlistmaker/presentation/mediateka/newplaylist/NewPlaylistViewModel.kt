@@ -1,6 +1,9 @@
 package bes.max.playlistmaker.presentation.mediateka.newplaylist
 
 import android.net.Uri
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
@@ -14,7 +17,11 @@ class NewPlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
+    private val _screenState: MutableLiveData<NewPlaylistScreenState> = MutableLiveData(NewPlaylistScreenState.Default)
+    val screenState: LiveData<NewPlaylistScreenState> = _screenState
+
     fun createPlaylist(name: String, description: String? = null, trackArg: String? = null, uri: Uri?) {
+        _screenState.value = NewPlaylistScreenState.Creating
         val track = trackArg.let { Gson().fromJson(it, Track::class.java) }
         viewModelScope.launch(Dispatchers.IO) {
             val savedCoverUri = uri?.let { saveImageToPrivateStorage(it) }
@@ -26,6 +33,7 @@ class NewPlaylistViewModel(
                 tracksNumber = if (track != null) 1 else 0
             )
             playlistInteractor.createPlaylist(playlist)
+            _screenState.postValue(NewPlaylistScreenState.Created)
         }
     }
 

@@ -8,7 +8,7 @@ import androidx.room.Query
 import bes.max.playlistmaker.data.db.entities.TrackEntity
 
 @Dao
-interface FavoriteTracksDao {
+interface TrackDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(track: TrackEntity)
@@ -16,10 +16,13 @@ interface FavoriteTracksDao {
     @Delete
     suspend fun deleteTrack(track: TrackEntity)
 
-    @Query("SELECT * FROM favorite_table ORDER BY adding_date")
-    suspend fun getAllFavoriteTracks() : List<TrackEntity>
+    @Query("SELECT * FROM tracks_table WHERE is_favorite ORDER BY adding_date")
+    suspend fun getAllFavoriteTracks(): List<TrackEntity>
 
-    @Query("SELECT track_id FROM favorite_table")
-    suspend fun getAllIdsOfFavoriteTracks() : List<Long>
+    @Query("SELECT track_id FROM tracks_table")
+    suspend fun getAllIdsOfFavoriteTracks(): List<Long>
+
+    @Query("SELECT * FROM tracks_table WHERE track_id=:id")
+    suspend fun getTrackById(id: Long): TrackEntity
 
 }
