@@ -63,13 +63,23 @@ class PlaylistRepositoryImpl(
 
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist): Flow<Boolean> =
         flow {
-            var result = false
-            if (!playlist.tracks.isNullOrEmpty()) {
+            val isTrackInDb = (playlistTrackDao.checkIsRowExists(
+                trackId = track.trackId,
+                playlistId = playlist.id
+            ) != 0)
+
+            if (!isTrackInDb) {
+                val updatedTracks = playlist.tracks?.toMutableList() ?: mutableListOf()
+                updatedTracks.add(track)
+                val updatedPlaylist = playlist.copy(
+                    tracks = updatedTracks,
+                    tracksNumber = playlist.tracksNumber + 1,
+                )
                 trackDao.insertTrack(trackDbMapper.map(track))
-                playlistsDao.updatePlaylist(PlaylistDbMapper.map(playlist))
+                playlistsDao.updatePlaylist(PlaylistDbMapper.map(updatedPlaylist))
                 playlistTrackDao.insert(PlaylistTrackEntity(track.trackId, playlist.id))
-                result = true
             }
-            emit(result)
+
+            emit(!isTrackInDb)
         }.flowOn(Dispatchers.IO)
 }

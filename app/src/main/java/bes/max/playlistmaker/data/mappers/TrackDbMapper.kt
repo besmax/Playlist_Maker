@@ -36,6 +36,6 @@ class TrackDbMapper {
             trackTime = track.trackTime,
             bigCover = track.bigCover,
             year = track.year,
-            isFavorite = track.isFavorite
+            isFavorite = track.isFavorite ?: false
         )
 }

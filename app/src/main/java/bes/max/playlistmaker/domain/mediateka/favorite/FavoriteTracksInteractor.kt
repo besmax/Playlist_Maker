@@ -9,7 +9,9 @@ interface FavoriteTracksInteractor {
 
     suspend fun deleteTrackFromFavorite(track: Track)
 
-    fun getAllFavoriteTracks() : Flow<List<Track>>
+    fun getAllFavoriteTracks(): Flow<List<Track>>
 
-    fun getAllIdsOfFavoriteTracks() : Flow<List<Long>>
+    fun getAllIdsOfFavoriteTracks(): Flow<List<Long>>
+
+    fun trackIsFavorite(trackId: Long): Flow<Boolean>
 }

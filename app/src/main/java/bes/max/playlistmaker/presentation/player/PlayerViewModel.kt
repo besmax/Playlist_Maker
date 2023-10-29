@@ -58,10 +58,10 @@ class PlayerViewModel(
         updateTimer()
     }
 
-   private fun preparePlayer() {
-       playerInteractor.preparePlayer(track.previewUrl ?: "")
-       checkIsFavorite()
-   }
+    private fun preparePlayer() {
+        playerInteractor.preparePlayer(track.previewUrl ?: "")
+        checkIsFavorite()
+    }
 
     fun pausePlayer() {
         playerInteractor.pause()
@@ -115,9 +115,9 @@ class PlayerViewModel(
     }
 
     private fun checkIsFavorite() {
-        viewModelScope.launch(Dispatchers.IO) {
-            favoriteTracksInteractor.getAllIdsOfFavoriteTracks().collect() {
-                _isFavorite.postValue(it.contains(track.trackId))
+        viewModelScope.launch {
+            favoriteTracksInteractor.trackIsFavorite(trackId = track.trackId).collect() { isFav ->
+                _isFavorite.postValue(isFav)
             }
         }
     }

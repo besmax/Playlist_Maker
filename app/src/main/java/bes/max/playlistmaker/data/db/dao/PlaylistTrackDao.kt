@@ -10,8 +10,8 @@ import bes.max.playlistmaker.data.db.entities.TrackEntity
 
 @Dao
 interface PlaylistTrackDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entity: PlaylistTrackEntity)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(entity: PlaylistTrackEntity): Long
 
     @Update
     suspend fun update(entity: PlaylistTrackEntity)
@@ -19,8 +19,8 @@ interface PlaylistTrackDao {
     @Query("SELECT * FROM playlist_track_table")
     suspend fun getAll(): List<PlaylistTrackEntity>
 
-    @Query("SELECT * FROM playlist_track_table WHERE playlist_id=:id")
-    suspend fun getAllTracksIdsFromPlaylist(id: Long): List<PlaylistTrackEntity>
+    @Query("SELECT COUNT(*) FROM playlist_track_table WHERE track_id = :trackId AND playlist_id = :playlistId")
+    suspend fun checkIsRowExists(trackId: Long, playlistId: Long): Int
 
     @Query("SELECT" +
             " tracks_table.track_id, track_name, track_artist, track_collection, track_genre, country, track_url, track_time, track_cover, year, adding_date, is_favorite" +
