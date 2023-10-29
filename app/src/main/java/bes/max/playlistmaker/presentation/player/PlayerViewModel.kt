@@ -102,7 +102,8 @@ class PlayerViewModel(
 
     fun addToFavorite(track: Track) {
         viewModelScope.launch(Dispatchers.IO) {
-            favoriteTracksInteractor.addTrackToFavorite(track)
+            val trackForAdding = track.copy(isFavorite = true)
+            favoriteTracksInteractor.addTrackToFavorite(trackForAdding)
             _isFavorite.postValue(true)
         }
     }
