@@ -3,7 +3,6 @@ package bes.max.playlistmaker.data.mappers
 import bes.max.playlistmaker.data.db.entities.PlaylistEntity
 import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
-import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 object PlaylistDbMapper {
