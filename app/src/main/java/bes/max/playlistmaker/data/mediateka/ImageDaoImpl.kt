@@ -12,9 +12,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import bes.max.playlistmaker.domain.mediateka.playlist.ImageDao
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 

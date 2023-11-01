@@ -7,14 +7,23 @@
     android:background="@color/white_black"
     android:padding="@dimen/search_activity_list_item_padding">
 
-    <ImageView
-        android:id="@+id/playlist_cover"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/playlist_cardview"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_picture_not_found" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/playlist_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white_black"
+            tools:src="@drawable/ic_picture_not_found" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/playlist_name"
@@ -24,8 +33,8 @@
         android:padding="4dp"
         android:textColor="@color/black_white"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@id/playlist_cover"
-        app:layout_constraintTop_toTopOf="@id/playlist_cover"
+        app:layout_constraintStart_toEndOf="@id/playlist_cardview"
+        app:layout_constraintTop_toTopOf="@id/playlist_cardview"
         tools:text="Name of playlist" />
 
     <TextView
@@ -34,9 +43,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_regular"
         android:padding="4dp"
-        android:textColor="@color/black_white"
+        android:textColor="@color/gray_white"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@id/playlist_cover"
+        app:layout_constraintStart_toEndOf="@id/playlist_cardview"
         app:layout_constraintTop_toBottomOf="@id/playlist_name"
         tools:text="999 tracks" />
 

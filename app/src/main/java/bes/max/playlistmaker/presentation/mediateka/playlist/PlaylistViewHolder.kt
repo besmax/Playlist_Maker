@@ -8,7 +8,6 @@ import bes.max.playlistmaker.databinding.PlaylistListItemGridBinding
 import bes.max.playlistmaker.databinding.PlaylistListItemLinearVertBinding
 import bes.max.playlistmaker.domain.models.Playlist
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 class PlaylistViewHolder(private val binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -21,14 +20,7 @@ class PlaylistViewHolder(private val binding: ViewBinding) :
                     Glide.with(binding.root)
                         .load(coverUri)
                         .centerCrop()
-                        .placeholder(R.drawable.ic_picture_not_found)
-                        .transform(
-                            RoundedCorners(
-                                itemView.resources.getDimensionPixelSize(
-                                    R.dimen.activity_player_album_cover_corner_radius
-                                )
-                            )
-                        )
+                        .placeholder(R.drawable.playlist_placeholder_grid)
                         .into(playlistCover)
                     playlistName.text = model.name
                     val trackQty =
@@ -43,14 +35,7 @@ class PlaylistViewHolder(private val binding: ViewBinding) :
                     Glide.with(binding.root)
                         .load(coverUri)
                         .centerCrop()
-                        .placeholder(R.drawable.ic_picture_not_found)
-                        .transform(
-                            RoundedCorners(
-                                itemView.resources.getDimensionPixelSize(
-                                    R.dimen.search_activity_album_cover_corner_radius
-                                )
-                            )
-                        )
+                        .placeholder(R.drawable.playlist_placeholder_grid)
                         .into(playlistCover)
                     playlistName.text = model.name
                     val trackQty =
