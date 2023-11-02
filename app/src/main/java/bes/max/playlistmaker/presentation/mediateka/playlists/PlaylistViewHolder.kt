@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.presentation.mediateka.playlist
+package bes.max.playlistmaker.presentation.mediateka.playlists
 
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView

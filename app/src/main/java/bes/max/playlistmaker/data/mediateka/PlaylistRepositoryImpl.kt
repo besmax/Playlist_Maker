@@ -82,4 +82,18 @@ class PlaylistRepositoryImpl(
 
             emit(!isTrackInDb)
         }.flowOn(Dispatchers.IO)
+
+    override fun getPlaylistById(id: Long) = flow<Playlist> {
+        val entity = playlistsDao.getPlaylistById(id)
+        val playlistNoTracks = PlaylistDbMapper.map(entity)
+        val tracks = playlistTrackDao.getAllTracksFromPlaylist(id).map { trackDbMapper.map(it) }
+        val result = playlistNoTracks.copy(
+            tracks = tracks,
+        )
+        emit(result)
+    }.flowOn(Dispatchers.IO)
+
+
+
+
 }

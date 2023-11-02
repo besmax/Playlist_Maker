@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.presentation.mediateka.playlist
+package bes.max.playlistmaker.presentation.mediateka.playlists
 
 import bes.max.playlistmaker.domain.models.Playlist
 
