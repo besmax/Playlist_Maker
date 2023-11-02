@@ -6,7 +6,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class PlaylistDetailsViewModel(
