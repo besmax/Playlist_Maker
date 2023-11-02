@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.presentation.mediateka.playlist
+package bes.max.playlistmaker.presentation.mediateka.playlists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
-class PlaylistViewModel(
+class PlaylistsViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 

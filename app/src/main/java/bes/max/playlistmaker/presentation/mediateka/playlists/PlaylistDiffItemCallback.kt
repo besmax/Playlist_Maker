@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.presentation.mediateka.playlist
+package bes.max.playlistmaker.presentation.mediateka.playlists
 
 import androidx.recyclerview.widget.DiffUtil
 import bes.max.playlistmaker.domain.models.Playlist
