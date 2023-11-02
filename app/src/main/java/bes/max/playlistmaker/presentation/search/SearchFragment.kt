@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
@@ -16,7 +15,6 @@ import bes.max.playlistmaker.databinding.FragmentSearchBinding
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import bes.max.playlistmaker.presentation.utils.debounce
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,11 +34,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        with(requireActivity()) {
-            requireViewById<BottomNavigationView>(R.id.bottom_navigation_view).isVisible = true
-            requireViewById<View>(R.id.bottom_navigation_view_line_above).isVisible = true
-        }
 
         val onElementClickAction = debounce<Track>(
             delayMillis = CLICK_DEBOUNCE_DELAY,
@@ -73,7 +66,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
         binding.searchScreenPlaceholderButton.setOnClickListener {
             if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
-                searchViewModel.searchDebounce(binding.searchScreenEditText.text.toString())
+                searchViewModel.searchTrack(binding.searchScreenEditText.text.toString())
             }
         }
 
@@ -199,7 +192,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         with(binding) {
             searchScreenPlaceholder.visibility = View.VISIBLE
             searchScreenPlaceholderImage.setImageResource(R.drawable.img_not_found)
-            searchScreenPlaceholderText.setText(getString(R.string.search_activity_placeholder_text_not_found))
+            searchScreenPlaceholderText.setText(getString(R.string.search_screen_placeholder_text_not_found))
             searchScreenPlaceholderButton.visibility = View.GONE
             searchScreenProgressBar.visibility = View.GONE
             searchScreenRecyclerViewTracks.visibility = View.GONE
@@ -211,7 +204,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         with(binding) {
             searchScreenPlaceholder.visibility = View.VISIBLE
             searchScreenPlaceholderImage.setImageResource(R.drawable.img_no_internet)
-            searchScreenPlaceholderText.setText(getString(R.string.search_activity_placeholder_text_error))
+            searchScreenPlaceholderText.setText(getString(R.string.search_screen_placeholder_text_error))
             searchScreenPlaceholderButton.visibility = View.VISIBLE
             searchScreenProgressBar.visibility = View.GONE
             searchScreenRecyclerViewTracks.visibility = View.GONE

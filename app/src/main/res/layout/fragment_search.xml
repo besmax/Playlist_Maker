@@ -6,6 +6,7 @@
     android:id="@+id/search_activity_history_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_black"
     tools:context=".presentation.search.SearchFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -14,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        app:title="@string/search_activity_title"
+        app:title="@string/search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +40,7 @@
             style="@style/search_activity_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/search_activity_title"
+            android:hint="@string/search"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"
@@ -161,7 +162,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="24dp"
-        android:text="@string/search_activity_placeholder_refresh_button"
+        android:text="@string/refresh"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_screen_placeholder_text" />

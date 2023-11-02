@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bes.max.playlistmaker.domain.mediateka.FavoriteTracksInteractor
+import bes.max.playlistmaker.domain.mediateka.favorite.FavoriteTracksInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

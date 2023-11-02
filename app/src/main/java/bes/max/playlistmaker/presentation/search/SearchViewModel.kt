@@ -48,7 +48,7 @@ class SearchViewModel(
         searchJob?.cancel()
     }
 
-    private fun searchTrack(searchRequest: String) {
+    fun searchTrack(searchRequest: String) {
         _screenState.value = SearchScreenState.Loading
         viewModelScope.launch {
             searchInNetworkUseCase.execute(searchRequest).collect { response ->

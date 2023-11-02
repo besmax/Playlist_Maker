@@ -13,5 +13,6 @@ data class Track(
     val previewUrl: String?,
     val trackTime: String,
     val bigCover: String,
-    val year: String
+    val year: String,
+    val isFavorite: Boolean = false
 )

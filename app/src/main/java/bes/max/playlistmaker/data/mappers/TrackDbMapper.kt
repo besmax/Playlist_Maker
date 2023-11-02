@@ -1,6 +1,6 @@
 package bes.max.playlistmaker.data.mappers
 
-import bes.max.playlistmaker.data.db.TrackEntity
+import bes.max.playlistmaker.data.db.entities.TrackEntity
 import bes.max.playlistmaker.domain.models.Track
 
 class TrackDbMapper {
@@ -17,7 +17,8 @@ class TrackDbMapper {
             trackTime = track.trackTime,
             bigCover = track.bigCover,
             year = track.year,
-            addingDate = System.currentTimeMillis()
+            addingDate = System.currentTimeMillis(),
+            isFavorite = track.isFavorite
         )
 
     fun map(track: TrackEntity): Track =
@@ -34,6 +35,7 @@ class TrackDbMapper {
             previewUrl = track.previewUrl,
             trackTime = track.trackTime,
             bigCover = track.bigCover,
-            year = track.year
+            year = track.year,
+            isFavorite = track.isFavorite ?: false
         )
 }

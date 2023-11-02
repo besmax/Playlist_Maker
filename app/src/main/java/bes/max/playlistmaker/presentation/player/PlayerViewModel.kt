@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import bes.max.playlistmaker.domain.mediateka.FavoriteTracksInteractor
+import bes.max.playlistmaker.domain.mediateka.favorite.FavoriteTracksInteractor
+import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
 import bes.max.playlistmaker.domain.models.PlayerState
+import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.player.PlayerInteractor
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +21,8 @@ import java.util.Locale
 class PlayerViewModel(
     val track: Track,
     private val playerInteractor: PlayerInteractor,
-    private val favoriteTracksInteractor: FavoriteTracksInteractor
+    private val favoriteTracksInteractor: FavoriteTracksInteractor,
+    private val playlistInteractor: PlaylistInteractor
 ) :
     ViewModel() {
 
@@ -29,10 +32,14 @@ class PlayerViewModel(
     private var timerJob: Job? = null
     private val _isFavorite = MutableLiveData(false)
     val isFavorite: LiveData<Boolean> = _isFavorite
+    private val _playlists: MutableLiveData<List<Playlist>> = MutableLiveData()
+    val playlists: LiveData<List<Playlist>> = _playlists
+    private val _isPlaylistAdded: MutableLiveData<Pair<Boolean, String>> = MutableLiveData()
+    val isPlaylistAdded: LiveData<Pair<Boolean, String>> = _isPlaylistAdded
 
     init {
-        playerInteractor.preparePlayer(track.previewUrl ?: "")
-        checkIsFavorite()
+        preparePlayer()
+        getPlaylists()
     }
 
     fun playbackControl() {
@@ -49,6 +56,11 @@ class PlayerViewModel(
             else -> {}
         }
         updateTimer()
+    }
+
+    private fun preparePlayer() {
+        playerInteractor.preparePlayer(track.previewUrl ?: "")
+        checkIsFavorite()
     }
 
     fun pausePlayer() {
@@ -90,7 +102,8 @@ class PlayerViewModel(
 
     fun addToFavorite(track: Track) {
         viewModelScope.launch(Dispatchers.IO) {
-            favoriteTracksInteractor.addTrackToFavorite(track)
+            val trackForAdding = track.copy(isFavorite = true)
+            favoriteTracksInteractor.addTrackToFavorite(trackForAdding)
             _isFavorite.postValue(true)
         }
     }
@@ -103,9 +116,25 @@ class PlayerViewModel(
     }
 
     private fun checkIsFavorite() {
-        viewModelScope.launch(Dispatchers.IO) {
-            favoriteTracksInteractor.getAllIdsOfFavoriteTracks().collect() {
-                _isFavorite.postValue(it.contains(track.trackId))
+        viewModelScope.launch {
+            favoriteTracksInteractor.trackIsFavorite(trackId = track.trackId).collect() { isFav ->
+                _isFavorite.postValue(isFav)
+            }
+        }
+    }
+
+    fun getPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor.getAllPlaylists().collect {
+                _playlists.postValue(it)
+            }
+        }
+    }
+
+    fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+        viewModelScope.launch {
+            playlistInteractor.addTrackToPlaylist(track, playlist).collect() {
+                _isPlaylistAdded.postValue(Pair(it, playlist.name))
             }
         }
     }

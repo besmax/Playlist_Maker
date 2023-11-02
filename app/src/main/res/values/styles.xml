@@ -8,6 +8,13 @@
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
+    <style name="toolbar_back_arrow_with_title">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:layout_marginStart">-16dp</item>
+    </style>
+
     <style name="screen_title_textview">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textColor">@color/black</item>
@@ -45,6 +52,16 @@
         <item name="boxCornerRadiusTopEnd">@dimen/edit_text_corner_radius</item>
     </style>
 
+    <style name="new_playlist_screen_input_layout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_input_box_stroke_newplaylist</item>
+        <item name="boxBackgroundColor">@color/white_black</item>
+        <item name="android:layout_marginHorizontal">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/edit_text_corner_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/edit_text_corner_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/edit_text_corner_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/edit_text_corner_radius</item>
+    </style>
+
     <style name="search_activity_history_text_view_hint_text" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">16sp</item>
         <item name="android:paddingStart">24dp</item>
@@ -55,17 +72,16 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:maxWidth">250dp</item>
         <item name="android:maxLines">1</item>
         <item name="android:paddingStart">8dp</item>
     </style>
 
     <style name="search_activity_list_item_track_time_artist">
+        <item name="android:maxWidth">180dp</item>
         <item name="android:textSize">11sp</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textColor">@color/gray_text</item>
+        <item name="android:textColor">@color/yp_gray</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:maxWidth">150dp</item>
         <item name="android:maxLines">1</item>
         <item name="android:paddingStart">8dp</item>
         <item name="android:drawablePadding">4dp</item>
@@ -105,12 +121,11 @@
         <item name="android:textSize">13sp</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:maxWidth">250dp</item>
     </style>
 
     <style name="activity_player_text_titles">
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textColor">@color/gray_text</item>
+        <item name="android:textColor">@color/yp_gray</item>
         <item name="android:textSize">13sp</item>
     </style>
 
@@ -132,5 +147,55 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <style name="playlist_screen_dialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">@style/playlist_screen_dialog_font_style</item>
+        <!-- Background Color-->
+        <item name="android:background">@color/black_white</item>
+        <!-- Text Color for title and message -->
+        <item name="colorOnSurface">@color/white_black</item>
+    </style>
+
+    <style name="playlist_screen_dialog_font_style" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textAppearance">@style/playlist_screen_dialog_font</item>
+    </style>
+
+    <style name="playlist_screen_dialog_font" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/white_black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Alert Dialog -->
+    <style name="Theme.MyApp.Dialog.Alert" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+
+        <!-- Title -->
+        <item name="materialAlertDialogTitleTextStyle">@style/MyTitle_MaterialAlertDialog.MaterialComponents.Title.Text</item>
+
+        <!-- Body -->
+        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextAppearance.MaterialComponents.Body2</item>
+
+        <!-- Buttons -->
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
+    </style>
+
+
+    <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/yp_blue</item>
+    </style>
+
+    <style name="NeutralButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/yp_blue</item>
+    </style>
+
+    <style name="MyTitle_MaterialAlertDialog.MaterialComponents.Title.Text" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="BodyTextAppearance.MaterialComponents.Body2" parent="@style/TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/ys_display_regular</item>
+    </style>
+
 
 </resources>

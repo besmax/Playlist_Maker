@@ -1,11 +1,10 @@
 package bes.max.playlistmaker.data
 
-import bes.max.playlistmaker.data.db.TrackEntity
+import bes.max.playlistmaker.data.db.entities.TrackEntity
 import bes.max.playlistmaker.data.mappers.TrackDbMapper
 import bes.max.playlistmaker.domain.models.Track
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 
 
 class TrackDbMapperTest {

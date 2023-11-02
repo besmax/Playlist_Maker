@@ -9,7 +9,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 
 class SettingsDaoImpl(
@@ -18,20 +17,20 @@ class SettingsDaoImpl(
 ) : SettingsDao {
 
     override fun isNightModeActive(): Flow<Boolean> {
-        return preferencesDataStore?.data
-            ?.catch { exception ->
+        return preferencesDataStore.data
+            .catch { exception ->
                 Log.e(
                     TAG,
                     "Error during getting DataStore: ${exception.toString()}"
                 )
             }
-            ?.map { preferences ->
+            .map { preferences ->
                 preferences[DARK_THEME_PREFERENCES_KEY] ?: isNightModeActiveDefault()
-            } ?: emptyFlow()
+            }
     }
 
     override suspend fun setIsNightModeActive(isNightModeActive: Boolean) {
-        preferencesDataStore?.edit { preferences ->
+        preferencesDataStore.edit { preferences ->
             preferences[DARK_THEME_PREFERENCES_KEY] = isNightModeActive
         }
     }
