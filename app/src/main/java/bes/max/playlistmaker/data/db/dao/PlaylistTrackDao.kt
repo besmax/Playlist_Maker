@@ -23,7 +23,7 @@ interface PlaylistTrackDao {
     suspend fun checkIsRowExists(trackId: Long, playlistId: Long): Int
 
     @Query("SELECT" +
-            " tracks_table.track_id, track_name, track_artist, track_collection, track_genre, country, track_url, track_time, track_cover, year, adding_date, is_favorite" +
+            " tracks_table.track_id, track_name, track_artist, track_collection, track_genre, country, track_url, track_time, track_time_millis, track_cover, year, adding_date, is_favorite" +
             " FROM" +
             " tracks_table" +
             " LEFT JOIN playlist_track_table ON" +

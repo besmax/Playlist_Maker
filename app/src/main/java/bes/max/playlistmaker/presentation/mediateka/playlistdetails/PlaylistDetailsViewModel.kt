@@ -27,7 +27,16 @@ class PlaylistDetailsViewModel(
     private fun getPlaylist(id: Long) {
         viewModelScope.launch {
             playlistInteractor.getPlaylistById(id).collect() { playlist ->
-                _screenState.postValue(PlaylistDetailsScreenState.Content(playlist))
+                var durationSum = 0L
+                playlist.tracks?.forEach { durationSum += it.trackTimeMillis }
+                val playlistDetails = PlaylistDetails(
+                    title = playlist.name,
+                    description = playlist.description ?: "",
+                    tracks = playlist.tracks ?: emptyList(),
+                    durationSum = durationSum,
+                    cover = playlist.coverPath
+                )
+                _screenState.postValue(PlaylistDetailsScreenState.Content(playlistDetails))
             }
         }
 

@@ -6,7 +6,7 @@ sealed interface PlaylistDetailsScreenState {
 
     object Default : PlaylistDetailsScreenState
 
-    data class Content(val playlist: Playlist) : PlaylistDetailsScreenState
+    data class Content(val playlistDetails: PlaylistDetails) : PlaylistDetailsScreenState
 
     object Empty : PlaylistDetailsScreenState
 

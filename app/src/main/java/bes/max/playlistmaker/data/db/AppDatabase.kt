@@ -10,7 +10,7 @@ import bes.max.playlistmaker.data.db.entities.PlaylistTrackEntity
 import bes.max.playlistmaker.data.db.entities.TrackEntity
 
 @Database(
-    version = 3,
+    version = 4,
     entities = [TrackEntity::class, PlaylistEntity::class, PlaylistTrackEntity::class]
 )
 abstract class AppDatabase : RoomDatabase() {
