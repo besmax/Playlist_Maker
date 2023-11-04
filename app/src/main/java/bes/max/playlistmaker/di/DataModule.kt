@@ -20,11 +20,11 @@ import bes.max.playlistmaker.data.network.NetworkClient
 import bes.max.playlistmaker.data.network.RetrofitNetworkClient
 import bes.max.playlistmaker.data.search.SearchHistoryDao
 import bes.max.playlistmaker.data.search.SearchHistoryDaoImpl
-import bes.max.playlistmaker.data.settings.ExternalNavigatorImpl
+import bes.max.playlistmaker.data.common.ExternalNavigatorImpl
 import bes.max.playlistmaker.data.settings.SettingsDao
 import bes.max.playlistmaker.data.settings.SettingsDaoImpl
 import bes.max.playlistmaker.domain.mediateka.playlist.ImageDao
-import bes.max.playlistmaker.domain.settings.ExternalNavigator
+import bes.max.playlistmaker.domain.common.ExternalNavigator
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf

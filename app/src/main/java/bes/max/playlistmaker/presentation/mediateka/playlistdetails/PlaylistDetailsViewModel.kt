@@ -6,12 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bes.max.playlistmaker.R
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
 import bes.max.playlistmaker.domain.mediateka.playlistdetails.SharePlaylistUseCase
 import bes.max.playlistmaker.domain.models.Playlist
-import bes.max.playlistmaker.domain.settings.ExternalNavigator
-import bes.max.playlistmaker.presentation.settings.SettingsViewModel
 import kotlinx.coroutines.launch
 
 class PlaylistDetailsViewModel(

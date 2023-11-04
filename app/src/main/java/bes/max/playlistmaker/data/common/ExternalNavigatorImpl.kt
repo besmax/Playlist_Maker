@@ -1,12 +1,11 @@
-package bes.max.playlistmaker.data.settings
+package bes.max.playlistmaker.data.common
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
 import bes.max.playlistmaker.domain.models.EmailData
-import bes.max.playlistmaker.domain.models.Playlist
-import bes.max.playlistmaker.domain.settings.ExternalNavigator
+import bes.max.playlistmaker.domain.common.ExternalNavigator
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     override fun shareApp(link: String) {

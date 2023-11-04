@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.domain.settings
+package bes.max.playlistmaker.domain.common
 
 import bes.max.playlistmaker.domain.models.EmailData
 

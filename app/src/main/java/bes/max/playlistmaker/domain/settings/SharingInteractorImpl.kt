@@ -1,5 +1,6 @@
 package bes.max.playlistmaker.domain.settings
 
+import bes.max.playlistmaker.domain.common.ExternalNavigator
 import bes.max.playlistmaker.domain.models.EmailData
 
 class SharingInteractorImpl(private val externalNavigator: ExternalNavigator) : SharingInteractor {
