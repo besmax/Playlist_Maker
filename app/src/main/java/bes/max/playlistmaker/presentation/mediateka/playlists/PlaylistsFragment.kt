@@ -68,7 +68,6 @@ class PlaylistsFragment : BindingFragment<FragmentPlaylistBinding>() {
     override fun onResume() {
         super.onResume()
         playlistsViewModel.getPlaylists()
-        adapter?.notifyDataSetChanged()
     }
 
     private fun showEmpty() {

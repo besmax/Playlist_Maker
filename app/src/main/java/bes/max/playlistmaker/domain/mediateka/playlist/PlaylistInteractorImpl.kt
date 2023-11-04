@@ -4,7 +4,6 @@ import android.net.Uri
 import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 
 class PlaylistInteractorImpl(
     private val playlistRepository: PlaylistRepository
