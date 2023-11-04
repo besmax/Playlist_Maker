@@ -16,9 +16,9 @@ class PlaylistDetailsViewModel(
     private val _screenState: MutableLiveData<PlaylistDetailsScreenState> =
         MutableLiveData(PlaylistDetailsScreenState.Default)
     val screenState: LiveData<PlaylistDetailsScreenState> = _screenState
+    private val playlistId = savedStateHandle.get<Long>("playlistId")!!
 
     init {
-        val playlistId = savedStateHandle.get<Long>("playlistId")
         if (playlistId != null) {
             getPlaylist(playlistId)
         }
@@ -39,7 +39,14 @@ class PlaylistDetailsViewModel(
                 _screenState.postValue(PlaylistDetailsScreenState.Content(playlistDetails))
             }
         }
+    }
 
+    fun deleteTrackFromPlaylist(trackId: Long) {
+        _screenState.value = PlaylistDetailsScreenState.Editing
+        viewModelScope.launch {
+            playlistInteractor.deleteTrackFromPlaylist(trackId = trackId, playlistId = playlistId)
+            getPlaylist(playlistId)
+        }
     }
 
 }

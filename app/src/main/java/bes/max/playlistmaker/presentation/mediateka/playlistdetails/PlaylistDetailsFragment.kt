@@ -4,13 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.net.toUri
+import androidx.core.view.doOnLayout
 import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlaylistDetailsBinding
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.search.TrackListItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,6 +24,8 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
 
     private val playlistDetailsViewModel: PlaylistDetailsViewModel by viewModel()
     private var trackAdapter: TrackListItemAdapter? = null
+    private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
+
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -26,8 +33,14 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         return FragmentPlaylistDetailsBinding.inflate(inflater, container, false)
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.playlistDetailsScreenConstraintLayout.doOnLayout {
+            setUpBottomsheet()
+        }
 
         setUpRecyclerview()
 
@@ -47,12 +60,11 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         if (trackAdapter != null) {
             trackAdapter!!.listOfTracks = state.playlistDetails.tracks
         }
+        if(!state.playlistDetails.cover.isNullOrBlank()) {
+            binding.playlistDetailsScreenCover.setImageURI(state.playlistDetails.cover.toUri())
+            binding.playlistDetailsScreenCover.setPadding(0, 0, 0, 0)
+        }
 
-//        val coverPlaceholder =
-//            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_picture_not_found)
-//        if (binding.playlistDetailsScreenCover.drawable == coverPlaceholder) {
-//            binding.playlistDetailsScreenCover.setPadding(0, 48, 0, 48)
-//        }
         with(binding) {
             playlistDetailsScreenTitle.text = state.playlistDetails.title
             playlistDetailsScreenDescription.text = state.playlistDetails.description
@@ -64,6 +76,21 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
 
     }
 
+    private fun showDeleteTrackDialog(trackId: Long) {
+        val alert = MaterialAlertDialogBuilder(requireContext(), R.style.Theme_MyApp_Dialog_Alert)
+            .setTitle(R.string.playlistdetails_screen_dialog_title)
+            .setMessage(R.string.playlistdetails_screen_dialog_message)
+            .setNegativeButton(R.string.Cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton(R.string.delete) { dialog, _ ->
+                playlistDetailsViewModel.deleteTrackFromPlaylist(trackId)
+                dialog.dismiss()
+            }
+        alert.show()
+    }
+
+
     private fun setUpRecyclerview() {
         trackAdapter = TrackListItemAdapter(
             onListElementClick = { track ->
@@ -73,10 +100,20 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                         trackArg
                     )
                 findNavController().navigate(action)
+            },
+            onListElementLongClick = { trackId ->
+                showDeleteTrackDialog(trackId)
             }
         )
         binding.playlistDetailsScreenBottomSheetRecyclerView.adapter = trackAdapter
 
+    }
+
+    private fun setUpBottomsheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistDetailsScreenBottomSheet)
+        val availableHeight =
+            binding.playlistDetailsScreenCoordinatorLayout.height - binding.playlistDetailsScreenConstraintLayout.height
+        bottomSheetBehavior!!.setPeekHeight(availableHeight, false)
     }
 
     private fun convertTrackToJson(track: Track): String {

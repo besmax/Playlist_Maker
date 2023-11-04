@@ -93,7 +93,17 @@ class PlaylistRepositoryImpl(
         emit(result)
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun deleteTrackFromPlaylist(trackId: Long, playlistId: Long) {
+        playlistTrackDao.deleteTrackFromPlaylist(
+            PlaylistTrackEntity(
+                trackId = trackId,
+                playlistId = playlistId
+            )
+        )
+    }
 
-
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistsDao.updatePlaylist(playlist = PlaylistDbMapper.map(playlist))
+    }
 
 }

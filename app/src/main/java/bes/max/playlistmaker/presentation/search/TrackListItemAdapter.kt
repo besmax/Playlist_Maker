@@ -9,7 +9,10 @@ import bes.max.playlistmaker.domain.models.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
-class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = null) :
+class TrackListItemAdapter(
+    var onListElementClick: ((track: Track) -> Unit)? = null,
+    val onListElementLongClick: ((trackId: Long) -> Unit)? = null
+) :
     RecyclerView.Adapter<TrackListItemAdapter.TrackViewHolder>() {
 
     var listOfTracks = listOf<Track>()
@@ -30,9 +33,15 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
         holder.itemView.setOnClickListener {
             if (onListElementClick != null) onListElementClick?.invoke(listOfTracks[position])
         }
+        holder.itemView.setOnLongClickListener {
+            if (onListElementLongClick != null)
+                onListElementLongClick.invoke((listOfTracks[position].trackId))
+            return@setOnLongClickListener true
+        }
     }
 
-    class TrackViewHolder(private val binding: TrackListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class TrackViewHolder(private val binding: TrackListItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: Track) {
             Glide.with(itemView)

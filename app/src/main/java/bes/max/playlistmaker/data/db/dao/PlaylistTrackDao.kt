@@ -1,6 +1,7 @@
 package bes.max.playlistmaker.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -32,5 +33,8 @@ interface PlaylistTrackDao {
             " playlist_track_table.playlist_id = playlist_table.playlist_id" +
             " WHERE playlist_track_table.playlist_id = :id")
     suspend fun getAllTracksFromPlaylist(id: Long): List<TrackEntity>
+
+    @Delete
+    suspend fun deleteTrackFromPlaylist(entity: PlaylistTrackEntity)
 
 }

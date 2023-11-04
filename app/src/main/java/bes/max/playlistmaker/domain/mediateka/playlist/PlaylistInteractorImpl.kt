@@ -4,6 +4,7 @@ import android.net.Uri
 import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 
 class PlaylistInteractorImpl(
     private val playlistRepository: PlaylistRepository
@@ -26,6 +27,13 @@ class PlaylistInteractorImpl(
     override fun getPlaylistById(id: Long): Flow<Playlist> =
         playlistRepository.getPlaylistById(id)
 
+    override suspend fun deleteTrackFromPlaylist(trackId: Long, playlistId: Long) {
+        playlistRepository.deleteTrackFromPlaylist(trackId = trackId, playlistId = playlistId)
+        getPlaylistById(playlistId).collect() {
+            val updatedPlaylist = it.copy(tracksNumber = it.tracksNumber - 1)
+            playlistRepository.updatePlaylist(updatedPlaylist)
+        }
 
+    }
 
 }
