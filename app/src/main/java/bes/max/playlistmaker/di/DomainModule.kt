@@ -4,6 +4,8 @@ import bes.max.playlistmaker.domain.mediateka.favorite.FavoriteTracksInteractor
 import bes.max.playlistmaker.domain.mediateka.favorite.FavoriteTracksInteractorImpl
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractorImpl
+import bes.max.playlistmaker.domain.mediateka.playlistdetails.SharePlaylistUseCase
+import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.player.PlayerInteractor
 import bes.max.playlistmaker.domain.player.PlayerInteractorImpl
 import bes.max.playlistmaker.domain.search.SearchHistoryInteractor
@@ -32,5 +34,7 @@ val domainModule = module {
     factoryOf(::FavoriteTracksInteractorImpl) bind FavoriteTracksInteractor::class
 
     factoryOf(::PlaylistInteractorImpl) bind PlaylistInteractor::class
+
+    factoryOf(::SharePlaylistUseCase)
 
 }

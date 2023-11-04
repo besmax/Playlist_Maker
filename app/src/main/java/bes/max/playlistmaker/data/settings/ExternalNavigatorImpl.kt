@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
 import bes.max.playlistmaker.domain.models.EmailData
+import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.settings.ExternalNavigator
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
@@ -40,5 +41,17 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         }
         startActivity(context, sendEmailIntent, null)
     }
+
+    override fun sharePlaylist(playlistString: String) {
+        val sharePlaylistIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, playlistString)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            Intent.createChooser(this, null)
+        }
+        startActivity(context, sharePlaylistIntent, null)
+    }
+
 
 }

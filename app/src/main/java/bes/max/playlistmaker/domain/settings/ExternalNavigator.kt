@@ -10,4 +10,6 @@ interface ExternalNavigator {
 
     fun sendEmail(emailData: EmailData)
 
+    fun sharePlaylist(playlistString: String)
+
 }

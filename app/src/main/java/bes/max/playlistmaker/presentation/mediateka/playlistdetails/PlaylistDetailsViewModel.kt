@@ -1,16 +1,23 @@
 package bes.max.playlistmaker.presentation.mediateka.playlistdetails
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import bes.max.playlistmaker.R
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
+import bes.max.playlistmaker.domain.mediateka.playlistdetails.SharePlaylistUseCase
+import bes.max.playlistmaker.domain.models.Playlist
+import bes.max.playlistmaker.domain.settings.ExternalNavigator
+import bes.max.playlistmaker.presentation.settings.SettingsViewModel
 import kotlinx.coroutines.launch
 
 class PlaylistDetailsViewModel(
     savedStateHandle: SavedStateHandle,
-    private val playlistInteractor: PlaylistInteractor
+    private val playlistInteractor: PlaylistInteractor,
+    private val sharePlaylistUseCase: SharePlaylistUseCase
 ) : ViewModel() {
 
     private val _screenState: MutableLiveData<PlaylistDetailsScreenState> =
@@ -34,7 +41,8 @@ class PlaylistDetailsViewModel(
                     description = playlist.description ?: "",
                     tracks = playlist.tracks ?: emptyList(),
                     durationSum = durationSum,
-                    cover = playlist.coverPath
+                    cover = playlist.coverPath,
+                    playlist = playlist
                 )
                 _screenState.postValue(PlaylistDetailsScreenState.Content(playlistDetails))
             }
@@ -47,6 +55,18 @@ class PlaylistDetailsViewModel(
             playlistInteractor.deleteTrackFromPlaylist(trackId = trackId, playlistId = playlistId)
             getPlaylist(playlistId)
         }
+    }
+
+    fun sharePlaylist(playlist: Playlist) {
+        try {
+            sharePlaylistUseCase.execute(playlist)
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+
+    companion object {
+        private const val TAG = "PlaylistDetailsViewModel"
     }
 
 }

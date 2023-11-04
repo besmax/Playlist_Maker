@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.core.view.doOnLayout
 import androidx.navigation.fragment.findNavController
@@ -33,7 +34,6 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -45,6 +45,10 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
 
         binding.playlistDetailsScreenBackArrow.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.playlistDetailsScreenShare.setNavigationOnClickListener {
+            sharePlaylist()
         }
 
         playlistDetailsViewModel.screenState.observe(viewLifecycleOwner) { state ->
@@ -59,7 +63,7 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         if (trackAdapter != null) {
             trackAdapter!!.listOfTracks = state.playlistDetails.tracks
         }
-        if(!state.playlistDetails.cover.isNullOrBlank()) {
+        if (!state.playlistDetails.cover.isNullOrBlank()) {
             binding.playlistDetailsScreenCover.setImageURI(state.playlistDetails.cover.toUri())
             binding.playlistDetailsScreenCover.setPadding(0, 0, 0, 0)
         }
@@ -113,6 +117,23 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         val availableHeight =
             binding.playlistDetailsScreenCoordinatorLayout.height - binding.playlistDetailsScreenConstraintLayout.height
         bottomSheetBehavior!!.setPeekHeight(availableHeight, false)
+    }
+
+    private fun sharePlaylist() {
+        if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Content) {
+            if ((playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.tracks.isEmpty()) {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.playlistdetails_screen_nothing_share,
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                playlistDetailsViewModel.sharePlaylist(
+                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist
+                )
+            }
+        }
+
     }
 
     private fun convertTrackToJson(track: Track): String {
