@@ -38,6 +38,7 @@ class PlaylistRepositoryImpl(
     override suspend fun deletePlaylist(playlist: Playlist) {
         withContext(Dispatchers.IO) {
             playlistsDao.deletePlaylist(PlaylistDbMapper.map(playlist))
+            playlistTrackDao.deleteAllTracksFromPlaylist(playlistId = playlist.id)
         }
     }
 

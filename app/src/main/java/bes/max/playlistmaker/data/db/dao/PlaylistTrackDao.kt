@@ -37,4 +37,8 @@ interface PlaylistTrackDao {
     @Delete
     suspend fun deleteTrackFromPlaylist(entity: PlaylistTrackEntity)
 
+    @Query("DELETE FROM playlist_track_table WHERE playlist_id=:playlistId")
+    suspend fun deleteAllTracksFromPlaylist(playlistId: Long)
+
+
 }

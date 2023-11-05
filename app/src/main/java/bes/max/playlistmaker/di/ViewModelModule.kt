@@ -1,6 +1,7 @@
 package bes.max.playlistmaker.di
 
 import bes.max.playlistmaker.presentation.mediateka.MediatekaViewModel
+import bes.max.playlistmaker.presentation.mediateka.editplaylist.EditPlaylistViewModel
 import bes.max.playlistmaker.presentation.mediateka.favorite.FavoriteTracksViewModel
 import bes.max.playlistmaker.presentation.mediateka.newplaylist.NewPlaylistViewModel
 import bes.max.playlistmaker.presentation.mediateka.playlistdetails.PlaylistDetailsViewModel
@@ -28,5 +29,7 @@ val viewModelModule = module {
     viewModelOf(::NewPlaylistViewModel)
 
     viewModelOf(::PlaylistDetailsViewModel)
+
+    viewModelOf(::EditPlaylistViewModel)
 
 }

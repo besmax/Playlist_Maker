@@ -28,7 +28,7 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    private fun getPlaylist(id: Long) {
+    fun getPlaylist(id: Long = playlistId) {
         viewModelScope.launch {
             playlistInteractor.getPlaylistById(id).collect() { playlist ->
                 var durationSum = 0L
@@ -54,11 +54,31 @@ class PlaylistDetailsViewModel(
         }
     }
 
+    fun deletePlaylist(playlist: Playlist) {
+        viewModelScope.launch {
+            playlistInteractor.deletePlaylist(playlist)
+        }
+    }
+
     fun sharePlaylist(playlist: Playlist) {
         try {
             sharePlaylistUseCase.execute(playlist)
         } catch (e: Exception) {
             Log.e(TAG, e.toString())
+        }
+    }
+
+    fun showMenu() {
+        if (_screenState.value is PlaylistDetailsScreenState.Content) {
+            val playlist =
+                (_screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist
+            _screenState.value = PlaylistDetailsScreenState.Menu(playlist = playlist)
+        }
+    }
+
+    fun onCloseMenu() {
+        if (_screenState.value is PlaylistDetailsScreenState.Menu) {
+            getPlaylist(playlistId)
         }
     }
 

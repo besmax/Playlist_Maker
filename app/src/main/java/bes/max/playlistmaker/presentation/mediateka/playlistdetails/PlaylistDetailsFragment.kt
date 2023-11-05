@@ -2,6 +2,7 @@ package bes.max.playlistmaker.presentation.mediateka.playlistdetails
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -11,9 +12,12 @@ import androidx.core.view.doOnLayout
 import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlaylistDetailsBinding
+import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.search.TrackListItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
@@ -25,6 +29,7 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     private val playlistDetailsViewModel: PlaylistDetailsViewModel by viewModel()
     private var trackAdapter: TrackListItemAdapter? = null
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
+    private var bottomSheetBehaviorMenu: BottomSheetBehavior<LinearLayout>? = null
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -38,7 +43,7 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         binding.playlistDetailsScreenConstraintLayout.doOnLayout {
-            setUpBottomsheet()
+            setUpBottomsheets()
         }
 
         setUpRecyclerview()
@@ -50,13 +55,38 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         binding.playlistDetailsScreenShare.setNavigationOnClickListener {
             sharePlaylist()
         }
+        binding.playlistDetailsScreenMenu.setOnClickListener {
+            playlistDetailsViewModel.showMenu()
+        }
+
+        binding.playlistDetailsScreenBottomSheetMenuDelete.setOnClickListener {
+            showDeletePlaylistDialog()
+        }
+
+        binding.playlistDetailsScreenBottomSheetMenuShare.setOnClickListener {
+            sharePlaylist()
+        }
+        binding.playlistDetailsScreenBottomSheetMenuEdit.setOnClickListener {
+            val action =
+                PlaylistDetailsFragmentDirections.actionPlaylistDetailsFragmentToEditPlaylistFragment(
+                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist.id
+                )
+            bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
+            findNavController().navigate(action)
+        }
 
         playlistDetailsViewModel.screenState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is PlaylistDetailsScreenState.Content -> showContent(state)
+                is PlaylistDetailsScreenState.Menu -> showMenu(state)
                 else -> {}
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        playlistDetailsViewModel.getPlaylist()
     }
 
     private fun showContent(state: PlaylistDetailsScreenState.Content) {
@@ -76,7 +106,12 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             playlistDetailsScreenTracksNumber.text =
                 getString(R.string.number_of_tracks, state.playlistDetails.tracksNumber.toString())
         }
+        bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_COLLAPSED
+        bindPlaylistItemViews(state.playlistDetails.playlist)
+    }
 
+    private fun showMenu(state: PlaylistDetailsScreenState.Menu) {
+        bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     private fun showDeleteTrackDialog(trackId: Long) {
@@ -89,6 +124,24 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             .setPositiveButton(R.string.delete) { dialog, _ ->
                 playlistDetailsViewModel.deleteTrackFromPlaylist(trackId)
                 dialog.dismiss()
+            }
+        alert.show()
+    }
+
+    private fun showDeletePlaylistDialog() {
+        val alert = MaterialAlertDialogBuilder(requireContext(), R.style.Theme_MyApp_Dialog_Alert)
+            .setTitle(R.string.delete_playlist)
+            .setMessage(R.string.want_delete_playlist)
+            .setNegativeButton(R.string.no) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton(R.string.yes) { dialog, _ ->
+                playlistDetailsViewModel.deletePlaylist(
+                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu)
+                        .playlist
+                )
+                dialog.dismiss()
+                findNavController().navigateUp()
             }
         alert.show()
     }
@@ -112,11 +165,36 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
 
     }
 
-    private fun setUpBottomsheet() {
+    private fun setUpBottomsheets() {
         bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistDetailsScreenBottomSheet)
         val availableHeight =
             binding.playlistDetailsScreenCoordinatorLayout.height - binding.playlistDetailsScreenConstraintLayout.height
         bottomSheetBehavior!!.setPeekHeight(availableHeight, false)
+
+        bottomSheetBehaviorMenu =
+            BottomSheetBehavior.from(binding.playlistDetailsScreenBottomSheetMenu).apply {
+                state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        bottomSheetBehaviorMenu!!.addBottomSheetCallback(getCallbackForBottomSheetState())
+    }
+
+    private fun bindPlaylistItemViews(playlist: Playlist) {
+        with(binding) {
+            Glide.with(playlistDetailsScreenBottomSheetMenuPlaylist.playlistCardview)
+                .load(playlist.coverPath)
+                .transform(
+                    RoundedCorners(
+                        resources.getDimensionPixelSize(
+                            R.dimen.search_activity_album_cover_corner_radius
+                        )
+                    )
+                )
+                .placeholder(R.drawable.ic_picture_not_found)
+                .into(playlistDetailsScreenBottomSheetMenuPlaylist.playlistCover)
+            playlistDetailsScreenBottomSheetMenuPlaylist.playlistName.text = playlist.name
+            playlistDetailsScreenBottomSheetMenuPlaylist.tracksQty.text =
+                getString(R.string.number_of_tracks, playlist.tracksNumber.toString())
+        }
     }
 
     private fun sharePlaylist() {
@@ -132,9 +210,36 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                     (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist
                 )
             }
+        } else if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Menu) {
+            playlistDetailsViewModel.sharePlaylist((playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist)
         }
-
     }
+
+    private fun getCallbackForBottomSheetState() =
+        object : BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED, BottomSheetBehavior.STATE_HALF_EXPANDED,
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                        playlistDetailsViewModel.onCloseMenu()
+                    }
+
+                    else -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        }
 
     private fun convertTrackToJson(track: Track): String {
         return Gson().toJson(track)

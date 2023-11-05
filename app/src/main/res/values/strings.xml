@@ -60,6 +60,14 @@
     <string name="playlistdetails_screen_dialog_title">Удалить трек</string>
     <string name="playlistdetails_screen_dialog_message">Вы уверены, что хотите удалить трек из плейлиста?</string>
     <string name="playlistdetails_screen_nothing_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="share">Поделиться</string>
+    <string name="edit_playlist">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="want_delete_playlist">Хотите удалить плейлист?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
 
 
 </resources>

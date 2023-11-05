@@ -32,7 +32,9 @@ class PlaylistInteractorImpl(
             val updatedPlaylist = it.copy(tracksNumber = it.tracksNumber - 1)
             playlistRepository.updatePlaylist(updatedPlaylist)
         }
-
     }
 
+    override suspend fun deletePlaylist(playlist: Playlist) {
+        playlistRepository.deletePlaylist(playlist)
+    }
 }

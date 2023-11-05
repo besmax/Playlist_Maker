@@ -75,5 +75,16 @@
         <action
             android:id="@+id/action_playlistDetailsFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_playlistDetailsFragment_to_editPlaylistFragment"
+            app:destination="@id/editPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlaylistFragment"
+        android:name="bes.max.playlistmaker.presentation.mediateka.editplaylist.EditPlaylistFragment"
+        android:label="EditPlaylistFragment" >
+        <argument
+            android:name="playlistId"
+            app:argType="long" />
     </fragment>
 </navigation>
