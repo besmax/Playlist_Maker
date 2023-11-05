@@ -23,9 +23,11 @@ class PlaylistViewHolder(private val binding: ViewBinding) :
                         .placeholder(R.drawable.playlist_placeholder_grid)
                         .into(playlistCover)
                     playlistName.text = model.name
-                    val trackQty =
-                        if (model.tracksNumber.toString() != "null") model.tracksNumber.toString() else "0"
-                    tracksQty.text = itemView.context.getString(R.string.number_of_tracks, trackQty)
+                    tracksQty.text = itemView.context.resources.getQuantityString(
+                        R.plurals.tracks_number,
+                        model.tracksNumber,
+                        model.tracksNumber
+                    )
                 }
             }
 
@@ -38,9 +40,11 @@ class PlaylistViewHolder(private val binding: ViewBinding) :
                         .placeholder(R.drawable.playlist_placeholder_grid)
                         .into(playlistCover)
                     playlistName.text = model.name
-                    val trackQty =
-                        if (model.tracksNumber.toString() != "null") model.tracksNumber.toString() else "0"
-                    tracksQty.text = itemView.context.getString(R.string.number_of_tracks, trackQty)
+                    tracksQty.text = itemView.context.resources.getQuantityString(
+                        R.plurals.tracks_number,
+                        model.tracksNumber,
+                        model.tracksNumber
+                    )
                 }
             }
         }
