@@ -66,9 +66,10 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             sharePlaylist()
         }
         binding.playlistDetailsScreenBottomSheetMenuEdit.setOnClickListener {
-            val playlistId = if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Menu)
-                (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist.id
-            else (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist.id
+            val playlistId =
+                if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Menu)
+                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist.id
+                else (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist.id
             val action =
                 PlaylistDetailsFragmentDirections.actionPlaylistDetailsFragmentToEditPlaylistFragment(
                     playlistId
@@ -111,9 +112,17 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             playlistDetailsScreenTitle.text = state.playlistDetails.title
             playlistDetailsScreenDescription.text = state.playlistDetails.description
             playlistDetailsScreenDuration.text =
-                getString(R.string.number_of_minutes, state.playlistDetails.duration)
+                requireContext().resources.getQuantityString(
+                    R.plurals.minutes_number,
+                    state.playlistDetails.duration,
+                    state.playlistDetails.duration
+                )
             playlistDetailsScreenTracksNumber.text =
-                getString(R.string.number_of_tracks, state.playlistDetails.tracksNumber.toString())
+                requireContext().resources.getQuantityString(
+                    R.plurals.tracks_number,
+                    state.playlistDetails.tracksNumber,
+                    state.playlistDetails.tracksNumber
+                )
         }
         bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
         bindPlaylistItemViews(state.playlistDetails.playlist)
@@ -201,7 +210,11 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                 .into(playlistDetailsScreenBottomSheetMenuPlaylist.playlistCover)
             playlistDetailsScreenBottomSheetMenuPlaylist.playlistName.text = playlist.name
             playlistDetailsScreenBottomSheetMenuPlaylist.tracksQty.text =
-                getString(R.string.number_of_tracks, playlist.tracksNumber.toString())
+                requireContext().resources.getQuantityString(
+                    R.plurals.tracks_number,
+                    playlist.tracksNumber,
+                    playlist.tracksNumber
+                )
         }
     }
 

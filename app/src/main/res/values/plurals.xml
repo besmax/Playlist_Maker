@@ -6,7 +6,7 @@
         <item quantity="many">%d треков</item>
         <item quantity="other">%d треков</item>
     </plurals>
-    <plurals name="minutes_number" tools:ignore="MissingDefaultResource">
+    <plurals name="minutes_number">
         <item quantity="one">%d минута</item>
         <item quantity="few">%d минуты</item>
         <item quantity="many">%d минут</item>

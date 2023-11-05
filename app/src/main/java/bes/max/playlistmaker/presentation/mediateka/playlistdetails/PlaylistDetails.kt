@@ -13,6 +13,7 @@ data class PlaylistDetails(
     val cover: String?,
     val playlist: Playlist
 ) {
-    val duration: String get() = SimpleDateFormat("mm", Locale.getDefault()).format(durationSum)
+    val duration: Int get() = (durationSum / 60000).toInt()
+
     val tracksNumber get() = tracks.size
 }
