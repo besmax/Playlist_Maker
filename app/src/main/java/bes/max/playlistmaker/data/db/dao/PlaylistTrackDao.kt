@@ -31,7 +31,8 @@ interface PlaylistTrackDao {
             " tracks_table.track_id = playlist_track_table.track_id" +
             " LEFT JOIN playlist_table ON" +
             " playlist_track_table.playlist_id = playlist_table.playlist_id" +
-            " WHERE playlist_track_table.playlist_id = :id")
+            " WHERE playlist_track_table.playlist_id = :id" +
+            " ORDER BY adding_time")
     suspend fun getAllTracksFromPlaylist(id: Long): List<TrackEntity>
 
     @Delete
