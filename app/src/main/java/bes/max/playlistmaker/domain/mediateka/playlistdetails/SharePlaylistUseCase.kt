@@ -2,8 +2,8 @@ package bes.max.playlistmaker.domain.mediateka.playlistdetails
 
 import android.content.Context
 import bes.max.playlistmaker.R
-import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.common.ExternalNavigator
+import bes.max.playlistmaker.domain.models.Playlist
 
 class SharePlaylistUseCase(
     private val externalNavigator: ExternalNavigator,

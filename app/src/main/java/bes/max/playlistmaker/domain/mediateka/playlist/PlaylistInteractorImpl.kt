@@ -37,4 +37,8 @@ class PlaylistInteractorImpl(
     override suspend fun deletePlaylist(playlist: Playlist) {
         playlistRepository.deletePlaylist(playlist)
     }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistRepository.updatePlaylist(playlist)
+    }
 }

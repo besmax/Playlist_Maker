@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
-import bes.max.playlistmaker.domain.models.EmailData
 import bes.max.playlistmaker.domain.common.ExternalNavigator
+import bes.max.playlistmaker.domain.models.EmailData
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     override fun shareApp(link: String) {

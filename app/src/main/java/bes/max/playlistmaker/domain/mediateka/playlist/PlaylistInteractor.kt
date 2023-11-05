@@ -11,6 +11,8 @@ interface PlaylistInteractor {
 
     suspend fun createPlaylist(playlist: Playlist)
 
+    suspend fun updatePlaylist(playlist: Playlist)
+
     suspend fun saveCover(uri: Uri): Uri
 
     suspend fun addTrackToPlaylist(track: Track, playlist: Playlist): Flow<Boolean>

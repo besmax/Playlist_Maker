@@ -21,7 +21,6 @@ import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.qualifier.named
 
 
 open class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
@@ -29,7 +28,7 @@ open class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
     private var textWatcher: TextWatcher? = null
     protected open val viewModel: NewPlaylistViewModel by viewModel()
     private val safeArgs: NewPlaylistFragmentArgs by navArgs()
-    private var coverUri: Uri? = null
+    protected var coverUri: Uri? = null
 
     private var defaultDrawable: Drawable? = null
 
@@ -68,7 +67,7 @@ open class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
         setTextWatcher()
 
-        (viewModel as NewPlaylistViewModel).screenState.observe(viewLifecycleOwner) { screenState ->
+        viewModel.screenState.observe(viewLifecycleOwner) { screenState ->
             when (screenState) {
                 is NewPlaylistScreenState.Created -> findNavController().navigateUp()
                 else -> {}
@@ -117,7 +116,6 @@ open class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
             findNavController().navigateUp()
         }
     }
-
 
     private fun setTextWatcher() {
         textWatcher = object : TextWatcher {

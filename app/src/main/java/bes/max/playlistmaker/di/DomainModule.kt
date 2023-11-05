@@ -5,7 +5,6 @@ import bes.max.playlistmaker.domain.mediateka.favorite.FavoriteTracksInteractorI
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractorImpl
 import bes.max.playlistmaker.domain.mediateka.playlistdetails.SharePlaylistUseCase
-import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.player.PlayerInteractor
 import bes.max.playlistmaker.domain.player.PlayerInteractorImpl
 import bes.max.playlistmaker.domain.search.SearchHistoryInteractor

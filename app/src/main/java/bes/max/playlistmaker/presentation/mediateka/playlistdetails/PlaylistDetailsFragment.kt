@@ -2,7 +2,6 @@ package bes.max.playlistmaker.presentation.mediateka.playlistdetails
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -67,9 +66,12 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             sharePlaylist()
         }
         binding.playlistDetailsScreenBottomSheetMenuEdit.setOnClickListener {
+            val playlistId = if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Menu)
+                (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist.id
+            else (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist.id
             val action =
                 PlaylistDetailsFragmentDirections.actionPlaylistDetailsFragmentToEditPlaylistFragment(
-                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist.id
+                    playlistId
                 )
             bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
             findNavController().navigate(action)
@@ -106,7 +108,7 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             playlistDetailsScreenTracksNumber.text =
                 getString(R.string.number_of_tracks, state.playlistDetails.tracksNumber.toString())
         }
-        bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
         bindPlaylistItemViews(state.playlistDetails.playlist)
     }
 
@@ -145,7 +147,6 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             }
         alert.show()
     }
-
 
     private fun setUpRecyclerview() {
         trackAdapter = TrackListItemAdapter(

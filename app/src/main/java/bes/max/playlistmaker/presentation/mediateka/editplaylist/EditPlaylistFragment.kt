@@ -7,9 +7,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
+import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.presentation.mediateka.newplaylist.NewPlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.qualifier.named
 
 class EditPlaylistFragment : NewPlaylistFragment() {
 
@@ -22,10 +22,19 @@ class EditPlaylistFragment : NewPlaylistFragment() {
 
         binding.newPlaylistScreenButton.text = getString(R.string.save)
 
-        bindViews()
+        viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
+            when (playlist) {
+                is EditPlaylistScreenState.Editing -> bindViews(playlist.playlist)
+                is EditPlaylistScreenState.Updated -> findNavController().navigateUp()
+            }
+        }
 
         binding.newPlaylistScreenBackArrow.setNavigationOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.newPlaylistScreenButton.setOnClickListener {
+            updatePlaylist()
         }
     }
 
@@ -39,11 +48,24 @@ class EditPlaylistFragment : NewPlaylistFragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
-    private fun bindViews() {
-        viewModel.playlist.value?.coverPath?.let { setImageToView(it.toUri()) }
-        binding.newPlaylistScreenNameInput.setText(viewModel.playlist.value?.name ?: "")
+    private fun bindViews(playlist: Playlist) {
+        playlist.coverPath?.let { setImageToView(it.toUri()) }
+        binding.newPlaylistScreenNameInput.setText(playlist.name)
         binding.newPlaylistScreenDescriptionInput.setText(
-            viewModel.playlist.value?.description ?: ""
+            playlist.description
+        )
+    }
+
+    private fun updatePlaylist() {
+        val description = if (binding.newPlaylistScreenDescriptionInput.text.toString().isNotBlank()
+            && binding.newPlaylistScreenDescriptionInput.text.toString() != (viewModel.playlist.value as EditPlaylistScreenState.Editing).playlist.description
+        )
+            binding.newPlaylistScreenDescriptionInput.text.toString()
+        else null
+        viewModel.updatePlaylist(
+            name = binding.newPlaylistScreenNameInput.text.toString(),
+            description = description,
+            uri = coverUri
         )
     }
 
