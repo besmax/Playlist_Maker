@@ -95,6 +95,13 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         if (trackAdapter != null) {
             trackAdapter!!.listOfTracks = state.playlistDetails.tracks
         }
+
+        if (state.playlistDetails.tracks.isEmpty()) {
+            binding.playlistDetailsScreenBottomSheetNoTracks.visibility = View.VISIBLE
+        } else {
+            binding.playlistDetailsScreenBottomSheetNoTracks.visibility = View.GONE
+        }
+
         if (!state.playlistDetails.cover.isNullOrBlank()) {
             binding.playlistDetailsScreenCover.setImageURI(state.playlistDetails.cover.toUri())
             binding.playlistDetailsScreenCover.setPadding(0, 0, 0, 0)

@@ -158,6 +158,19 @@
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+        <TextView
+            android:id="@+id/playlist_details_screen_bottom_sheet_no_tracks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:paddingHorizontal="16dp"
+            android:fontFamily="@font/ys_display_regular"
+            android:textSize="20sp"
+            android:text="@string/playlistdetails_no_tracks"
+            android:textColor="@color/black_white"
+            android:visibility="gone"
+            />
+
     </LinearLayout>
 
     <LinearLayout
