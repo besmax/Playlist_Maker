@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken
 
 object PlaylistDbMapper {
 
-    private val typeToken = object : TypeToken<List<Track>>() {}.type
     fun map(playlistEntity: PlaylistEntity): Playlist =
         Playlist(
             id = playlistEntity.id,

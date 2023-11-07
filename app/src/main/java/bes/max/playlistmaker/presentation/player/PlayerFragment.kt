@@ -61,12 +61,12 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             findNavController().navigateUp()
         }
 
-        playerViewModel.playlists.observe(viewLifecycleOwner) {
-            playlistsAdapter?.submitList(it)
+        playerViewModel.playlists.observe(viewLifecycleOwner) { playlists ->
+            playlistsAdapter?.submitList(playlists)
         }
 
-        playerViewModel.playerState.observe(viewLifecycleOwner) {
-            when (it) {
+        playerViewModel.playerState.observe(viewLifecycleOwner) { screenState ->
+            when (screenState) {
                 PlayerState.STATE_PLAYING -> {
                     binding.playerScreenButtonPlay.isEnabled = true
                 }
@@ -97,9 +97,9 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         playerViewModel.playingTime.observe(viewLifecycleOwner) { playingTimeString ->
             binding.playerScreenTimeCounter.text = playingTimeString
         }
-        playerViewModel.isFavorite.observe(viewLifecycleOwner) {
+        playerViewModel.isFavorite.observe(viewLifecycleOwner) { isFavorite ->
             binding.playerScreenButtonLike.setImageResource(
-                if (it) R.drawable.ic_player_like_active
+                if (isFavorite) R.drawable.ic_player_like_active
                 else R.drawable.ic_player_like
             )
         }
