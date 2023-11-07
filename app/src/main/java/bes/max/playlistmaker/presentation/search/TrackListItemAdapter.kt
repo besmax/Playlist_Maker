@@ -11,7 +11,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 class TrackListItemAdapter(
     var onListElementClick: ((track: Track) -> Unit)? = null,
-    val onListElementLongClick: ((trackId: Long) -> Unit)? = null
+    val onListElementLongClick: ((trackId: Long) -> Unit)? = null,
+    private val coverOption: Int = BIG_COVER_OPTION
 ) :
     RecyclerView.Adapter<TrackListItemAdapter.TrackViewHolder>() {
 
@@ -23,7 +24,10 @@ class TrackListItemAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return TrackViewHolder(TrackListItemBinding.inflate(layoutInflater, parent, false))
+        return TrackViewHolder(
+            TrackListItemBinding.inflate(layoutInflater, parent, false),
+            coverOption
+        )
     }
 
     override fun getItemCount(): Int = listOfTracks.size
@@ -39,12 +43,19 @@ class TrackListItemAdapter(
         }
     }
 
-    class TrackViewHolder(private val binding: TrackListItemBinding) :
+    class TrackViewHolder(private val binding: TrackListItemBinding, private val coverOption: Int) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: Track) {
             Glide.with(itemView)
-                .load(model.bigCover)
+                .load(
+                    when (coverOption) {
+                        BIG_COVER_OPTION -> model.bigCover
+                        SMALL_COVER_OPTION -> model.bigCover.replaceAfterLast('/', "60x60bb.jpg")
+                        else -> model.artworkUrl100
+                    }
+
+                )
                 .placeholder(R.drawable.ic_picture_not_found)
                 .transform(
                     RoundedCorners(
@@ -62,4 +73,10 @@ class TrackListItemAdapter(
         }
 
     }
+
+    companion object {
+        const val BIG_COVER_OPTION = 1
+        const val SMALL_COVER_OPTION = 2
+    }
+
 }

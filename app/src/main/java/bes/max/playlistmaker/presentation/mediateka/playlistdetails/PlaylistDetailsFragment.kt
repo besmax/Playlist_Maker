@@ -178,7 +178,8 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             },
             onListElementLongClick = { trackId ->
                 showDeleteTrackDialog(trackId)
-            }
+            },
+            coverOption = TrackListItemAdapter.SMALL_COVER_OPTION
         )
         binding.playlistDetailsScreenBottomSheetRecyclerView.adapter = trackAdapter
 
