@@ -236,7 +236,17 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                 )
             }
         } else if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Menu) {
-            playlistDetailsViewModel.sharePlaylist((playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist)
+            if ((playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist.tracks?.isEmpty() == true) {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.playlistdetails_screen_nothing_share,
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                playlistDetailsViewModel.sharePlaylist((playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist)
+            }
+
+
         }
     }
 
