@@ -87,10 +87,12 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
 
         playerViewModel.isPlaylistAdded.observe(viewLifecycleOwner) { isAddedPair ->
-            if (isAddedPair.first) {
+            if (isAddedPair.first == true) {
                 showTrackAddedToast(isAddedPair.second)
-            } else {
+                playerViewModel.clearIsPlaylistAdded()
+            } else if ((isAddedPair.first == false)) {
                 showTrackNotAddedToast(isAddedPair.second)
+                playerViewModel.clearIsPlaylistAdded()
             }
         }
 
@@ -261,16 +263,14 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     }
 
     private fun showTrackAddedToast(playlistName: String) {
-        if (bottomSheetBehavior?.state != BottomSheetBehavior.STATE_HIDDEN) {
-            val trackName = formatStringByLength(playerViewModel.track.trackName, 20)
-            bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.player_screen_toast_added, trackName, playlistName),
-                Toast.LENGTH_LONG
-            )
-                .show()
-        }
+        val trackName = formatStringByLength(playerViewModel.track.trackName, 20)
+        bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.player_screen_toast_added, trackName, playlistName),
+            Toast.LENGTH_LONG
+        )
+            .show()
     }
 
     private fun showTrackNotAddedToast(playlistName: String) {
