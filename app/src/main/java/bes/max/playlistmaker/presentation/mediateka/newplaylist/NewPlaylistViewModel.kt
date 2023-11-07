@@ -27,7 +27,7 @@ open class NewPlaylistViewModel(
             val playlist = Playlist(
                 name = name,
                 description = description,
-                coverPath = if (savedCoverUri != null) savedCoverUri.toString() else null,
+                coverPath = savedCoverUri?.toString(),
                 tracks = if (track != null) listOf(track) else null,
                 tracksNumber = if (track != null) 1 else 0
             )

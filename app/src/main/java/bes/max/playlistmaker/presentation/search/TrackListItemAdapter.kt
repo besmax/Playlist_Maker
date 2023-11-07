@@ -34,8 +34,7 @@ class TrackListItemAdapter(
             if (onListElementClick != null) onListElementClick?.invoke(listOfTracks[position])
         }
         holder.itemView.setOnLongClickListener {
-            if (onListElementLongClick != null)
-                onListElementLongClick.invoke((listOfTracks[position].trackId))
+            onListElementLongClick?.invoke((listOfTracks[position].trackId))
             return@setOnLongClickListener true
         }
     }

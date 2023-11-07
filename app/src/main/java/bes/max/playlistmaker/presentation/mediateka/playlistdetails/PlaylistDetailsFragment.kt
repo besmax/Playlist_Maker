@@ -42,8 +42,10 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         binding.playlistDetailsScreenConstraintLayout.doOnLayout {
-            setUpBottomsheets()
+            setUpBottomsheet()
         }
+
+        setUpBottomsheetMenu()
 
         setUpRecyclerview()
 
@@ -124,7 +126,7 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                     state.playlistDetails.tracksNumber
                 )
         }
-        bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
+        //bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
         bindPlaylistItemViews(state.playlistDetails.playlist)
     }
 
@@ -182,12 +184,14 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
 
     }
 
-    private fun setUpBottomsheets() {
+    private fun setUpBottomsheet() {
         bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistDetailsScreenBottomSheet)
         val availableHeight =
             binding.playlistDetailsScreenCoordinatorLayout.height - binding.playlistDetailsScreenConstraintLayout.height
         bottomSheetBehavior!!.setPeekHeight(availableHeight, false)
+    }
 
+    private fun setUpBottomsheetMenu() {
         bottomSheetBehaviorMenu =
             BottomSheetBehavior.from(binding.playlistDetailsScreenBottomSheetMenu).apply {
                 state = BottomSheetBehavior.STATE_HIDDEN
