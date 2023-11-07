@@ -261,18 +261,20 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     }
 
     private fun showTrackAddedToast(playlistName: String) {
-        val trackName = formatStringByLength(playerViewModel.track.trackName, 20)
-        bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
-        Toast.makeText(
-            requireContext(),
-            getString(R.string.player_screen_toast_added, trackName, playlistName),
-            Toast.LENGTH_LONG
-        )
-            .show()
+        if (bottomSheetBehavior?.state != BottomSheetBehavior.STATE_HIDDEN) {
+            val trackName = formatStringByLength(playerViewModel.track.trackName, 20)
+            bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.player_screen_toast_added, trackName, playlistName),
+                Toast.LENGTH_LONG
+            )
+                .show()
+        }
     }
 
     private fun showTrackNotAddedToast(playlistName: String) {
-        if(bottomSheetBehavior?.state != BottomSheetBehavior.STATE_HIDDEN) {
+        if (bottomSheetBehavior?.state != BottomSheetBehavior.STATE_HIDDEN) {
             val trackName = formatStringByLength(playerViewModel.track.trackName, 20)
             Toast.makeText(
                 requireContext(),
