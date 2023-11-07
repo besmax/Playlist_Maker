@@ -134,6 +134,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("playlistName")
             ?.observe(viewLifecycleOwner) { playlistName ->
                 showTrackAddedToast(playlistName)
+                findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("playlistName")
             }
     }
 
