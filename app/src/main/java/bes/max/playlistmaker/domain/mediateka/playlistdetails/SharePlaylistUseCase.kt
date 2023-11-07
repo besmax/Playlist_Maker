@@ -17,14 +17,15 @@ class SharePlaylistUseCase(
         playlistString.append(playlist.description)
         playlistString.append(System.lineSeparator())
         playlistString.append(
-            context.getString(
-                R.string.number_of_tracks,
-                playlist.tracksNumber.toString()
+            context.resources.getQuantityString(
+                R.plurals.tracks_number,
+                playlist.tracksNumber,
+                playlist.tracksNumber
             )
         )
         playlistString.append(System.lineSeparator())
+        var number = 1
         playlist.tracks?.forEach { track ->
-            var number = 1
             playlistString.append("$number. ${track.artistName} - ${track.trackName} (${track.trackTime})")
             playlistString.append(System.lineSeparator())
             number++

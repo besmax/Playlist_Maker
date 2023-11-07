@@ -243,7 +243,9 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                playlistDetailsViewModel.sharePlaylist((playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist)
+                playlistDetailsViewModel.sharePlaylist(
+                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist
+                )
             }
 
 

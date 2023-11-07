@@ -2,8 +2,6 @@ package bes.max.playlistmaker.presentation.mediateka.playlistdetails
 
 import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 data class PlaylistDetails(
     val title: String,
