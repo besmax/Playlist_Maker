@@ -9,7 +9,11 @@ import bes.max.playlistmaker.domain.models.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
-class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = null) :
+class TrackListItemAdapter(
+    var onListElementClick: ((track: Track) -> Unit)? = null,
+    val onListElementLongClick: ((trackId: Long) -> Unit)? = null,
+    private val coverOption: Int = BIG_COVER_OPTION
+) :
     RecyclerView.Adapter<TrackListItemAdapter.TrackViewHolder>() {
 
     var listOfTracks = listOf<Track>()
@@ -20,7 +24,10 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return TrackViewHolder(TrackListItemBinding.inflate(layoutInflater, parent, false))
+        return TrackViewHolder(
+            TrackListItemBinding.inflate(layoutInflater, parent, false),
+            coverOption
+        )
     }
 
     override fun getItemCount(): Int = listOfTracks.size
@@ -30,13 +37,25 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
         holder.itemView.setOnClickListener {
             if (onListElementClick != null) onListElementClick?.invoke(listOfTracks[position])
         }
+        holder.itemView.setOnLongClickListener {
+            onListElementLongClick?.invoke((listOfTracks[position].trackId))
+            return@setOnLongClickListener true
+        }
     }
 
-    class TrackViewHolder(private val binding: TrackListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class TrackViewHolder(private val binding: TrackListItemBinding, private val coverOption: Int) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: Track) {
             Glide.with(itemView)
-                .load(model.bigCover)
+                .load(
+                    when (coverOption) {
+                        BIG_COVER_OPTION -> model.bigCover
+                        SMALL_COVER_OPTION -> model.bigCover.replaceAfterLast('/', "60x60bb.jpg")
+                        else -> model.artworkUrl100
+                    }
+
+                )
                 .placeholder(R.drawable.ic_picture_not_found)
                 .transform(
                     RoundedCorners(
@@ -54,4 +73,10 @@ class TrackListItemAdapter(var onListElementClick: ((track: Track) -> Unit)? = n
         }
 
     }
+
+    companion object {
+        const val BIG_COVER_OPTION = 1
+        const val SMALL_COVER_OPTION = 2
+    }
+
 }

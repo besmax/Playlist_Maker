@@ -19,6 +19,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         startKoin {
             androidContext(this@App)
             modules(dataModule, domainModule, viewModelModule, repositoryModule)
@@ -41,6 +42,6 @@ class App : Application() {
             else AppCompatDelegate.MODE_NIGHT_NO
 
         )
-
     }
+
 }

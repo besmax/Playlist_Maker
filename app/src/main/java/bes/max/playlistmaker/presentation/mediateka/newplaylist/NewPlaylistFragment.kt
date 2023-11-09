@@ -23,12 +23,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
+open class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
     private var textWatcher: TextWatcher? = null
-    private val newPlaylistViewModel: NewPlaylistViewModel by viewModel()
+    protected open val viewModel: NewPlaylistViewModel by viewModel()
     private val safeArgs: NewPlaylistFragmentArgs by navArgs()
-    private var coverUri: Uri? = null
+    protected var coverUri: Uri? = null
 
     private var defaultDrawable: Drawable? = null
 
@@ -67,8 +67,8 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
         setTextWatcher()
 
-        newPlaylistViewModel.screenState.observe(viewLifecycleOwner) { screenState ->
-            when(screenState) {
+        viewModel.screenState.observe(viewLifecycleOwner) { screenState ->
+            when (screenState) {
                 is NewPlaylistScreenState.Created -> findNavController().navigateUp()
                 else -> {}
             }
@@ -100,22 +100,22 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
             !binding.newPlaylistScreenDescriptionInput.text.isNullOrBlank() ||
             binding.newPlaylistScreenPlaylistCover.drawable != defaultDrawable
         ) {
-            val alert = MaterialAlertDialogBuilder(requireContext(), R.style.Theme_MyApp_Dialog_Alert)
-                .setTitle(getString(R.string.newplaylist_screen_dialog_title))
-                .setMessage(getString(R.string.newplaylist_screen_dialog_message))
-                .setNeutralButton(getString(R.string.Cancel)) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .setPositiveButton(getString(R.string.Complete)) { dialog, _ ->
-                    dialog.dismiss()
-                    findNavController().navigateUp()
-                }
+            val alert =
+                MaterialAlertDialogBuilder(requireContext(), R.style.Theme_MyApp_Dialog_Alert)
+                    .setTitle(getString(R.string.newplaylist_screen_dialog_title))
+                    .setMessage(getString(R.string.newplaylist_screen_dialog_message))
+                    .setNeutralButton(getString(R.string.Cancel)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .setPositiveButton(getString(R.string.Complete)) { dialog, _ ->
+                        dialog.dismiss()
+                        findNavController().navigateUp()
+                    }
             alert.show()
         } else {
             findNavController().navigateUp()
         }
     }
-
 
     private fun setTextWatcher() {
         textWatcher = object : TextWatcher {
@@ -132,7 +132,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
     private fun savePlaylist() {
         val name = binding.newPlaylistScreenNameInput.text.toString()
-        newPlaylistViewModel.createPlaylist(
+        (viewModel as NewPlaylistViewModel).createPlaylist(
             name = name,
             description = binding.newPlaylistScreenDescriptionInput.text.toString(),
             trackArg = safeArgs.track,
@@ -142,7 +142,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
         findNavController().previousBackStackEntry?.savedStateHandle?.set("playlistName", name)
     }
 
-    private fun setImageToView(uri: Uri) {
+    protected fun setImageToView(uri: Uri) {
         Glide.with(binding.root)
             .load(uri)
             .centerCrop()

@@ -15,4 +15,7 @@ data class PlaylistTrackEntity(
     @ColumnInfo("playlist_id")
     val playlistId: Long,
 
+    @ColumnInfo("adding_time")
+    val addingTime: Long = System.currentTimeMillis()
+
     )

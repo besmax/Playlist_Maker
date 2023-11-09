@@ -8,6 +8,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
+import bes.max.playlistmaker.data.common.ExternalNavigatorImpl
 import bes.max.playlistmaker.data.db.AppDatabase
 import bes.max.playlistmaker.data.db.dao.PlaylistTrackDao
 import bes.max.playlistmaker.data.db.dao.PlaylistsDao
@@ -20,11 +21,10 @@ import bes.max.playlistmaker.data.network.NetworkClient
 import bes.max.playlistmaker.data.network.RetrofitNetworkClient
 import bes.max.playlistmaker.data.search.SearchHistoryDao
 import bes.max.playlistmaker.data.search.SearchHistoryDaoImpl
-import bes.max.playlistmaker.data.settings.ExternalNavigatorImpl
 import bes.max.playlistmaker.data.settings.SettingsDao
 import bes.max.playlistmaker.data.settings.SettingsDaoImpl
+import bes.max.playlistmaker.domain.common.ExternalNavigator
 import bes.max.playlistmaker.domain.mediateka.playlist.ImageDao
-import bes.max.playlistmaker.domain.settings.ExternalNavigator
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf

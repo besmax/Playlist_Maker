@@ -29,6 +29,9 @@ data class TrackEntity(
     @ColumnInfo("track_time")
     val trackTime: String,
 
+    @ColumnInfo("track_time_millis")
+    val trackTimeMillis: Long,
+
     @ColumnInfo("track_cover")
     val bigCover: String,
 

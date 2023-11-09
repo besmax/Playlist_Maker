@@ -12,7 +12,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NewPlaylistViewModel(
+open class NewPlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
@@ -27,7 +27,7 @@ class NewPlaylistViewModel(
             val playlist = Playlist(
                 name = name,
                 description = description,
-                coverPath = if (savedCoverUri != null) savedCoverUri.toString() else null,
+                coverPath = savedCoverUri?.toString(),
                 tracks = if (track != null) listOf(track) else null,
                 tracksNumber = if (track != null) 1 else 0
             )

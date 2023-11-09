@@ -1,4 +1,4 @@
-package bes.max.playlistmaker.presentation.mediateka.playlist
+package bes.max.playlistmaker.presentation.mediateka.playlists
 
 import android.os.Bundle
 import android.text.TextUtils
@@ -16,11 +16,20 @@ import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
+class PlaylistsFragment : BindingFragment<FragmentPlaylistBinding>() {
 
-    private val playlistViewModel: PlaylistViewModel by viewModel()
+    private val playlistsViewModel: PlaylistsViewModel by viewModel()
     private var adapter: PlaylistItemAdapter? =
-        PlaylistItemAdapter(listType = PlaylistItemAdapter.GRID_LIST)
+        PlaylistItemAdapter(
+            listType = PlaylistItemAdapter.GRID_LIST,
+            doOnClick = { playlist ->
+                val action =
+                    MediatekaFragmentDirections.actionMediatekaFragmentToPlaylistDetailsFragment(
+                        playlist.id
+                    )
+                findNavController().navigate(action)
+            }
+        )
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -40,7 +49,7 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
         binding.playlistScreenRecyclerView.adapter = adapter
         binding.playlistScreenRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        playlistViewModel.screenState.observe(viewLifecycleOwner) { state ->
+        playlistsViewModel.screenState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is PlaylistScreenState.Empty -> showEmpty()
 
@@ -58,7 +67,7 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
 
     override fun onResume() {
         super.onResume()
-        playlistViewModel.getPlaylists()
+        playlistsViewModel.getPlaylists()
     }
 
     private fun showEmpty() {
@@ -106,7 +115,7 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
     }
 
     companion object {
-        fun newInstance() = PlaylistFragment()
+        fun newInstance() = PlaylistsFragment()
     }
 
 }

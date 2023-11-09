@@ -6,8 +6,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-private const val SHARED_PREF_KEY = "search_history_preferences_key"
-
 class SearchHistoryDaoImpl(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson
@@ -23,7 +21,7 @@ class SearchHistoryDaoImpl(
                 if (history.contains(track)) {
                     history.remove(track)
                 }
-                if (history.size > 9) {
+                if (history.size > (HISTORY_SIZE - 1)) {
                     history.removeFirst()
                 }
             }
@@ -50,5 +48,10 @@ class SearchHistoryDaoImpl(
         sharedPreferences.edit()
             .clear()
             .apply()
+    }
+
+    companion object {
+        private const val SHARED_PREF_KEY = "search_history_preferences_key"
+        private const val HISTORY_SIZE = 10
     }
 }

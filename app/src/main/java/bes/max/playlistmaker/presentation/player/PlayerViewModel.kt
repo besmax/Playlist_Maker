@@ -34,8 +34,8 @@ class PlayerViewModel(
     val isFavorite: LiveData<Boolean> = _isFavorite
     private val _playlists: MutableLiveData<List<Playlist>> = MutableLiveData()
     val playlists: LiveData<List<Playlist>> = _playlists
-    private val _isPlaylistAdded: MutableLiveData<Pair<Boolean, String>> = MutableLiveData()
-    val isPlaylistAdded: LiveData<Pair<Boolean, String>> = _isPlaylistAdded
+    private val _isPlaylistAdded: MutableLiveData<Pair<Boolean?, String>> = MutableLiveData()
+    val isPlaylistAdded: LiveData<Pair<Boolean?, String>> = _isPlaylistAdded
 
     init {
         preparePlayer()
@@ -137,6 +137,10 @@ class PlayerViewModel(
                 _isPlaylistAdded.postValue(Pair(it, playlist.name))
             }
         }
+    }
+
+    fun clearIsPlaylistAdded() {
+        _isPlaylistAdded.value = Pair(null, "")
     }
 
     companion object {

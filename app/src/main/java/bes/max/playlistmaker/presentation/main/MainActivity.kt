@@ -1,5 +1,7 @@
 package bes.max.playlistmaker.presentation.main
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -7,11 +9,18 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.ActivityMainBinding
+import bes.max.playlistmaker.presentation.utils.setAppLocale
 
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        if (newBase != null) {
+            super.attachBaseContext(ContextWrapper(newBase.setAppLocale("ru")))
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.playerFragment, R.id.newPlaylistFragment -> {
+                R.id.playerFragment, R.id.newPlaylistFragment, R.id.playlistDetailsFragment -> {
                     binding.bottomNavigationView.visibility = View.GONE
                     binding.bottomNavigationViewLineAbove.visibility = View.GONE
                 }

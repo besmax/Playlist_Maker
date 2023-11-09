@@ -9,3 +9,4 @@ fun Group.setClickListenersForAllViews(listener: View.OnClickListener) {
         rootView.findViewById<View>(id).setOnClickListener(listener)
     }
 }
+

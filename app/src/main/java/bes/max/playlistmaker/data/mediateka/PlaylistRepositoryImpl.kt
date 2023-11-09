@@ -38,6 +38,7 @@ class PlaylistRepositoryImpl(
     override suspend fun deletePlaylist(playlist: Playlist) {
         withContext(Dispatchers.IO) {
             playlistsDao.deletePlaylist(PlaylistDbMapper.map(playlist))
+            playlistTrackDao.deleteAllTracksFromPlaylist(playlistId = playlist.id)
         }
     }
 
@@ -82,4 +83,28 @@ class PlaylistRepositoryImpl(
 
             emit(!isTrackInDb)
         }.flowOn(Dispatchers.IO)
+
+    override fun getPlaylistById(id: Long) = flow<Playlist> {
+        val entity = playlistsDao.getPlaylistById(id)
+        val playlistNoTracks = PlaylistDbMapper.map(entity)
+        val tracks = playlistTrackDao.getAllTracksFromPlaylist(id).map { trackDbMapper.map(it) }
+        val result = playlistNoTracks.copy(
+            tracks = tracks,
+        )
+        emit(result)
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun deleteTrackFromPlaylist(trackId: Long, playlistId: Long) {
+        playlistTrackDao.deleteTrackFromPlaylist(
+            PlaylistTrackEntity(
+                trackId = trackId,
+                playlistId = playlistId
+            )
+        )
+    }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistsDao.updatePlaylist(playlist = PlaylistDbMapper.map(playlist))
+    }
+
 }

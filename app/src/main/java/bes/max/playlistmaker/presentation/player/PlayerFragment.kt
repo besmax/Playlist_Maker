@@ -18,7 +18,7 @@ import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlayerBinding
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
-import bes.max.playlistmaker.presentation.mediateka.playlist.PlaylistItemAdapter
+import bes.max.playlistmaker.presentation.mediateka.playlists.PlaylistItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -61,12 +61,12 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             findNavController().navigateUp()
         }
 
-        playerViewModel.playlists.observe(viewLifecycleOwner) {
-            playlistsAdapter?.submitList(it)
+        playerViewModel.playlists.observe(viewLifecycleOwner) { playlists ->
+            playlistsAdapter?.submitList(playlists)
         }
 
-        playerViewModel.playerState.observe(viewLifecycleOwner) {
-            when (it) {
+        playerViewModel.playerState.observe(viewLifecycleOwner) { screenState ->
+            when (screenState) {
                 PlayerState.STATE_PLAYING -> {
                     binding.playerScreenButtonPlay.isEnabled = true
                 }
@@ -87,19 +87,21 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
 
         playerViewModel.isPlaylistAdded.observe(viewLifecycleOwner) { isAddedPair ->
-            if (isAddedPair.first) {
+            if (isAddedPair.first == true) {
                 showTrackAddedToast(isAddedPair.second)
-            } else {
+                playerViewModel.clearIsPlaylistAdded()
+            } else if ((isAddedPair.first == false)) {
                 showTrackNotAddedToast(isAddedPair.second)
+                playerViewModel.clearIsPlaylistAdded()
             }
         }
 
         playerViewModel.playingTime.observe(viewLifecycleOwner) { playingTimeString ->
             binding.playerScreenTimeCounter.text = playingTimeString
         }
-        playerViewModel.isFavorite.observe(viewLifecycleOwner) {
+        playerViewModel.isFavorite.observe(viewLifecycleOwner) { isFavorite ->
             binding.playerScreenButtonLike.setImageResource(
-                if (it) R.drawable.ic_player_like_active
+                if (isFavorite) R.drawable.ic_player_like_active
                 else R.drawable.ic_player_like
             )
         }
@@ -132,6 +134,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("playlistName")
             ?.observe(viewLifecycleOwner) { playlistName ->
                 showTrackAddedToast(playlistName)
+                findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("playlistName")
             }
     }
 
@@ -272,7 +275,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     }
 
     private fun showTrackNotAddedToast(playlistName: String) {
-        if(bottomSheetBehavior?.state != BottomSheetBehavior.STATE_HIDDEN) {
+        if (bottomSheetBehavior?.state != BottomSheetBehavior.STATE_HIDDEN) {
             val trackName = formatStringByLength(playerViewModel.track.trackName, 20)
             Toast.makeText(
                 requireContext(),
