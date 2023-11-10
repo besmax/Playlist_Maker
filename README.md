@@ -28,3 +28,15 @@
 
 ### Экран настроек (тёмная тема)
 <img src="https://github.com/besmax/Playlist_Maker/assets/88286767/8545f05e-aeac-4997-9699-24ec002da9b3"  width="270" height="600" alt="Settings screen (dark theme)">
+
+### Экран Медиатеки избранные треки
+<img src="https://github.com/besmax/Playlist_Maker/assets/88286767/938ff851-b42b-48f3-bdcf-ef70ef0e41d0"  width="270" height="600" alt="Mediateka screen (dark theme)">
+
+### Экран Медиатеки плейлисты (тёмная тема)
+<img src="https://github.com/besmax/Playlist_Maker/assets/88286767/7bfca969-50c8-446d-b50e-ff97bb24b23c"  width="270" height="600" alt="Mediateka screen (dark theme)">
+
+### Экран Плейлиста
+<img src="https://github.com/besmax/Playlist_Maker/assets/88286767/46937796-8900-4e90-81ad-c026aafe237f"  width="270" height="600" alt="Mediateka screen (dark theme)">
+
+### Экран создания плейлиста
+<img src="https://github.com/besmax/Playlist_Maker/assets/88286767/9d5983df-ce3a-4dba-84a9-8ed4df911fff"  width="270" height="600" alt="Mediateka screen (dark theme)">
