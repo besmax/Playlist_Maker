@@ -1,5 +1,6 @@
 package bes.max.playlistmaker.presentation.player
 
+import android.content.ComponentName
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,8 @@ import android.view.animation.ScaleAnimation
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,12 +21,15 @@ import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlayerBinding
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
+import bes.max.playlistmaker.domain.player.PlayerService
 import bes.max.playlistmaker.presentation.mediateka.playlists.PlaylistItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.common.util.concurrent.ListenableFuture
+import com.google.common.util.concurrent.MoreExecutors
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -38,6 +44,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
 
     private var playlistsAdapter: PlaylistItemAdapter? = null
+    private var controllerFuture: ListenableFuture<MediaController>? = null
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -107,7 +114,15 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
 
         binding.playerScreenButtonPlay.setOnClickListener {
-            playerViewModel.playbackControl()
+            //playerViewModel.playbackControl()
+
+            if (controllerFuture?.get()?.isPlaying == true) {
+                controllerFuture?.get()?.pause() //TODO Temporary
+            } else if (controllerFuture?.get()?.isConnected == true) {
+
+                }
+
+
             playPauseAnimation()
         }
 
@@ -138,6 +153,19 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val sessionToken =
+            SessionToken(requireContext(), ComponentName(requireContext(), PlayerService::class.java))
+
+        controllerFuture =
+            MediaController.Builder(requireContext(), sessionToken).buildAsync()
+        controllerFuture!!.addListener({
+                                       binding.playerView.player = controllerFuture!!.get()
+            // MediaController is available here with controllerFuture.get()
+        }, MoreExecutors.directExecutor())
+    }
+
     override fun onResume() {
         super.onResume()
         playerViewModel.getPlaylists()
@@ -145,15 +173,13 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     override fun onStop() {
         super.onStop()
-        if (playerViewModel.playerState.value == PlayerState.STATE_PLAYING) {
-            playerViewModel.pausePlayer()
-        }
+        controllerFuture?.get()?.release()
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerViewModel.releasePlayer()
-        playlistsAdapter = null
+
     }
 
     private fun scaleAnimation(view: View) {

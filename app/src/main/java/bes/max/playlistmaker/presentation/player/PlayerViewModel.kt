@@ -10,6 +10,7 @@ import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
+import bes.max.playlistmaker.domain.player.PlaybackService
 import bes.max.playlistmaker.domain.player.PlayerInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,13 +21,13 @@ import java.util.Locale
 
 class PlayerViewModel(
     val track: Track,
-    private val playerInteractor: PlayerInteractor,
+    private val playbackService: PlaybackService,
     private val favoriteTracksInteractor: FavoriteTracksInteractor,
     private val playlistInteractor: PlaylistInteractor
 ) :
     ViewModel() {
 
-    val playerState = playerInteractor.state.asLiveData()
+    val playerState = playbackService.state.asLiveData()
     private val _playingTime = MutableLiveData<String>("00:00")
     val playingTime: LiveData<String> = _playingTime
     private var timerJob: Job? = null
@@ -38,37 +39,27 @@ class PlayerViewModel(
     val isPlaylistAdded: LiveData<Pair<Boolean?, String>> = _isPlaylistAdded
 
     init {
+        releasePlayer()
         preparePlayer()
         getPlaylists()
     }
 
     fun playbackControl() {
-        when (playerState.value) {
-
-            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
-                playerInteractor.play()
-            }
-
-            PlayerState.STATE_PLAYING -> {
-                playerInteractor.pause()
-            }
-
-            else -> {}
-        }
+        playbackService.playbackControl(track.previewUrl)
         updateTimer()
     }
 
     private fun preparePlayer() {
-        playerInteractor.preparePlayer(track.previewUrl ?: "")
+        playbackService.preparePlayer(track.previewUrl ?: "")
         checkIsFavorite()
     }
 
     fun pausePlayer() {
-        playerInteractor.pause()
+        playbackService.playbackControl()
     }
 
     fun releasePlayer() {
-        playerInteractor.release()
+        playbackService.releasePlayer()
         updateTimer()
     }
 
@@ -78,7 +69,7 @@ class PlayerViewModel(
 
     private fun updateTimer() {
         val formattedText = formatIntToFormattedTimeText(
-            playerInteractor.getCurrentTime()
+            playbackService.getCurrentTime()
         )
         when (playerState.value) {
             PlayerState.STATE_PLAYING -> {
