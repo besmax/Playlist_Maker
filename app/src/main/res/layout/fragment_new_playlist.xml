@@ -69,7 +69,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/black_white"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textCursorDrawable="@null"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,7 +95,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/black_white"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textCursorDrawable="@null"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
