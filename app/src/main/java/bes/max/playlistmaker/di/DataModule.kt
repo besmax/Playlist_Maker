@@ -74,16 +74,16 @@ val dataModule = module {
             .create(ITunesSearchApiService::class.java)
     }
 
-    single {
-        MediaPlayer().apply {
-            setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .build()
-            )
-        }
-    }
+//    single {
+//        MediaPlayer().apply {
+//            setAudioAttributes(
+//                AudioAttributes.Builder()
+//                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+//                    .setUsage(AudioAttributes.USAGE_MEDIA)
+//                    .build()
+//            )
+//        }
+//    }
 
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database")

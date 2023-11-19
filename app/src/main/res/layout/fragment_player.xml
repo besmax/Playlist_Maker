@@ -79,21 +79,6 @@
                 app:layout_constraintTop_toBottomOf="@id/player_screen_track_name"
                 tools:text="The Beatles" />
 
-            <androidx.media3.ui.PlayerView
-                android:id="@+id/player_view"
-                android:background="@color/yp_gray"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:artwork_display_mode="fill"
-                app:default_artwork="@drawable/img_new_playlist_placeholder"
-                app:repeat_toggle_modes="one|all"
-                app:show_shuffle_button="true"
-                app:shutter_background_color="@color/yp_blue"
-                app:layout_constraintEnd_toStartOf="@id/player_screen_guideline_end"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/player_screen_track_name"/>
-
             <ImageView
                 android:id="@+id/player_screen_button_add"
                 android:layout_width="wrap_content"

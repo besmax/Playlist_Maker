@@ -44,7 +44,7 @@
         </service>
 
         <service
-            android:name=".domain.player.PlayerService"
+            android:name=".data.player.PlayerServiceImpl"
             android:foregroundServiceType="mediaPlayback"
             android:enabled="true"
             android:exported="false">

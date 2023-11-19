@@ -11,6 +11,7 @@ import android.view.animation.ScaleAnimation
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import androidx.navigation.fragment.findNavController
@@ -19,9 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlayerBinding
-import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
-import bes.max.playlistmaker.domain.player.PlayerService
+import bes.max.playlistmaker.data.player.PlayerServiceImpl
+import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.presentation.mediateka.playlists.PlaylistItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.bumptech.glide.Glide
@@ -44,7 +45,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
 
     private var playlistsAdapter: PlaylistItemAdapter? = null
-    private var controllerFuture: ListenableFuture<MediaController>? = null
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -114,15 +114,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
 
         binding.playerScreenButtonPlay.setOnClickListener {
-            //playerViewModel.playbackControl()
-
-            if (controllerFuture?.get()?.isPlaying == true) {
-                controllerFuture?.get()?.pause() //TODO Temporary
-            } else if (controllerFuture?.get()?.isConnected == true) {
-
-                }
-
-
+            playerViewModel.playbackControl()
             playPauseAnimation()
         }
 
@@ -155,15 +147,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     override fun onStart() {
         super.onStart()
-        val sessionToken =
-            SessionToken(requireContext(), ComponentName(requireContext(), PlayerService::class.java))
-
-        controllerFuture =
-            MediaController.Builder(requireContext(), sessionToken).buildAsync()
-        controllerFuture!!.addListener({
-                                       binding.playerView.player = controllerFuture!!.get()
-            // MediaController is available here with controllerFuture.get()
-        }, MoreExecutors.directExecutor())
     }
 
     override fun onResume() {
@@ -173,13 +156,10 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     override fun onStop() {
         super.onStop()
-        controllerFuture?.get()?.release()
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
     }
 
     private fun scaleAnimation(view: View) {
