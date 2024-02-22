@@ -91,15 +91,17 @@
                 app:layout_constraintStart_toEndOf="@id/player_screen_guideline_start"
                 app:layout_constraintTop_toBottomOf="@id/player_screen_track_author" />
 
-            <ImageView
+            <bes.max.playlistmaker.presentation.utils.PlaybackButtonView
                 android:id="@+id/player_screen_button_play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="84dp"
                 android:layout_marginTop="32dp"
-                android:src="@drawable/avd_play_to_pause"
+                app:playImageResId="@drawable/play"
+                app:pauseImageResId="@drawable/pause"
                 app:layout_constraintEnd_toStartOf="@id/player_screen_button_like"
                 app:layout_constraintStart_toEndOf="@id/player_screen_button_add"
-                app:layout_constraintTop_toBottomOf="@id/player_screen_track_author" />
+                app:layout_constraintTop_toBottomOf="@id/player_screen_track_author"/>
 
             <ImageView
                 android:id="@+id/player_screen_button_like"

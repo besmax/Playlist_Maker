@@ -31,6 +31,10 @@
     <string name="search_screen_to_player_screen_track_as_json">TRACK_JSON</string>
     <string name="player_screen_toast_added">Трек %1$s добавлен в плэйлист %2$s</string>
     <string name="player_screen_toast_not_added">Трек %1$s уже добавлен в плэйлист %2$s</string>
+    <string name="error_view_width_mode">Неизвестный режим ширины %1$s</string>
+    <string name="error_view_height_mode">Неизвестный режим высоты %1$s</string>
+
+    "Неизвестный режим ширины ($widthMode)"
 
     <string name="mediateka">Медиатека</string>
     <string name="favorite_tracks_screen_placeholder_text">Ваша медиатека пуста</string>
