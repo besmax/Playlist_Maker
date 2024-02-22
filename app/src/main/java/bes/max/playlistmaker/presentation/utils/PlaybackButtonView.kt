@@ -1,5 +1,6 @@
 package bes.max.playlistmaker.presentation.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -26,7 +27,7 @@ class PlaybackButtonView @JvmOverloads constructor(
     private var contentWidth: Int = minimumWidth
     private var contentHeight: Int = minimumHeight
 
-    private var state = STATE_PAUSED
+    private var state = PlaybackButtonViewState.STATE_PAUSED
 
     init {
         context.theme.obtainStyledAttributes(
@@ -44,7 +45,15 @@ class PlaybackButtonView @JvmOverloads constructor(
         }
     }
 
-    fun setState(newState: Int) {
+    fun setPlayingState() {
+        setState(PlaybackButtonViewState.STATE_PLAYING)
+    }
+
+    fun setPausedState() {
+        setState(PlaybackButtonViewState.STATE_PAUSED)
+    }
+
+    private fun setState(newState: PlaybackButtonViewState) {
         if (newState != state) {
             state = newState
         }
@@ -52,10 +61,10 @@ class PlaybackButtonView @JvmOverloads constructor(
     }
 
     private fun changeState() {
-        if (state == STATE_PAUSED) {
-            state = STATE_PLAYING
+        state = if (state == PlaybackButtonViewState.STATE_PAUSED) {
+            PlaybackButtonViewState.STATE_PLAYING
         } else {
-            state = STATE_PAUSED
+            PlaybackButtonViewState.STATE_PAUSED
         }
         invalidate()
     }
@@ -97,7 +106,7 @@ class PlaybackButtonView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        if (state == STATE_PLAYING) {
+        if (state == PlaybackButtonViewState.STATE_PLAYING) {
             if (pauseImage != null) {
                 canvas.drawBitmap(pauseImage!!, null, imageRect, null)
             }
@@ -108,6 +117,7 @@ class PlaybackButtonView @JvmOverloads constructor(
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -123,9 +133,9 @@ class PlaybackButtonView @JvmOverloads constructor(
         return super.onTouchEvent(event)
     }
 
-    companion object {
-        const val STATE_PLAYING = 0
-        const val STATE_PAUSED = 1
+    enum class PlaybackButtonViewState {
+        STATE_PLAYING,
+        STATE_PAUSED
     }
 
 }
