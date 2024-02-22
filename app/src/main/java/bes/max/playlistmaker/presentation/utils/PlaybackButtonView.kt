@@ -45,10 +45,6 @@ class PlaybackButtonView @JvmOverloads constructor(
         }
     }
 
-    fun setPlayingState() {
-        setState(PlaybackButtonViewState.STATE_PLAYING)
-    }
-
     fun setPausedState() {
         setState(PlaybackButtonViewState.STATE_PAUSED)
     }
@@ -61,12 +57,11 @@ class PlaybackButtonView @JvmOverloads constructor(
     }
 
     private fun changeState() {
-        state = if (state == PlaybackButtonViewState.STATE_PAUSED) {
-            PlaybackButtonViewState.STATE_PLAYING
+        if (state == PlaybackButtonViewState.STATE_PAUSED) {
+            setState(PlaybackButtonViewState.STATE_PLAYING)
         } else {
-            PlaybackButtonViewState.STATE_PAUSED
+            setState(PlaybackButtonViewState.STATE_PAUSED)
         }
-        invalidate()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
