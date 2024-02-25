@@ -18,6 +18,7 @@ import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.mediateka.playlists.PlaylistItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import bes.max.playlistmaker.presentation.utils.PlaybackButtonView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -76,7 +77,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
                 PlayerState.STATE_PREPARED -> {
                     binding.playerScreenButtonPlay.isEnabled = true
-                    binding.playerScreenButtonPlay.setPausedState()
+                    binding.playerScreenButtonPlay.setState(PlaybackButtonView.Companion.PlaybackButtonViewState.STATE_PAUSED)
                 }
 
                 else -> {}

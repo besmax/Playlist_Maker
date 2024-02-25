@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.AttrRes
@@ -24,8 +25,6 @@ class PlaybackButtonView @JvmOverloads constructor(
     private val imageRect = RectF()
     private var playImage: Bitmap? = null
     private var pauseImage: Bitmap? = null
-    private var contentWidth: Int = minimumWidth
-    private var contentHeight: Int = minimumHeight
 
     private var state = PlaybackButtonViewState.STATE_PAUSED
 
@@ -45,23 +44,11 @@ class PlaybackButtonView @JvmOverloads constructor(
         }
     }
 
-    fun setPausedState() {
-        setState(PlaybackButtonViewState.STATE_PAUSED)
-    }
-
-    private fun setState(newState: PlaybackButtonViewState) {
+    fun setState(newState: PlaybackButtonViewState) {
         if (newState != state) {
             state = newState
         }
         invalidate()
-    }
-
-    private fun changeState() {
-        if (state == PlaybackButtonViewState.STATE_PAUSED) {
-            setState(PlaybackButtonViewState.STATE_PLAYING)
-        } else {
-            setState(PlaybackButtonViewState.STATE_PAUSED)
-        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -70,33 +57,9 @@ class PlaybackButtonView @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        contentWidth = when (widthMode) {
-            MeasureSpec.UNSPECIFIED -> minimumWidth
-            MeasureSpec.AT_MOST, MeasureSpec.EXACTLY -> widthSize
-            else -> error(
-                context.resources.getString(
-                    R.string.error_view_width_mode,
-                    widthMode.toString()
-                )
-            )
-        }
-
-        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
-        contentHeight = when (heightMode) {
-            MeasureSpec.UNSPECIFIED -> minimumHeight
-            MeasureSpec.AT_MOST, MeasureSpec.EXACTLY -> heightSize
-            else -> error(
-                context.resources.getString(
-                    R.string.error_view_height_mode,
-                    heightMode.toString()
-                )
-            )
-        }
-
-        val size = min(contentWidth, contentHeight)
+        val widthSize = getSize(widthMeasureSpec, minimumWidth)
+        val heightSize = getSize(heightMeasureSpec, minimumHeight)
+        val size = min(widthSize, heightSize)
         setMeasuredDimension(size, size)
     }
 
@@ -120,7 +83,7 @@ class PlaybackButtonView @JvmOverloads constructor(
             }
 
             MotionEvent.ACTION_UP -> {
-                callOnClick()
+                performClick()
                 changeState()
                 return true
             }
@@ -128,9 +91,44 @@ class PlaybackButtonView @JvmOverloads constructor(
         return super.onTouchEvent(event)
     }
 
-    enum class PlaybackButtonViewState {
-        STATE_PLAYING,
-        STATE_PAUSED
+    private fun changeState() {
+        if (state == PlaybackButtonViewState.STATE_PAUSED) {
+            setState(PlaybackButtonViewState.STATE_PLAYING)
+        } else {
+            setState(PlaybackButtonViewState.STATE_PAUSED)
+        }
+    }
+
+    private fun getSize(measureSpec: Int, minimumSize: Int): Int {
+        val size = MeasureSpec.getSize(measureSpec)
+        val sizeMode = MeasureSpec.getMode(measureSpec)
+        return when (sizeMode) {
+            MeasureSpec.UNSPECIFIED -> {
+                if (minimumSize > 0) {
+                    minimumSize
+                } else {
+                    size
+                }
+            }
+
+            MeasureSpec.AT_MOST, MeasureSpec.EXACTLY -> size
+            else -> Log.e(
+                TAG,
+                context.resources.getString(
+                    R.string.error_view_size_mode,
+                    sizeMode.toString()
+                )
+            )
+        }
+    }
+
+    companion object {
+        private const val TAG = "PlaybackButtonView"
+
+        enum class PlaybackButtonViewState {
+            STATE_PLAYING,
+            STATE_PAUSED
+        }
     }
 
 }

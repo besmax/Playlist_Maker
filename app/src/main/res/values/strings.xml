@@ -10,7 +10,6 @@
     <string name="you_searched">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
 
-
     <string name="link_for_app_share">https://practicum.yandex.ru/android-developer/</string>
     <string name="email_for_support">bespalov.m.9@ya.ru</string>
     <string name="email_theme_for_support">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
@@ -22,7 +21,6 @@
     <string name="search_screen_placeholder_text_error">Проблемы со связью \n \n Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="search_screen_placeholder_text_not_found">Ничего не нашлось</string>
 
-
     <string name="duration">Длительность</string>
     <string name="album">Альбом</string>
     <string name="year">Год</string>
@@ -31,10 +29,7 @@
     <string name="search_screen_to_player_screen_track_as_json">TRACK_JSON</string>
     <string name="player_screen_toast_added">Трек %1$s добавлен в плэйлист %2$s</string>
     <string name="player_screen_toast_not_added">Трек %1$s уже добавлен в плэйлист %2$s</string>
-    <string name="error_view_width_mode">Неизвестный режим ширины %1$s</string>
-    <string name="error_view_height_mode">Неизвестный режим высоты %1$s</string>
-
-    "Неизвестный режим ширины ($widthMode)"
+    <string name="error_view_size_mode">Неизвестный режим ширины/высоты %1$s</string>
 
     <string name="mediateka">Медиатека</string>
     <string name="favorite_tracks_screen_placeholder_text">Ваша медиатека пуста</string>
