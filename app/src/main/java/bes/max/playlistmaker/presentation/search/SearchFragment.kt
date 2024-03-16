@@ -1,5 +1,6 @@
 package bes.max.playlistmaker.presentation.search
 
+import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,12 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentSearchBinding
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import bes.max.playlistmaker.presentation.utils.CONNECTIVITY_CHANGE_ACTION
+import bes.max.playlistmaker.presentation.utils.InternetStateReceiver
 import bes.max.playlistmaker.presentation.utils.debounce
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,6 +28,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private val adapter = TrackListItemAdapter()
     private val adapterForHistory = TrackListItemAdapter()
     private var textWatcher: TextWatcher? = null
+    private var internetConnectionReceiver: InternetStateReceiver? = null
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -81,6 +86,12 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
             binding.searchScreenTextInputLayout.isEndIconVisible = true
         }
+        registerInternetConnectionReceiver()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireContext().unregisterReceiver(internetConnectionReceiver)
     }
 
     override fun onStop() {
@@ -223,6 +234,16 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         if (view != null) {
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
         }
+    }
+
+    private fun registerInternetConnectionReceiver() {
+        internetConnectionReceiver = InternetStateReceiver()
+        ContextCompat.registerReceiver(
+            requireContext(),
+            internetConnectionReceiver,
+            IntentFilter(CONNECTIVITY_CHANGE_ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
     }
 
     companion object {

@@ -1,5 +1,6 @@
 package bes.max.playlistmaker.presentation.player
 
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +20,8 @@ import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.mediateka.playlists.PlaylistItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
+import bes.max.playlistmaker.presentation.utils.CONNECTIVITY_CHANGE_ACTION
+import bes.max.playlistmaker.presentation.utils.InternetStateReceiver
 import bes.max.playlistmaker.presentation.utils.PlaybackButtonView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -37,6 +41,8 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
 
     private var playlistsAdapter: PlaylistItemAdapter? = null
+
+    private var internetConnectionReceiver: InternetStateReceiver? = null
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -138,6 +144,12 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     override fun onResume() {
         super.onResume()
         playerViewModel.getPlaylists()
+        registerInternetConnectionReceiver()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireContext().unregisterReceiver(internetConnectionReceiver)
     }
 
     override fun onStop() {
@@ -267,5 +279,14 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         else text
     }
 
+    private fun registerInternetConnectionReceiver() {
+        internetConnectionReceiver = InternetStateReceiver()
+        ContextCompat.registerReceiver(
+            requireContext(),
+            internetConnectionReceiver,
+            IntentFilter(CONNECTIVITY_CHANGE_ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
+    }
 
 }
