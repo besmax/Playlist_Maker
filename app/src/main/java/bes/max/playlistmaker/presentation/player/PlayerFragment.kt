@@ -1,7 +1,9 @@
 package bes.max.playlistmaker.presentation.player
 
+import android.content.ComponentName
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,11 @@ import android.view.animation.ScaleAnimation
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +34,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.common.util.concurrent.ListenableFuture
+import com.google.common.util.concurrent.MoreExecutors
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -44,6 +53,10 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private var internetConnectionReceiver: InternetStateReceiver? = null
 
+    private var controllerFuture: ListenableFuture<MediaController>? = null
+
+    private var mediaController: MediaController? = null
+
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -51,10 +64,16 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         return FragmentPlayerBinding.inflate(inflater, container, false)
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         bind(playerViewModel.track)
+
+        prepareMediaSession()
 
         preparePlaylistRecyclerView()
         bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet)
@@ -78,7 +97,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
                 PlayerState.STATE_PAUSED -> {
                     binding.playerScreenButtonPlay.isEnabled = true
-
                 }
 
                 PlayerState.STATE_PREPARED -> {
@@ -111,7 +129,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
 
         binding.playerScreenButtonPlay.setOnClickListener {
-            playerViewModel.playbackControl()
+            playbackControl()
         }
 
         binding.playerScreenButtonAdd.setOnClickListener {
@@ -154,15 +172,56 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     override fun onStop() {
         super.onStop()
-        if (playerViewModel.playerState.value == PlayerState.STATE_PLAYING) {
-            playerViewModel.pausePlayer()
+
+        controllerFuture?.let {
+            MediaController.releaseFuture(it)
+            mediaController = null
         }
+        controllerFuture = null
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerViewModel.releasePlayer()
         playlistsAdapter = null
+    }
+
+    private fun prepareMediaSession() {
+        val sessionToken = SessionToken(
+            requireContext(),
+            ComponentName(requireContext(), PlaybackService::class.java)
+        )
+        controllerFuture = MediaController.Builder(requireContext(), sessionToken).buildAsync()
+        controllerFuture?.addListener(
+            {
+                mediaController = controllerFuture?.get()
+                prepareMediaController()
+            },
+            MoreExecutors.directExecutor()
+        )
+    }
+
+    private fun prepareMediaController() {
+        val mediaItem = MediaItem.Builder()
+            .setMediaId(playerViewModel.track.trackId.toString())
+            .setUri(playerViewModel.track.previewUrl)
+            .setMediaMetadata(
+                MediaMetadata.Builder()
+                    .setArtist(playerViewModel.track.artistName)
+                    .setTitle(playerViewModel.track.trackName)
+                    .setArtworkUri(playerViewModel.track.artworkUrl100.toUri())
+                    .build()
+            )
+            .build()
+        mediaController?.setMediaItem(mediaItem)
+        mediaController?.prepare()
+    }
+
+    private fun playbackControl() {
+        if (mediaController?.isPlaying == true) {
+            mediaController?.pause()
+        } else {
+            mediaController?.play()
+        }
     }
 
     private fun scaleAnimation(view: View) {

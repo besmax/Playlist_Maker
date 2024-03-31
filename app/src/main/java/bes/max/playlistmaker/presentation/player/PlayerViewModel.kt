@@ -38,7 +38,7 @@ class PlayerViewModel(
     val isPlaylistAdded: LiveData<Pair<Boolean?, String>> = _isPlaylistAdded
 
     init {
-        preparePlayer()
+
         getPlaylists()
     }
 

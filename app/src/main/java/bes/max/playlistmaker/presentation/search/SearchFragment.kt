@@ -46,7 +46,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             useLastParam = false,
             action = { track ->
                 searchViewModel.saveTrackToHistory(track)
-                val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(convertTrackToJson(track))
+                val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(
+                    convertTrackToJson(track)
+                )
                 findNavController().navigate(action)
             }
         )
