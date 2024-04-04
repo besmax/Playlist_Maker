@@ -1,7 +1,13 @@
 package bes.max.playlistmaker.presentation.player
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
+import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +15,21 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import bes.max.playlistmaker.Manifest
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlayerBinding
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.mediateka.playlists.PlaylistItemAdapter
+import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_ARTIST
+import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_TITLE
+import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_URL
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import bes.max.playlistmaker.presentation.utils.CONNECTIVITY_CHANGE_ACTION
 import bes.max.playlistmaker.presentation.utils.InternetStateReceiver
@@ -44,6 +55,33 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private var internetConnectionReceiver: InternetStateReceiver? = null
 
+    private var playerService: PlayerServiceImpl? = null
+
+    private val playerServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
+            val binder = p1 as PlayerServiceImpl.PlayerServiceImplBinder
+            playerService = binder.getService()
+        }
+
+        override fun onServiceDisconnected(p0: ComponentName?) {
+            playerService = null
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            bindMusicService(playerViewModel.track)
+        } else {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.no_notification_permission),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -55,6 +93,12 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         bind(playerViewModel.track)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            bindMusicService(playerViewModel.track)
+        }
 
         preparePlaylistRecyclerView()
         bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet)
@@ -159,6 +203,11 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
     }
 
+    override fun onDestroyView() {
+        requireContext().unbindService(playerServiceConnection)
+        super.onDestroyView()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         playerViewModel.releasePlayer()
@@ -194,6 +243,15 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         return json.let {
             Gson().fromJson(json, Track::class.java)
         }
+    }
+
+    private fun bindMusicService(track: Track) {
+        val intent = Intent(requireContext(), PlayerServiceImpl::class.java).apply {
+            putExtra(EXTRA_ARTIST, track.artistName)
+            putExtra(EXTRA_TITLE, track.trackName)
+            putExtra(EXTRA_URL, track.previewUrl)
+        }
+        requireContext().bindService(intent, playerServiceConnection, Context.BIND_AUTO_CREATE)
     }
 
     private fun bind(track: Track?) {
