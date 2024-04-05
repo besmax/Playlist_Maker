@@ -21,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import bes.max.playlistmaker.Manifest
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlayerBinding
 import bes.max.playlistmaker.domain.models.PlayerState
@@ -61,6 +60,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
             val binder = p1 as PlayerServiceImpl.PlayerServiceImplBinder
             playerService = binder.getService()
+            playerViewModel.setPlayerService(playerService as PlayerService)
         }
 
         override fun onServiceDisconnected(p0: ComponentName?) {
@@ -114,7 +114,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             playlistsAdapter?.submitList(playlists)
         }
 
-        playerViewModel.playerState.observe(viewLifecycleOwner) { screenState ->
+        playerViewModel.playerState?.observe(viewLifecycleOwner) { screenState ->
             when (screenState) {
                 PlayerState.STATE_PLAYING -> {
                     binding.playerScreenButtonPlay.isEnabled = true
@@ -194,13 +194,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     override fun onPause() {
         super.onPause()
         requireContext().unregisterReceiver(internetConnectionReceiver)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (playerViewModel.playerState.value == PlayerState.STATE_PLAYING) {
-            playerViewModel.pausePlayer()
-        }
     }
 
     override fun onDestroyView() {

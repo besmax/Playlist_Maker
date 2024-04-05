@@ -1,5 +1,6 @@
 package bes.max.playlistmaker.presentation.player
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,13 +21,12 @@ import java.util.Locale
 
 class PlayerViewModel(
     val track: Track,
-    private val playerInteractor: PlayerInteractor,
     private val favoriteTracksInteractor: FavoriteTracksInteractor,
     private val playlistInteractor: PlaylistInteractor
 ) :
     ViewModel() {
 
-    val playerState = playerInteractor.state.asLiveData()
+    private var playerService: PlayerService? = null
     private val _playingTime = MutableLiveData<String>("00:00")
     val playingTime: LiveData<String> = _playingTime
     private var timerJob: Job? = null
@@ -37,38 +37,18 @@ class PlayerViewModel(
     private val _isPlaylistAdded: MutableLiveData<Pair<Boolean?, String>> = MutableLiveData()
     val isPlaylistAdded: LiveData<Pair<Boolean?, String>> = _isPlaylistAdded
 
+
     init {
-        preparePlayer()
+        checkIsFavorite()
         getPlaylists()
     }
 
     fun playbackControl() {
-        when (playerState.value) {
-
-            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
-                playerInteractor.play()
-            }
-
-            PlayerState.STATE_PLAYING -> {
-                playerInteractor.pause()
-            }
-
-            else -> {}
-        }
+        playerService?.playback()
         updateTimer()
     }
 
-    private fun preparePlayer() {
-        playerInteractor.preparePlayer(track.previewUrl ?: "")
-        checkIsFavorite()
-    }
-
-    fun pausePlayer() {
-        playerInteractor.pause()
-    }
-
     fun releasePlayer() {
-        playerInteractor.release()
         updateTimer()
     }
 
@@ -78,9 +58,9 @@ class PlayerViewModel(
 
     private fun updateTimer() {
         val formattedText = formatIntToFormattedTimeText(
-            playerInteractor.getCurrentTime()
+            playerService?.getCurrentTime() ?: 0
         )
-        when (playerState.value) {
+        when (playerState?.value) {
             PlayerState.STATE_PLAYING -> {
                 _playingTime.value = formattedText
                 timerJob = viewModelScope.launch {
@@ -141,6 +121,10 @@ class PlayerViewModel(
 
     fun clearIsPlaylistAdded() {
         _isPlaylistAdded.value = Pair(null, "")
+    }
+
+    fun setPlayerService(service: PlayerService) {
+        playerService = service
     }
 
     companion object {

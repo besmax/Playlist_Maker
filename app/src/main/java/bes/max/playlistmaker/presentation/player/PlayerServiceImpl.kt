@@ -9,10 +9,12 @@ import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.data.player.PlayerImpl
+import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.player.Player
 import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_ARTIST
 import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_TITLE
@@ -39,16 +41,7 @@ class PlayerServiceImpl : Service(), PlayerService {
         }
     )
 
-    override fun onCreate() {
-        super.onCreate()
-
-        ServiceCompat.startForeground(
-            this,
-            SERVICE_NOTIFICATION_ID,
-            createServiceNotification(),
-            getForegroundServiceTypeConstant()
-        )
-    }
+    override val playerState = player.playerState
 
     override fun onBind(p0: Intent?): IBinder? {
         trackUrl = p0?.getStringExtra(EXTRA_URL)
@@ -57,6 +50,8 @@ class PlayerServiceImpl : Service(), PlayerService {
 
         if (trackUrl != null) {
             player.preparePlayer(trackUrl!!)
+            Log.d("ServiceImpl", "prepared with url=$trackUrl")
+            Log.d("ServiceImpl", "player state=${playerState.value}")
         }
         return binder
     }
@@ -64,6 +59,43 @@ class PlayerServiceImpl : Service(), PlayerService {
     override fun onUnbind(intent: Intent?): Boolean {
         player.releasePlayer()
         return super.onUnbind(intent)
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        showNotification()
+        return Service.START_NOT_STICKY
+    }
+
+    override fun playback() {
+        when (playerState.value) {
+
+            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
+                player.startPlayer()
+            }
+
+            PlayerState.STATE_PLAYING -> {
+                player.pausePlayer()
+            }
+
+            else -> {}
+        }
+    }
+
+    override fun getCurrentTime(): Int {
+        return player.getCurrentPosition()
+    }
+
+    fun showNotification() {
+        ServiceCompat.startForeground(
+            this,
+            SERVICE_NOTIFICATION_ID,
+            createServiceNotification(),
+            getForegroundServiceTypeConstant()
+        )
+    }
+
+    fun stopForegroundMode() {
+        stopSelf()
     }
 
     private fun createServiceNotification(): Notification {

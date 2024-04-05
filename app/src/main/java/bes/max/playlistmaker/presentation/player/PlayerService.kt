@@ -7,9 +7,9 @@ interface PlayerService {
 
     val playerState: StateFlow<PlayerState>
 
-    fun play()
+    fun playback()
 
-    fun pause()
+    fun getCurrentTime(): Int
 
     companion object {
         const val NOTIFICATION_CHANNEL_ID = "Player Service"
