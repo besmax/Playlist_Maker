@@ -253,7 +253,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
                 .into(binding.playerScreenAlbumCover)
 
             with(binding) {
-                playerScreenTimeCounter.text = track.trackTime
+                playerScreenTimeCounter.text = getString(R.string.default_timer_value)
                 playerScreenTrackName.text = track.trackName
                 playerScreenTrackAuthor.text = track.artistName
                 playerScreenDuration.text = track.trackTime

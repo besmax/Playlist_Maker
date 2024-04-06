@@ -1,6 +1,5 @@
 package bes.max.playlistmaker.presentation.player
 
-import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

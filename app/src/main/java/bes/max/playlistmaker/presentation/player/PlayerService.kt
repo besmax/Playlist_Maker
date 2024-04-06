@@ -1,13 +1,14 @@
 package bes.max.playlistmaker.presentation.player
 
 import bes.max.playlistmaker.domain.models.PlayerState
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 interface PlayerService {
 
     val playerState: StateFlow<PlayerState>
 
-    val currentPosition: StateFlow<Int>
+    val currentPosition: SharedFlow<Int>
 
     fun playback()
 

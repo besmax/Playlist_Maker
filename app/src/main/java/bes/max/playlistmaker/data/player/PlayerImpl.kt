@@ -9,8 +9,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -20,8 +23,8 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
 
     private val _playerState = MutableStateFlow<PlayerState>(PlayerState.STATE_DEFAULT)
     override val playerState: StateFlow<PlayerState> = _playerState.asStateFlow()
-    private val _currentPosition = MutableStateFlow<Int>(0)
-    override val currentPosition: StateFlow<Int> = _currentPosition.asStateFlow()
+    private val _currentPosition = MutableSharedFlow<Int>(0)
+    override val currentPosition: SharedFlow<Int> = _currentPosition.asSharedFlow()
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private var timerJob: Job? = null
 
@@ -49,11 +52,11 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
                 _playerState.value = PlayerState.STATE_PLAYING
                 timerJob = coroutineScope.launch {
                     while (_playerState.value == PlayerState.STATE_PLAYING) {
-                        _currentPosition.value = mediaPlayer.currentPosition
+                        _currentPosition.emit(mediaPlayer.currentPosition)
                         delay(TIMER_UPDATE_RATE)
                     }
                     if (_playerState.value == PlayerState.STATE_PREPARED) {
-                        _currentPosition.value = DEFAULT_TIMER_TIME
+                        _currentPosition.emit(DEFAULT_TIMER_TIME)
                     }
                     timerJob?.cancel()
                 }
