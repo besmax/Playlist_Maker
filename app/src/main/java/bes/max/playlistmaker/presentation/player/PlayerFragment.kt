@@ -27,10 +27,10 @@ import bes.max.playlistmaker.databinding.FragmentPlayerBinding
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.domain.player.PlayerService
-import bes.max.playlistmaker.presentation.mediateka.playlists.PlaylistItemAdapter
 import bes.max.playlistmaker.domain.player.PlayerService.Companion.EXTRA_ARTIST
 import bes.max.playlistmaker.domain.player.PlayerService.Companion.EXTRA_TITLE
 import bes.max.playlistmaker.domain.player.PlayerService.Companion.EXTRA_URL
+import bes.max.playlistmaker.presentation.mediateka.playlists.PlaylistItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import bes.max.playlistmaker.presentation.utils.CONNECTIVITY_CHANGE_ACTION
 import bes.max.playlistmaker.presentation.utils.InternetStateReceiver
