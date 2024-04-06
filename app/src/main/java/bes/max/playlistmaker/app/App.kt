@@ -11,7 +11,7 @@ import bes.max.playlistmaker.di.dataModule
 import bes.max.playlistmaker.di.domainModule
 import bes.max.playlistmaker.di.repositoryModule
 import bes.max.playlistmaker.di.viewModelModule
-import bes.max.playlistmaker.presentation.player.PlayerService
+import bes.max.playlistmaker.domain.player.PlayerService
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext

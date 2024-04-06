@@ -12,11 +12,12 @@ import androidx.core.app.ServiceCompat
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.player.Player
-import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_ARTIST
-import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_TITLE
-import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_URL
-import bes.max.playlistmaker.presentation.player.PlayerService.Companion.NOTIFICATION_CHANNEL_ID
-import bes.max.playlistmaker.presentation.player.PlayerService.Companion.SERVICE_NOTIFICATION_ID
+import bes.max.playlistmaker.domain.player.PlayerService
+import bes.max.playlistmaker.domain.player.PlayerService.Companion.EXTRA_ARTIST
+import bes.max.playlistmaker.domain.player.PlayerService.Companion.EXTRA_TITLE
+import bes.max.playlistmaker.domain.player.PlayerService.Companion.EXTRA_URL
+import bes.max.playlistmaker.domain.player.PlayerService.Companion.NOTIFICATION_CHANNEL_ID
+import bes.max.playlistmaker.domain.player.PlayerService.Companion.SERVICE_NOTIFICATION_ID
 import org.koin.android.ext.android.get
 import java.text.SimpleDateFormat
 import java.util.Locale
