@@ -15,6 +15,7 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
@@ -82,12 +83,21 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             ).show()
         }
     }
+    private var backPressed = false
 
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentPlayerBinding {
         return FragmentPlayerBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+           navigateBack()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,7 +118,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         bottomSheetBehavior?.addBottomSheetCallback(getCallbackForBottomSheetState())
 
         binding.playerScreenBackArrow.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            navigateBack()
         }
 
         playerViewModel.playlists.observe(viewLifecycleOwner) { playlists ->
@@ -149,6 +159,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
             scaleAnimation(binding.playerScreenButtonLike)
         }
+
         binding.playlistsBottomSheetButton.setOnClickListener {
             val trackArg = Gson().toJson(playerViewModel.track)
             val action =
@@ -165,16 +176,22 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     override fun onResume() {
         super.onResume()
+        backPressed = false
         playerViewModel.getPlaylists()
         registerInternetConnectionReceiver()
+        playerViewModel.hideNotification()
     }
 
     override fun onPause() {
         super.onPause()
         requireContext().unregisterReceiver(internetConnectionReceiver)
+        if (playerService?.playerState?.value == PlayerState.STATE_PLAYING && !backPressed) {
+            playerViewModel.showNotification()
+        }
     }
 
     override fun onDestroyView() {
+        playerViewModel.hideNotification()
         requireContext().unbindService(playerServiceConnection)
         super.onDestroyView()
     }
@@ -183,6 +200,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         super.onDestroy()
         playlistsAdapter = null
     }
+
 
     private fun scaleAnimation(view: View) {
         val animIncrease = ScaleAnimation(
@@ -342,6 +360,12 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             IntentFilter(CONNECTIVITY_CHANGE_ACTION),
             ContextCompat.RECEIVER_NOT_EXPORTED,
         )
+    }
+
+    private fun navigateBack() {
+        backPressed = true
+        playerViewModel.hideNotification()
+        findNavController().popBackStack()
     }
 
 }

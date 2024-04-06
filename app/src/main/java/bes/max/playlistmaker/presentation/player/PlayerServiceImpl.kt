@@ -31,7 +31,6 @@ class PlayerServiceImpl : Service(), PlayerService {
     override val playerState = player.playerState
     override val currentPosition = player.currentPosition
 
-
     override fun onBind(p0: Intent?): IBinder? {
         trackUrl = p0?.getStringExtra(EXTRA_URL)
         trackArtist = p0?.getStringExtra(EXTRA_ARTIST)
@@ -46,6 +45,7 @@ class PlayerServiceImpl : Service(), PlayerService {
 
     override fun onUnbind(intent: Intent?): Boolean {
         player.releasePlayer()
+        stopSelf()
         return super.onUnbind(intent)
     }
 
@@ -73,7 +73,7 @@ class PlayerServiceImpl : Service(), PlayerService {
         return formatIntToFormattedTimeText(player.getCurrentPosition())
     }
 
-    fun showNotification() {
+    override fun showNotification() {
         ServiceCompat.startForeground(
             this,
             SERVICE_NOTIFICATION_ID,
@@ -82,8 +82,8 @@ class PlayerServiceImpl : Service(), PlayerService {
         )
     }
 
-    fun stopForegroundMode() {
-        stopSelf()
+    override fun hideNotification() {
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
     }
 
     private fun createServiceNotification(): Notification {

@@ -1,5 +1,6 @@
 package bes.max.playlistmaker.presentation.player
 
+import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -93,6 +94,14 @@ class PlayerViewModel(
 
     fun formatIntToFormattedTimeText(time: Int): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
+    }
+
+    fun showNotification() {
+        playerService?.showNotification()
+    }
+
+    fun hideNotification() {
+        playerService?.hideNotification()
     }
 
 }

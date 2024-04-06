@@ -13,6 +13,10 @@ interface PlayerService {
 
     fun getCurrentTime(): String
 
+    fun showNotification()
+
+    fun hideNotification()
+
     companion object {
         const val NOTIFICATION_CHANNEL_ID = "Player Service"
         const val SERVICE_NOTIFICATION_ID = 101
