@@ -61,6 +61,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             val binder = p1 as PlayerServiceImpl.PlayerServiceImplBinder
             playerService = binder.getService()
             playerViewModel.setPlayerService(playerService as PlayerService)
+            setPlayerObservers()
         }
 
         override fun onServiceDisconnected(p0: ComponentName?) {
@@ -114,26 +115,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             playlistsAdapter?.submitList(playlists)
         }
 
-        playerViewModel.playerState?.observe(viewLifecycleOwner) { screenState ->
-            when (screenState) {
-                PlayerState.STATE_PLAYING -> {
-                    binding.playerScreenButtonPlay.isEnabled = true
-                }
-
-                PlayerState.STATE_PAUSED -> {
-                    binding.playerScreenButtonPlay.isEnabled = true
-
-                }
-
-                PlayerState.STATE_PREPARED -> {
-                    binding.playerScreenButtonPlay.isEnabled = true
-                    binding.playerScreenButtonPlay.setState(PlaybackButtonView.Companion.PlaybackButtonViewState.STATE_PAUSED)
-                }
-
-                else -> {}
-            }
-        }
-
         playerViewModel.isPlaylistAdded.observe(viewLifecycleOwner) { isAddedPair ->
             if (isAddedPair.first == true) {
                 showTrackAddedToast(isAddedPair.second)
@@ -144,9 +125,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             }
         }
 
-        playerViewModel.playingTime.observe(viewLifecycleOwner) { playingTimeString ->
-            binding.playerScreenTimeCounter.text = playingTimeString
-        }
         playerViewModel.isFavorite.observe(viewLifecycleOwner) { isFavorite ->
             binding.playerScreenButtonLike.setImageResource(
                 if (isFavorite) R.drawable.ic_player_like_active
@@ -203,7 +181,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
-        playerViewModel.releasePlayer()
         playlistsAdapter = null
     }
 
@@ -300,6 +277,33 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         binding.playlistsBottomSheetRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.playlistsBottomSheetRecyclerView.adapter = playlistsAdapter
+    }
+
+    private fun setPlayerObservers() {
+        playerViewModel.playingTime?.observe(viewLifecycleOwner) { playingTimeString ->
+            binding.playerScreenTimeCounter.text =
+                playerViewModel.formatIntToFormattedTimeText(playingTimeString)
+        }
+
+        playerViewModel.playerState?.observe(viewLifecycleOwner) { screenState ->
+            when (screenState) {
+                PlayerState.STATE_PLAYING -> {
+                    binding.playerScreenButtonPlay.isEnabled = true
+                }
+
+                PlayerState.STATE_PAUSED -> {
+                    binding.playerScreenButtonPlay.isEnabled = true
+
+                }
+
+                PlayerState.STATE_PREPARED -> {
+                    binding.playerScreenButtonPlay.isEnabled = true
+                    binding.playerScreenButtonPlay.setState(PlaybackButtonView.Companion.PlaybackButtonViewState.STATE_PAUSED)
+                }
+
+                else -> {}
+            }
+        }
     }
 
     private fun showTrackAddedToast(playlistName: String) {

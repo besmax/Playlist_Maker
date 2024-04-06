@@ -4,16 +4,12 @@ import android.app.Notification
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
-import android.media.AudioAttributes
-import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import bes.max.playlistmaker.R
-import bes.max.playlistmaker.data.player.PlayerImpl
 import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.player.Player
 import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_ARTIST
@@ -21,6 +17,9 @@ import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_T
 import bes.max.playlistmaker.presentation.player.PlayerService.Companion.EXTRA_URL
 import bes.max.playlistmaker.presentation.player.PlayerService.Companion.NOTIFICATION_CHANNEL_ID
 import bes.max.playlistmaker.presentation.player.PlayerService.Companion.SERVICE_NOTIFICATION_ID
+import org.koin.android.ext.android.get
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayerServiceImpl : Service(), PlayerService {
 
@@ -28,20 +27,10 @@ class PlayerServiceImpl : Service(), PlayerService {
     private var trackUrl: String? = null
     private var trackArtist: String? = null
     private var trackTitle: String? = null
-
-
-    private val player: Player = PlayerImpl(
-        MediaPlayer().apply {
-            setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .build()
-            )
-        }
-    )
-
+    private val player: Player = get()
     override val playerState = player.playerState
+    override val currentPosition = player.currentPosition
+
 
     override fun onBind(p0: Intent?): IBinder? {
         trackUrl = p0?.getStringExtra(EXTRA_URL)
@@ -50,9 +39,8 @@ class PlayerServiceImpl : Service(), PlayerService {
 
         if (trackUrl != null) {
             player.preparePlayer(trackUrl!!)
-            Log.d("ServiceImpl", "prepared with url=$trackUrl")
-            Log.d("ServiceImpl", "player state=${playerState.value}")
         }
+
         return binder
     }
 
@@ -81,8 +69,8 @@ class PlayerServiceImpl : Service(), PlayerService {
         }
     }
 
-    override fun getCurrentTime(): Int {
-        return player.getCurrentPosition()
+    override fun getCurrentTime(): String {
+        return formatIntToFormattedTimeText(player.getCurrentPosition())
     }
 
     fun showNotification() {
@@ -114,6 +102,10 @@ class PlayerServiceImpl : Service(), PlayerService {
         } else {
             0
         }
+    }
+
+    private fun formatIntToFormattedTimeText(time: Int): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
     }
 
     inner class PlayerServiceImplBinder : Binder() {

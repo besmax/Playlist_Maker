@@ -7,6 +7,8 @@ interface Player {
 
     val playerState: StateFlow<PlayerState>
 
+    val currentPosition: StateFlow<Int>
+
     fun preparePlayer(dataSourceUrl: String)
 
     fun startPlayer()
