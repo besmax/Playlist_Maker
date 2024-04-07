@@ -85,7 +85,7 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
     }
 
     override fun getCurrentPosition(): Int {
-        var currentPosition = 0
+        var currentPosition = DEFAULT_TIMER_TIME
         try {
             currentPosition = mediaPlayer.currentPosition
         } catch (e: IllegalStateException) {
