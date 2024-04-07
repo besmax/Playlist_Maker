@@ -39,7 +39,6 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
                 setOnCompletionListener { _playerState.value = PlayerState.STATE_PREPARED }
             }
         }
-
     }
 
     override fun startPlayer() {
@@ -61,7 +60,6 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
         } catch (e: IllegalStateException) {
             Log.e(TAG, "exception in startPlayer() ${e.toString()}")
         }
-
     }
 
     override fun pausePlayer() {
@@ -72,7 +70,6 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
         } catch (e: IllegalStateException) {
             Log.e(TAG, "exception in pausePlayer() ${e.toString()}")
         }
-
     }
 
     override fun releasePlayer() {

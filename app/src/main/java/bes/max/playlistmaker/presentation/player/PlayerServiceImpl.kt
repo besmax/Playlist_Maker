@@ -1,7 +1,10 @@
 package bes.max.playlistmaker.presentation.player
 
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Binder
@@ -36,6 +39,11 @@ class PlayerServiceImpl : Service(), PlayerService {
     override val playerState = player.playerState
     override val currentPosition = player.currentPosition
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+    override fun onCreate() {
+        super.onCreate()
+        createPlayerNotificationChannel()
+    }
 
     override fun onBind(p0: Intent?): IBinder? {
         trackUrl = p0?.getStringExtra(EXTRA_URL)
@@ -119,6 +127,17 @@ class PlayerServiceImpl : Service(), PlayerService {
                 }
             }
         }
+    }
+
+    private fun createPlayerNotificationChannel() {
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID,
+            getString(R.string.player_notification_channel_name),
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     inner class PlayerServiceImplBinder : Binder() {
