@@ -18,6 +18,10 @@ import bes.max.playlistmaker.domain.player.PlayerService.Companion.EXTRA_TITLE
 import bes.max.playlistmaker.domain.player.PlayerService.Companion.EXTRA_URL
 import bes.max.playlistmaker.domain.player.PlayerService.Companion.NOTIFICATION_CHANNEL_ID
 import bes.max.playlistmaker.domain.player.PlayerService.Companion.SERVICE_NOTIFICATION_ID
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -31,6 +35,7 @@ class PlayerServiceImpl : Service(), PlayerService {
     private val player: Player = get()
     override val playerState = player.playerState
     override val currentPosition = player.currentPosition
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     override fun onBind(p0: Intent?): IBinder? {
         trackUrl = p0?.getStringExtra(EXTRA_URL)
@@ -40,6 +45,8 @@ class PlayerServiceImpl : Service(), PlayerService {
         if (trackUrl != null) {
             player.preparePlayer(trackUrl!!)
         }
+
+        hideNotificationOnTrackEnded()
 
         return binder
     }
@@ -102,6 +109,16 @@ class PlayerServiceImpl : Service(), PlayerService {
 
     private fun formatIntToFormattedTimeText(time: Int): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
+    }
+
+    private fun hideNotificationOnTrackEnded() {
+        coroutineScope.launch {
+            playerState.collect() { state ->
+                if (state != PlayerState.STATE_PLAYING || state != PlayerState.STATE_PAUSED) {
+                    hideNotification()
+                }
+            }
+        }
     }
 
     inner class PlayerServiceImplBinder : Binder() {
