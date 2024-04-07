@@ -21,7 +21,6 @@ interface PlayerService {
     companion object {
         const val NOTIFICATION_CHANNEL_ID = "Player Service"
         const val SERVICE_NOTIFICATION_ID = 101
-        const val NOTIFICATION_CHANNEL_NAME = "Media player notification"
         const val EXTRA_ARTIST = "EXTRA_ARTIST"
         const val EXTRA_TITLE = "EXTRA_TITLE"
         const val EXTRA_URL = "EXTRA_URL"

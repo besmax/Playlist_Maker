@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.asLiveData
+import bes.max.playlistmaker.R
 import bes.max.playlistmaker.data.settings.SettingsDao
 import bes.max.playlistmaker.di.dataModule
 import bes.max.playlistmaker.di.domainModule
@@ -46,7 +47,7 @@ class App : Application() {
     private fun createPlayerNotificationChannel() {
         val channel = NotificationChannel(
             PlayerService.NOTIFICATION_CHANNEL_ID,
-            PlayerService.NOTIFICATION_CHANNEL_NAME,
+            getString(R.string.player_notification_channel_name),
             NotificationManager.IMPORTANCE_HIGH
         )
         val notificationManager =

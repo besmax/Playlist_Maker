@@ -50,11 +50,6 @@ class PlayerServiceImpl : Service(), PlayerService {
         return super.onUnbind(intent)
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        showNotification()
-        return Service.START_NOT_STICKY
-    }
-
     override fun playback() {
         when (playerState.value) {
 

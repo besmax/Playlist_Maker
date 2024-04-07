@@ -34,6 +34,9 @@ class PlayerViewModel(
     val playlists: LiveData<List<Playlist>> = _playlists
     private val _isPlaylistAdded: MutableLiveData<Pair<Boolean?, String>> = MutableLiveData()
     val isPlaylistAdded: LiveData<Pair<Boolean?, String>> = _isPlaylistAdded
+    private val dateFormatter: SimpleDateFormat by lazy {
+        SimpleDateFormat("mm:ss", Locale.getDefault())
+    }
 
 
     init {
@@ -93,7 +96,7 @@ class PlayerViewModel(
     }
 
     fun formatIntToFormattedTimeText(time: Int): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
+        return dateFormatter.format(time)
     }
 
     fun showNotification() {

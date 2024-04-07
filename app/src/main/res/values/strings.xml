@@ -34,6 +34,7 @@
     <string name="no_internet_message">Отсутствует подключение к интернету</string>
     <string name="notification_placeholder">%1$s - %2$s</string>
     <string name="no_notification_permission">Отсутствует разрешение на показ уведомлений</string>
+    <string name="player_notification_channel_name">Уведомление плеера</string>
 
     <string name="mediateka">Медиатека</string>
     <string name="favorite_tracks_screen_placeholder_text">Ваша медиатека пуста</string>
