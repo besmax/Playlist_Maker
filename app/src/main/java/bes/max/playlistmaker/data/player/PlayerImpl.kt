@@ -23,8 +23,8 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
 
     private val _playerState = MutableStateFlow<PlayerState>(PlayerState.STATE_DEFAULT)
     override val playerState: StateFlow<PlayerState> = _playerState.asStateFlow()
-    private val _currentPosition = MutableSharedFlow<Int>(0)
-    override val currentPosition: SharedFlow<Int> = _currentPosition.asSharedFlow()
+    private val _currentPosition = MutableStateFlow<Int>(1)
+    override val currentPosition: StateFlow<Int> = _currentPosition.asStateFlow()
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private var timerJob: Job? = null
 
