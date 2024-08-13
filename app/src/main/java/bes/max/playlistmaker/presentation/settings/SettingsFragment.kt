@@ -5,21 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
 import bes.max.playlistmaker.R
-import bes.max.playlistmaker.databinding.FragmentSettingsBinding
-import bes.max.playlistmaker.presentation.utils.BindingFragment
 import bes.max.playlistmaker.presentation.utils.setClickListenersForAllViews
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
+class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by viewModel()
 
-    override fun createBinding(
+    override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentSettingsBinding {
-        return FragmentSettingsBinding.inflate(inflater, container, false)
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                Text(text = "Hello world.")
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
