@@ -7,5 +7,5 @@ sealed interface EditPlaylistScreenState {
         val playlist: Playlist
     ): EditPlaylistScreenState
 
-    data object Updated: EditPlaylistScreenState
+    object Updated: EditPlaylistScreenState
 }
