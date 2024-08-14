@@ -1,35 +1,44 @@
-package bes.max.playlistmaker.presentation.search
+package bes.max.playlistmaker.ui.search
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
-import bes.max.playlistmaker.databinding.FragmentSearchBinding
 import bes.max.playlistmaker.domain.models.Track
-import bes.max.playlistmaker.presentation.utils.BindingFragment
+import bes.max.playlistmaker.presentation.search.SearchScreenState
+import bes.max.playlistmaker.presentation.search.SearchViewModel
+import bes.max.playlistmaker.presentation.settings.SettingsViewModel
 import bes.max.playlistmaker.presentation.utils.debounce
+import bes.max.playlistmaker.ui.theme.PlaylistMakerTheme
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment : BindingFragment<FragmentSearchBinding>() {
+class SearchFragment : Fragment() {
 
     private val searchViewModel: SearchViewModel by viewModel()
-    private val adapter = TrackListItemAdapter()
-    private val adapterForHistory = TrackListItemAdapter()
-    private var textWatcher: TextWatcher? = null
+    private val settingsViewModel: SettingsViewModel by viewModel()
 
-    override fun createBinding(
+    override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentSearchBinding {
-        return FragmentSearchBinding.inflate(inflater, container, false)
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                val darkTheme by settingsViewModel.isNightModeActive.observeAsState(initial = isSystemInDarkTheme())
+                PlaylistMakerTheme(darkTheme = darkTheme) {
+
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,51 +55,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             }
         )
 
-        setUpRecyclers(onElementClickAction)
-        setTextWatcher()
 
-        binding.searchScreenTextInputLayout.setEndIconOnClickListener {
-            binding.searchScreenEditText.text?.clear()
-            hideKeyboard()
-            searchViewModel.cancelSearch()
-            searchViewModel.showHistory()
-        }
 
-        binding.searchScreenEditText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) searchViewModel.showHistory()
-        }
-
-        searchViewModel.screenState.observe(viewLifecycleOwner) { state ->
-            showScreenContent(state)
-        }
-
-        binding.searchScreenPlaceholderButton.setOnClickListener {
-            if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
-                searchViewModel.searchTrack(binding.searchScreenEditText.text.toString())
-            }
-        }
-
-        binding.searchScreenHistoryButton.setOnClickListener {
-            searchViewModel.clearHistory()
-        }
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (binding.searchScreenEditText.text?.isNotEmpty() == true) {
-            binding.searchScreenTextInputLayout.isEndIconVisible = true
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        binding.searchScreenEditText.text?.clear()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        textWatcher = null
     }
 
     private fun showScreenContent(state: SearchScreenState) {
@@ -104,12 +70,12 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             }
 
             is SearchScreenState.History -> {
-                adapterForHistory.listOfTracks = state.tracks
+                adapterForHistory.listOfTracks = SearchScreenState.History.tracks
                 showHistory()
             }
 
             is SearchScreenState.Tracks -> {
-                adapter.listOfTracks = state.tracks
+                adapter.listOfTracks = SearchScreenState.Tracks.tracks
                 showTracks()
             }
 
@@ -121,32 +87,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 showError()
             }
         }
-    }
-
-    private fun setUpRecyclers(onElementClickAction: (Track) -> Unit) {
-        binding.searchScreenRecyclerViewTracks.adapter = adapter
-        adapter.onListElementClick = onElementClickAction
-        adapterForHistory.listOfTracks = SearchScreenState.History.tracks
-        adapterForHistory.onListElementClick = onElementClickAction
-        binding.searchScreenHistoryRecyclerView.adapter = adapterForHistory
-    }
-
-    private fun setTextWatcher() {
-        textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!s.toString().isNullOrBlank()) searchViewModel.searchDebounce(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if (s.toString().isNullOrBlank()) {
-                    searchViewModel.cancelSearch()
-                    searchViewModel.showHistory()
-                }
-            }
-        }
-        binding.searchScreenEditText.addTextChangedListener(textWatcher)
     }
 
     private fun showDefaultScreenState() {
@@ -214,15 +154,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun convertTrackToJson(track: Track): String {
         return Gson().toJson(track)
-    }
-
-    private fun hideKeyboard() {
-        val inputMethodManager =
-            activity?.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-        val view = requireActivity().currentFocus
-        if (view != null) {
-            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
-        }
     }
 
     companion object {

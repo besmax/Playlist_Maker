@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import bes.max.playlistmaker.databinding.FragmentFavoriteTracksBinding
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.mediateka.MediatekaFragmentDirections
-import bes.max.playlistmaker.presentation.search.TrackListItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import bes.max.playlistmaker.presentation.utils.debounce
 import com.google.gson.Gson

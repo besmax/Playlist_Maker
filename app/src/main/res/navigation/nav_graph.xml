@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="bes.max.playlistmaker.presentation.search.SearchFragment"
+        android:name="bes.max.playlistmaker.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/mediatekaFragment"
-        android:name="bes.max.playlistmaker.presentation.mediateka.MediatekaFragment"
+        android:name="bes.max.playlistmaker.ui.mediateka.MediatekaFragment"
         android:label="MediatekaFragment" >
         <action
             android:id="@+id/action_mediatekaFragment_to_playerFragment"
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="bes.max.playlistmaker.presentation.settings.SettingsFragment"
+        android:name="bes.max.playlistmaker.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/playerFragment"
