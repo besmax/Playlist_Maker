@@ -35,7 +35,7 @@ class SearchFragment : Fragment() {
             setContent {
                 val darkTheme by settingsViewModel.isNightModeActive.observeAsState(initial = isSystemInDarkTheme())
                 PlaylistMakerTheme(darkTheme = darkTheme) {
-
+                    SearchScreen(navController = findNavController(), viewModel = searchViewModel)
                 }
             }
         }
