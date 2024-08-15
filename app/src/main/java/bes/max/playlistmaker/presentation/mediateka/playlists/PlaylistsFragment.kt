@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlaylistBinding
-import bes.max.playlistmaker.presentation.mediateka.MediatekaFragmentDirections
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,11 +22,10 @@ class PlaylistsFragment : BindingFragment<FragmentPlaylistBinding>() {
         PlaylistItemAdapter(
             listType = PlaylistItemAdapter.GRID_LIST,
             doOnClick = { playlist ->
-                val action =
-                    MediatekaFragmentDirections.actionMediatekaFragmentToPlaylistDetailsFragment(
-                        playlist.id
-                    )
-                findNavController().navigate(action)
+                findNavController().navigate(
+                    R.id.action_mediatekaFragment_to_playlistDetailsFragment,
+                    Bundle().apply { putLong("playlistId", playlist.id) }
+                )
             }
         )
 
@@ -42,9 +40,9 @@ class PlaylistsFragment : BindingFragment<FragmentPlaylistBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.playlistScreenButton.setOnClickListener {
-            val action =
-                MediatekaFragmentDirections.actionMediatekaFragmentToNewPlaylistFragment2(null)
-            findNavController().navigate(action)
+            findNavController().navigate(
+                R.id.action_mediatekaFragment_to_newPlaylistFragment2
+            )
         }
         binding.playlistScreenRecyclerView.adapter = adapter
         binding.playlistScreenRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)

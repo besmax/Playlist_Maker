@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentFavoriteTracksBinding
 import bes.max.playlistmaker.domain.models.Track
-import bes.max.playlistmaker.presentation.mediateka.MediatekaFragmentDirections
+import bes.max.playlistmaker.presentation.search.TrackListItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import bes.max.playlistmaker.presentation.utils.debounce
 import com.google.gson.Gson
@@ -36,10 +37,9 @@ class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() 
             coroutineScope = viewLifecycleOwner.lifecycleScope,
             useLastParam = false,
             action = { track ->
-                val action = MediatekaFragmentDirections.actionMediatekaFragmentToPlayerFragment(
-                    convertTrackToJson(track)
-                )
-                findNavController().navigate(action)
+                findNavController().navigate(
+                    R.id.action_mediatekaFragment_to_playerFragment,
+                    Bundle().apply { putString("track", convertTrackToJson(track)) })
             }
         )
         adapter = TrackListItemAdapter(onElementClickAction)

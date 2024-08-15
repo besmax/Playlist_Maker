@@ -30,7 +30,9 @@
 
     <color name="black_white">#1A1B22</color>
     <color name="gray_white">#AEAFB4</color>
+    <color name="yp_gray_light">#E6E8EB</color>
     <color name="white_black">#FFFFFFFF</color>
+    <color name="switch_thumb">#AEAFB4</color>
 
 
 

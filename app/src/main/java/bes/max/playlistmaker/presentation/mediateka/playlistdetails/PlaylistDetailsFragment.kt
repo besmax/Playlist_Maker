@@ -13,6 +13,7 @@ import bes.max.playlistmaker.R
 import bes.max.playlistmaker.databinding.FragmentPlaylistDetailsBinding
 import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
+import bes.max.playlistmaker.presentation.search.TrackListItemAdapter
 import bes.max.playlistmaker.presentation.utils.BindingFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
