@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -101,6 +102,7 @@ fun SettingSection(
             fontFamily = ysDisplayFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Icon(
@@ -134,6 +136,7 @@ fun SettingSwitchSection(
             fontFamily = ysDisplayFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Switch(

@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -74,16 +75,15 @@ fun TrackListItem(
                 fontSize = 16.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-
-
-                )
+                color = MaterialTheme.colorScheme.onBackground,
+            )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = track.artistName,
                     fontFamily = ysDisplayFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 11.sp,
-                    color = YpGray,
+                    color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.widthIn(max = 250.dp)
@@ -101,7 +101,7 @@ fun TrackListItem(
                     fontFamily = ysDisplayFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 11.sp,
-                    color = YpGray,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .weight(1f)
                 )
@@ -111,7 +111,7 @@ fun TrackListItem(
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow),
             contentDescription = "right arrow",
-            tint = YpGray,
+            tint = MaterialTheme.colorScheme.onBackground,
         )
     }
 }

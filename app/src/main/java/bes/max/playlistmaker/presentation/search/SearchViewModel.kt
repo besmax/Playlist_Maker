@@ -53,7 +53,7 @@ class SearchViewModel(
         searchJob?.cancel()
     }
 
-    fun searchTrack(searchRequest: String) {
+    private fun searchTrack(searchRequest: String) {
         if (searchRequest.isBlank()) return
         _screenState.value = SearchScreenState.Loading
         viewModelScope.launch {

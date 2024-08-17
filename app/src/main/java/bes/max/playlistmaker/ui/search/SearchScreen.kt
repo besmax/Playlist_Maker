@@ -192,11 +192,13 @@ fun TrackHistory(
     onTrackClick: (Track) -> Unit,
     clearHistory: () -> Unit
 ) {
-
     if (tracks.isEmpty()) return
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 40.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Text(
@@ -204,7 +206,8 @@ fun TrackHistory(
             fontFamily = ysDisplayFamily,
             fontWeight = FontWeight.Medium,
             fontSize = 19.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground,
         )
 
         TrackList(tracks = tracks, onItemClick = onTrackClick, isReverse = true)
@@ -222,7 +225,8 @@ fun TrackHistory(
                 text = stringResource(id = R.string.clear_history),
                 fontFamily = ysDisplayFamily,
                 fontWeight = FontWeight.Medium,
-                fontSize = 14.sp
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.background,
             )
         }
 
@@ -248,7 +252,8 @@ fun NotFound() {
             fontFamily = ysDisplayFamily,
             fontWeight = FontWeight.Medium,
             fontSize = 19.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground,
         )
 
     }
@@ -259,34 +264,43 @@ fun ConnectionProblem(
     refresh: () -> Unit
 ) {
 
-    Image(
-        painter = painterResource(id = R.drawable.img_not_found),
-        contentDescription = "Tracks not found",
-    )
-
-    Text(
-        text = stringResource(id = R.string.search_screen_placeholder_text_error),
-        fontFamily = ysDisplayFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 19.sp,
-        textAlign = TextAlign.Center
-    )
-
-    Button(
-        onClick = { refresh() },
+    Column (
         modifier = Modifier
-            .padding(top = 24.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.onBackground,
-            contentColor = MaterialTheme.colorScheme.background
+            .fillMaxWidth()
+            .padding(top = 104.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Image(
+            painter = painterResource(id = R.drawable.img_no_internet),
+            contentDescription = "Tracks not found",
         )
-    ) {
+
         Text(
-            text = stringResource(id = R.string.clear_history),
+            text = stringResource(id = R.string.search_screen_placeholder_text_error),
             fontFamily = ysDisplayFamily,
             fontWeight = FontWeight.Medium,
-            fontSize = 14.sp
+            fontSize = 19.sp,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground,
         )
+
+        Button(
+            onClick = { refresh() },
+            modifier = Modifier
+                .padding(top = 24.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.onBackground,
+                contentColor = MaterialTheme.colorScheme.background
+            )
+        ) {
+            Text(
+                text = stringResource(id = R.string.clear_history),
+                fontFamily = ysDisplayFamily,
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.background,
+            )
+        }
     }
 
 }
