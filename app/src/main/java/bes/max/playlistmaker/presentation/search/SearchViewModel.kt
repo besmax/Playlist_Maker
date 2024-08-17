@@ -49,6 +49,7 @@ class SearchViewModel(
     }
 
     fun searchTrack(searchRequest: String) {
+        if (searchRequest.isBlank()) return
         _screenState.value = SearchScreenState.Loading
         viewModelScope.launch {
             searchInNetworkUseCase.execute(searchRequest).collect { response ->
@@ -112,6 +113,10 @@ class SearchViewModel(
                 SearchScreenState.History.tracks = emptyList()
             }
         }
+    }
+
+    fun refreshSearch() {
+        searchDebounce(latestSearchText)
     }
 
     companion object {

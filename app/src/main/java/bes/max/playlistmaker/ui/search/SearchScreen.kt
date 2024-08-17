@@ -1,11 +1,15 @@
 package bes.max.playlistmaker.ui.search
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -16,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -23,17 +28,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.R
 import bes.max.playlistmaker.domain.models.Track
 import bes.max.playlistmaker.presentation.search.SearchScreenState
 import bes.max.playlistmaker.presentation.search.SearchViewModel
 import bes.max.playlistmaker.presentation.utils.debounce
+import bes.max.playlistmaker.ui.common.Loading
 import bes.max.playlistmaker.ui.common.Title
+import bes.max.playlistmaker.ui.common.TrackList
 import bes.max.playlistmaker.ui.theme.YpBlack
 import bes.max.playlistmaker.ui.theme.YpLightGray
 import bes.max.playlistmaker.ui.theme.ysDisplayFamily
@@ -56,14 +62,18 @@ fun SearchScreen(
         useLastParam = false,
         action = { track ->
             viewModel.saveTrackToHistory(track)
-            val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(Gson().toJson(track))
+            val action =
+                SearchFragmentDirections.actionSearchFragmentToPlayerFragment(Gson().toJson(track))
             navController.navigate(action)
         }
     )
 
     SearchScreenContent(
         uiScreenState = uiScreenState,
-        onInputChange = { input -> viewModel.searchDebounce(input) }
+        onInputChange = { input -> viewModel.searchDebounce(input) },
+        onElementClickAction = onElementClickAction,
+        clearHistory = viewModel::clearHistory,
+        refresh = viewModel::refreshSearch
     )
 
 }
@@ -71,7 +81,10 @@ fun SearchScreen(
 @Composable
 fun SearchScreenContent(
     uiScreenState: SearchScreenState,
-    onInputChange: (String) -> Unit
+    onInputChange: (String) -> Unit,
+    onElementClickAction: (Track) -> Unit,
+    clearHistory: () -> Unit,
+    refresh: () -> Unit
 ) {
 
     Column(
@@ -84,15 +97,33 @@ fun SearchScreenContent(
         when (uiScreenState) {
             is SearchScreenState.Default -> {}
 
-            is SearchScreenState.Loading -> {}
+            is SearchScreenState.Loading -> {
+                Loading()
+            }
 
-            is SearchScreenState.History -> {}
+            is SearchScreenState.History -> {
+                TrackHistory(
+                    tracks = uiScreenState.tracks,
+                    onTrackClick = onElementClickAction,
+                    clearHistory = clearHistory,
+                )
+            }
 
-            is SearchScreenState.Tracks -> {}
+            is SearchScreenState.Tracks -> {
+                TrackList(
+                    tracks = uiScreenState.tracks,
+                    onItemClick = onElementClickAction,
+                    isReverse = false
+                )
+            }
 
-            is SearchScreenState.TracksNotFound -> {}
+            is SearchScreenState.TracksNotFound -> {
+                NotFound()
+            }
 
-            is SearchScreenState.SearchError -> {}
+            is SearchScreenState.SearchError -> {
+                ConnectionProblem(refresh)
+            }
         }
     }
 
@@ -153,4 +184,109 @@ fun SearchInput(onInputChange: (String) -> Unit) {
                 }
             }
     )
+}
+
+@Composable
+fun TrackHistory(
+    tracks: List<Track>,
+    onTrackClick: (Track) -> Unit,
+    clearHistory: () -> Unit
+) {
+
+    if (tracks.isEmpty()) return
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+
+        Text(
+            text = stringResource(id = R.string.you_searched),
+            fontFamily = ysDisplayFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 19.sp,
+            textAlign = TextAlign.Center
+        )
+
+        TrackList(tracks = tracks, onItemClick = onTrackClick, isReverse = true)
+
+        Button(
+            onClick = { clearHistory() },
+            modifier = Modifier
+                .padding(top = 24.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.onBackground,
+                contentColor = MaterialTheme.colorScheme.background
+            )
+        ) {
+            Text(
+                text = stringResource(id = R.string.clear_history),
+                fontFamily = ysDisplayFamily,
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp
+            )
+        }
+
+    }
+
+}
+
+@Composable
+fun NotFound() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 104.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Image(
+            painter = painterResource(id = R.drawable.img_not_found),
+            contentDescription = "Tracks not found",
+        )
+        Text(
+            text = stringResource(id = R.string.search_screen_placeholder_text_not_found),
+            fontFamily = ysDisplayFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 19.sp,
+            textAlign = TextAlign.Center
+        )
+
+    }
+}
+
+@Composable
+fun ConnectionProblem(
+    refresh: () -> Unit
+) {
+
+    Image(
+        painter = painterResource(id = R.drawable.img_not_found),
+        contentDescription = "Tracks not found",
+    )
+
+    Text(
+        text = stringResource(id = R.string.search_screen_placeholder_text_error),
+        fontFamily = ysDisplayFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 19.sp,
+        textAlign = TextAlign.Center
+    )
+
+    Button(
+        onClick = { refresh() },
+        modifier = Modifier
+            .padding(top = 24.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.onBackground,
+            contentColor = MaterialTheme.colorScheme.background
+        )
+    ) {
+        Text(
+            text = stringResource(id = R.string.clear_history),
+            fontFamily = ysDisplayFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp
+        )
+    }
+
 }
