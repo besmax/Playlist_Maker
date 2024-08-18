@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_black"
-    tools:context=".presentation.mediateka.favorite.FavoriteTracksFragment">
+    tools:context=".ui.mediateka.favorite.FavoriteTracksFragment">
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/favorite_screen_placeholder"

@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import bes.max.playlistmaker.presentation.settings.SettingsViewModel
 import bes.max.playlistmaker.ui.theme.PlaylistMakerTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,7 +27,7 @@ class MediatekaFragment : Fragment() {
             setContent {
                 val darkTheme by settingsViewModel.isNightModeActive.observeAsState(initial = isSystemInDarkTheme())
                 PlaylistMakerTheme(darkTheme = darkTheme) {
-
+                    MediatekaScreen(findNavController())
                 }
             }
         }

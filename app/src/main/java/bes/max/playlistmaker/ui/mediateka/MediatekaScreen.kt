@@ -15,7 +15,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
 import bes.max.playlistmaker.R
+import bes.max.playlistmaker.ui.common.Title
+import bes.max.playlistmaker.ui.mediateka.favorite.FavoriteTracksScreen
+import bes.max.playlistmaker.ui.mediateka.playlists.PlaylistsScreen
 import kotlinx.coroutines.launch
 
 private const val PAGE_COUNT = 2
@@ -23,7 +27,7 @@ private const val PAGE_COUNT = 2
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MediatekaScreen(
-
+    navController: NavController,
 ) {
 
     val scope = rememberCoroutineScope()
@@ -36,6 +40,8 @@ fun MediatekaScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        
+        Title(text = stringResource(R.string.mediateka))
 
         TabRow(
             selectedTabIndex = selectedTabIndex,
@@ -43,8 +49,8 @@ fun MediatekaScreen(
         ) {
             Tab(
                 selected = selectedTabIndex == 0,
-                selectedContentColor = MaterialTheme.colorScheme.primary,
-                unselectedContentColor = MaterialTheme.colorScheme.outline,
+                selectedContentColor = MaterialTheme.colorScheme.onBackground,
+                unselectedContentColor = MaterialTheme.colorScheme.onBackground,
                 onClick = {
                     scope.launch {
                         pagerState.animateScrollToPage(0)
@@ -73,8 +79,8 @@ fun MediatekaScreen(
                 .weight(1f)
         ) { page ->
             when (page) {
-                0 -> FirstScreen()
-                1 -> SecondScreen()
+                0 -> FavoriteTracksScreen(navController = navController)
+                1 -> PlaylistsScreen(navController = navController)
             }
         }
 
