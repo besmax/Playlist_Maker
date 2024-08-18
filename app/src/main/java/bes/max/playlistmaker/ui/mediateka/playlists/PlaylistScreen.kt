@@ -58,7 +58,7 @@ fun PlaylistsScreen(
 
     PlaylistsScreenContent(
         uiState = uiState,
-        addPlaylist = { navController.navigate(R.id.action_mediatekaFragment_to_newPlaylistFragment2) },
+        addPlaylist = { navController.navigate(R.id.action_mediatekaFragment_to_newPlaylistFragment) },
         navigateToPlaylistDetails = { playlistId ->
             navController.navigate(
                 R.id.action_mediatekaFragment_to_playlistDetailsFragment,
@@ -176,7 +176,7 @@ fun PlaylistGridListItem(
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
             textAlign = TextAlign.Start,
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }

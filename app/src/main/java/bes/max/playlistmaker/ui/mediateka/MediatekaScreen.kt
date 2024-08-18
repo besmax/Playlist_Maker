@@ -1,7 +1,7 @@
 package bes.max.playlistmaker.ui.mediateka
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +17,6 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,7 +29,6 @@ import bes.max.playlistmaker.R
 import bes.max.playlistmaker.ui.common.Title
 import bes.max.playlistmaker.ui.mediateka.favorite.FavoriteTracksScreen
 import bes.max.playlistmaker.ui.mediateka.playlists.PlaylistsScreen
-import bes.max.playlistmaker.ui.theme.YpBlack
 import bes.max.playlistmaker.ui.theme.ysDisplayFamily
 import kotlinx.coroutines.launch
 
@@ -52,21 +47,20 @@ fun MediatekaScreen(
     var selectedTabIndex = pagerState.currentPage
 
     val tabs = listOf(
+        stringResource(id = R.string.mediateka_screen_tab_title_favorite_tracks),
         stringResource(id = R.string.mediateka_screen_tab_title_playlists),
-        stringResource(id = R.string.mediateka_screen_tab_title_favorite_tracks)
     )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
     ) {
 
         Title(text = stringResource(R.string.mediateka))
 
         TabRow(
             selectedTabIndex = selectedTabIndex,
-            containerColor = MaterialTheme.colorScheme.background,
-            contentColor = MaterialTheme.colorScheme.background,
             indicator = {
                 Box(
                     Modifier
@@ -75,7 +69,9 @@ fun MediatekaScreen(
                         .border(2.dp, MaterialTheme.colorScheme.onBackground)
                 )
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
         ) {
 
             tabs.forEachIndexed { index, title ->
@@ -85,7 +81,6 @@ fun MediatekaScreen(
                         scope.launch {
                             selectedTabIndex = index
                             pagerState.animateScrollToPage(index)
-                            Log.e("AAAAA", "selectedTabIndex=${selectedTabIndex}")
                         }
                     },
                 ) {

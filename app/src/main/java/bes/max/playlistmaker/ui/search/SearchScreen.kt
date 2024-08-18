@@ -1,6 +1,7 @@
 package bes.max.playlistmaker.ui.search
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -88,7 +89,9 @@ fun SearchScreenContent(
 ) {
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.background)
     ) {
 
         Title(text = stringResource(id = R.string.search))

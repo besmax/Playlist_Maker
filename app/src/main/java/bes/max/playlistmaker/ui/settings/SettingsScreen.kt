@@ -1,6 +1,7 @@
 package bes.max.playlistmaker.ui.settings
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +45,9 @@ fun SettingsScreen(
     val agreementUrl = stringResource(R.string.link_for_app_share)
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+        .fillMaxWidth()
+        .background(color = MaterialTheme.colorScheme.background)
     ) {
 
         Title(text = stringResource(id = R.string.settings))
@@ -52,7 +55,8 @@ fun SettingsScreen(
         SettingSwitchSection(
             onSectionClick = { checked -> viewModel.setIsNightModeActiveDebounce(checked) },
             initialSwitchValue = isNightModeActive,
-            title = stringResource(id = R.string.dark_theme)
+            title = stringResource(id = R.string.dark_theme),
+            modifier = Modifier.padding(top = 24.dp)
         )
         val shareUrl = stringResource(R.string.link_for_app_share)
 
@@ -74,8 +78,8 @@ fun SettingsScreen(
             onSectionClick = {
                 viewModel.openUserAgreement(agreementUrl)
             },
-            iconResId = R.drawable.ic_support,
-            title = stringResource(id = R.string.contact_support)
+            iconResId = R.drawable.ic_arrow,
+            title = stringResource(id = R.string.user_agreement)
         )
     }
 
