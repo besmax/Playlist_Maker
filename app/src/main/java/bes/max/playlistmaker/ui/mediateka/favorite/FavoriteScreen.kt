@@ -3,6 +3,7 @@ package bes.max.playlistmaker.ui.mediateka.favorite
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -62,14 +63,21 @@ fun FavoriteTracksScreenContent(
     onItemClick: (Track) -> Unit
 ) {
 
-    when (uiState) {
-        is FavoriteScreenState.Empty -> EmptyFavoriteTracks()
-        is FavoriteScreenState.Loading -> Loading()
-        is FavoriteScreenState.Content -> TrackList(
-            tracks = uiState.tracks,
-            onItemClick = onItemClick,
-            isReverse = false
-        )
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        when (uiState) {
+            is FavoriteScreenState.Empty -> EmptyFavoriteTracks()
+            is FavoriteScreenState.Loading -> Loading()
+            is FavoriteScreenState.Content -> TrackList(
+                tracks = uiState.tracks,
+                onItemClick = onItemClick,
+                isReverse = false
+            )
+        }
     }
 
 }
@@ -78,12 +86,14 @@ fun FavoriteTracksScreenContent(
 fun EmptyFavoriteTracks() {
     Column(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(top = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = painterResource(id = R.drawable.img_not_found),
             contentDescription = "Favorite tracks not found",
+            modifier = Modifier.padding(top = 40.dp)
         )
         Text(
             text = stringResource(id = R.string.favorite_tracks_screen_placeholder_text),
