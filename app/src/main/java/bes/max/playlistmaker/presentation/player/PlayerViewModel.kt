@@ -7,97 +7,45 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import bes.max.playlistmaker.domain.mediateka.favorite.FavoriteTracksInteractor
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
-import bes.max.playlistmaker.domain.models.PlayerState
 import bes.max.playlistmaker.domain.models.Playlist
 import bes.max.playlistmaker.domain.models.Track
-import bes.max.playlistmaker.domain.player.PlayerInteractor
+import bes.max.playlistmaker.domain.player.PlayerService
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
     val track: Track,
-    private val playerInteractor: PlayerInteractor,
     private val favoriteTracksInteractor: FavoriteTracksInteractor,
     private val playlistInteractor: PlaylistInteractor
-) :
-    ViewModel() {
+) : ViewModel() {
 
-    val playerState = playerInteractor.state.asLiveData()
-    private val _playingTime = MutableLiveData<String>("00:00")
-    val playingTime: LiveData<String> = _playingTime
-    private var timerJob: Job? = null
+    private var playerService: PlayerService? = null
+    val playerState by lazy {
+        playerService?.playerState?.asLiveData()
+    }
+    val playingTime: LiveData<Int>? by lazy {
+        playerService?.currentPosition?.asLiveData()
+    }
     private val _isFavorite = MutableLiveData(false)
     val isFavorite: LiveData<Boolean> = _isFavorite
     private val _playlists: MutableLiveData<List<Playlist>> = MutableLiveData()
     val playlists: LiveData<List<Playlist>> = _playlists
     private val _isPlaylistAdded: MutableLiveData<Pair<Boolean?, String>> = MutableLiveData()
     val isPlaylistAdded: LiveData<Pair<Boolean?, String>> = _isPlaylistAdded
+    private val dateFormatter: SimpleDateFormat by lazy {
+        SimpleDateFormat("mm:ss", Locale.getDefault())
+    }
+
 
     init {
-        preparePlayer()
+        checkIsFavorite()
         getPlaylists()
     }
 
     fun playbackControl() {
-        when (playerState.value) {
-
-            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
-                playerInteractor.play()
-            }
-
-            PlayerState.STATE_PLAYING -> {
-                playerInteractor.pause()
-            }
-
-            else -> {}
-        }
-        updateTimer()
-    }
-
-    private fun preparePlayer() {
-        playerInteractor.preparePlayer(track.previewUrl ?: "")
-        checkIsFavorite()
-    }
-
-    fun pausePlayer() {
-        playerInteractor.pause()
-    }
-
-    fun releasePlayer() {
-        playerInteractor.release()
-        updateTimer()
-    }
-
-    private fun formatIntToFormattedTimeText(time: Int): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
-    }
-
-    private fun updateTimer() {
-        val formattedText = formatIntToFormattedTimeText(
-            playerInteractor.getCurrentTime()
-        )
-        when (playerState.value) {
-            PlayerState.STATE_PLAYING -> {
-                _playingTime.value = formattedText
-                timerJob = viewModelScope.launch {
-                    delay(TIMER_UPDATE_RATE)
-                    updateTimer()
-                }
-            }
-
-            PlayerState.STATE_PAUSED -> {
-                timerJob?.cancel()
-            }
-
-            else -> {
-                timerJob?.cancel()
-                _playingTime.value = DEFAULT_TIMER_TIME
-            }
-        }
+        playerService?.playback()
     }
 
     fun addToFavorite(track: Track) {
@@ -143,9 +91,20 @@ class PlayerViewModel(
         _isPlaylistAdded.value = Pair(null, "")
     }
 
-    companion object {
-        private const val TIMER_UPDATE_RATE = 300L
-        private const val DEFAULT_TIMER_TIME = "00:00"
+    fun setPlayerService(service: PlayerService) {
+        playerService = service
+    }
+
+    fun formatIntToFormattedTimeText(time: Int): String {
+        return dateFormatter.format(time)
+    }
+
+    fun showNotification() {
+        playerService?.showNotification()
+    }
+
+    fun hideNotification() {
+        playerService?.hideNotification()
     }
 
 }

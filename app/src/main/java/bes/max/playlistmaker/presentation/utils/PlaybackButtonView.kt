@@ -12,6 +12,7 @@ import android.view.View
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.withRotation
 import bes.max.playlistmaker.R
 import kotlin.math.min
 
@@ -27,6 +28,8 @@ class PlaybackButtonView @JvmOverloads constructor(
     private var pauseImage: Bitmap? = null
 
     private var state = PlaybackButtonViewState.STATE_PAUSED
+
+
 
     init {
         context.theme.obtainStyledAttributes(
@@ -66,7 +69,8 @@ class PlaybackButtonView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         if (state == PlaybackButtonViewState.STATE_PLAYING) {
             if (pauseImage != null) {
-                canvas.drawBitmap(pauseImage!!, null, imageRect, null)
+
+                canvas.withRotation { canvas.drawBitmap(pauseImage!!, null, imageRect, null) }
             }
         } else {
             if (playImage != null) {

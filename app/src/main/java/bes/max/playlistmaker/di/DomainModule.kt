@@ -5,8 +5,6 @@ import bes.max.playlistmaker.domain.mediateka.favorite.FavoriteTracksInteractorI
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractor
 import bes.max.playlistmaker.domain.mediateka.playlist.PlaylistInteractorImpl
 import bes.max.playlistmaker.domain.mediateka.playlistdetails.SharePlaylistUseCase
-import bes.max.playlistmaker.domain.player.PlayerInteractor
-import bes.max.playlistmaker.domain.player.PlayerInteractorImpl
 import bes.max.playlistmaker.domain.search.SearchHistoryInteractor
 import bes.max.playlistmaker.domain.search.SearchHistoryInteractorImpl
 import bes.max.playlistmaker.domain.search.SearchInNetworkUseCase
@@ -19,8 +17,6 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val domainModule = module {
-
-    factoryOf(::PlayerInteractorImpl) bind PlayerInteractor::class
 
     factoryOf(::SearchHistoryInteractorImpl) bind SearchHistoryInteractor::class
 
