@@ -17,7 +17,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
-    private val searchViewModel: SearchViewModel by viewModel()
     private val settingsViewModel: SettingsViewModel by viewModel()
 
     override fun onCreateView(
@@ -29,7 +28,7 @@ class SearchFragment : Fragment() {
             setContent {
                 val darkTheme by settingsViewModel.isNightModeActive.observeAsState(initial = isSystemInDarkTheme())
                 PlaylistMakerTheme(darkTheme = darkTheme) {
-                    SearchScreen(navController = findNavController(), viewModel = searchViewModel)
+                    SearchScreen(navController = findNavController())
                 }
             }
         }

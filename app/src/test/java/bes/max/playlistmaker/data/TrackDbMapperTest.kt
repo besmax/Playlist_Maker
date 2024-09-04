@@ -40,7 +40,9 @@ class TrackDbMapperTest {
             trackTime = "01:38",
             bigCover = "track.bigCover",
             year = "year",
-            addingDate = 589L
+            addingDate = 589L,
+            trackTimeMillis = 100_000L,
+            isFavorite = false
         )
 
         assertEquals(expected, mapper.map(trackEntity))
@@ -74,7 +76,9 @@ class TrackDbMapperTest {
             trackTime = "01:38",
             bigCover = "track.bigCover",
             year = "year",
-            addingDate = System.currentTimeMillis()
+            addingDate = System.currentTimeMillis(),
+            trackTimeMillis = 100_000L,
+            isFavorite = false
         )
 
         assertEquals(expected.trackTime, mapper.map(track).trackTime)

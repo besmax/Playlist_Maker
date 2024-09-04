@@ -45,13 +45,14 @@ import bes.max.playlistmaker.ui.theme.YpBlack
 import bes.max.playlistmaker.ui.theme.YpLightGray
 import bes.max.playlistmaker.ui.theme.ysDisplayFamily
 import com.google.gson.Gson
+import org.koin.androidx.compose.koinViewModel
 
 private const val CLICK_DEBOUNCE_DELAY = 1000L
 
 @Composable
 fun SearchScreen(
     navController: NavController,
-    viewModel: SearchViewModel
+    viewModel: SearchViewModel = koinViewModel()
 ) {
 
     val uiScreenState by viewModel.screenState.observeAsState(SearchScreenState.Default)

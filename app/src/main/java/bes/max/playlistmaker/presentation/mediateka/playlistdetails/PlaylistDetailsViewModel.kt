@@ -17,9 +17,13 @@ class PlaylistDetailsViewModel(
     private val sharePlaylistUseCase: SharePlaylistUseCase
 ) : ViewModel() {
 
-    private val _screenState: MutableLiveData<PlaylistDetailsScreenState> =
-        MutableLiveData(PlaylistDetailsScreenState.Default)
+    private val _screenState =
+        MutableLiveData<PlaylistDetailsScreenState>(PlaylistDetailsScreenState.Default)
     val screenState: LiveData<PlaylistDetailsScreenState> = _screenState
+
+    private val _event = MutableLiveData<PlaylistDetailsEvent>()
+    val event: LiveData<PlaylistDetailsEvent> = _event
+
     private val playlistId = savedStateHandle.get<Long>("playlistId")!!
 
     init {
@@ -69,17 +73,12 @@ class PlaylistDetailsViewModel(
     }
 
     fun showMenu() {
-        if (_screenState.value is PlaylistDetailsScreenState.Content) {
-            val playlist =
-                (_screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist
-            _screenState.value = PlaylistDetailsScreenState.Menu(playlist = playlist)
-        }
+        _event.value = PlaylistDetailsEvent.OpenBottomSheetMenu
     }
 
     fun onCloseMenu() {
-        if (_screenState.value is PlaylistDetailsScreenState.Menu) {
-            getPlaylist(playlistId)
-        }
+        _event.value = PlaylistDetailsEvent.CloseBottomSheetMenu
+        getPlaylist(playlistId)
     }
 
     companion object {
