@@ -298,7 +298,7 @@ fun ConnectionProblem(
             )
         ) {
             Text(
-                text = stringResource(id = R.string.clear_history),
+                text = stringResource(id = R.string.refresh),
                 fontFamily = ysDisplayFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,

@@ -31,9 +31,7 @@ class SearchViewModel(
 
 
     fun searchDebounce(searchText: String) {
-        if (searchJob?.isCompleted != true) {
-            searchJob?.cancel()
-        }
+        if (searchJob?.isActive != true)  searchJob?.cancel()
 
         if (searchText.isBlank()) {
             showHistory()
@@ -45,7 +43,6 @@ class SearchViewModel(
                     searchTrack(searchText)
                 }
             }
-
         }
     }
 
@@ -121,7 +118,7 @@ class SearchViewModel(
     }
 
     fun refreshSearch() {
-        searchDebounce(latestSearchText)
+        searchTrack(latestSearchText)
     }
 
     companion object {
