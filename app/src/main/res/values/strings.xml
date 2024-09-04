@@ -27,8 +27,8 @@
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
     <string name="search_screen_to_player_screen_track_as_json">TRACK_JSON</string>
-    <string name="player_screen_toast_added">Трек %1$s добавлен в плэйлист %2$s</string>
-    <string name="player_screen_toast_not_added">Трек %1$s уже добавлен в плэйлист %2$s</string>
+    <string name="player_screen_toast_added">Трек %1$s добавлен в плейлист %2$s</string>
+    <string name="player_screen_toast_not_added">Трек %1$s уже добавлен в плейлист %2$s</string>
     <string name="error_view_size_mode">Неизвестный режим ширины/высоты %1$s</string>
 
     <string name="mediateka">Медиатека</string>
