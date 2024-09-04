@@ -68,16 +68,21 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             sharePlaylist()
         }
         binding.playlistDetailsScreenBottomSheetMenuEdit.setOnClickListener {
-            val playlistId =
-                if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Menu)
-                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist.id
-                else (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist.id
-            val action =
-                PlaylistDetailsFragmentDirections.actionPlaylistDetailsFragmentToEditPlaylistFragment(
-                    playlistId
-                )
-            bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
-            findNavController().navigate(action)
+            val currentState = playlistDetailsViewModel.screenState.value
+            val playlistId = when (currentState) {
+                is PlaylistDetailsScreenState.Menu -> currentState.playlist.id
+                is PlaylistDetailsScreenState.Content -> currentState.playlistDetails.playlist.id
+                else -> null
+            }
+
+            if (playlistId != null) {
+                val action =
+                    PlaylistDetailsFragmentDirections.actionPlaylistDetailsFragmentToEditPlaylistFragment(
+                        playlistId
+                    )
+                bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
+                findNavController().navigate(action)
+            }
         }
 
         playlistDetailsViewModel.screenState.observe(viewLifecycleOwner) { state ->
@@ -156,12 +161,12 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                 dialog.dismiss()
             }
             .setPositiveButton(R.string.yes) { dialog, _ ->
-                playlistDetailsViewModel.deletePlaylist(
-                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu)
-                        .playlist
-                )
-                dialog.dismiss()
-                findNavController().navigateUp()
+                val currentState = playlistDetailsViewModel.screenState.value
+                if (currentState is PlaylistDetailsScreenState.Menu) {
+                    playlistDetailsViewModel.deletePlaylist(currentState.playlist)
+                    dialog.dismiss()
+                    findNavController().navigateUp()
+                }
             }
         alert.show()
     }
@@ -224,8 +229,9 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     }
 
     private fun sharePlaylist() {
-        if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Content) {
-            if ((playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.tracks.isEmpty()) {
+        val currentState = playlistDetailsViewModel.screenState.value
+        if (currentState is PlaylistDetailsScreenState.Content) {
+            if (currentState.playlistDetails.tracks.isEmpty()) {
                 Toast.makeText(
                     requireContext(),
                     R.string.playlistdetails_screen_nothing_share,
@@ -233,23 +239,19 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                 ).show()
             } else {
                 playlistDetailsViewModel.sharePlaylist(
-                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist
+                    currentState.playlistDetails.playlist
                 )
             }
-        } else if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Menu) {
-            if ((playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist.tracks?.isEmpty() == true) {
+        } else if (currentState is PlaylistDetailsScreenState.Menu) {
+            if (currentState.playlist.tracks?.isEmpty() == true) {
                 Toast.makeText(
                     requireContext(),
                     R.string.playlistdetails_screen_nothing_share,
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                playlistDetailsViewModel.sharePlaylist(
-                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist
-                )
+                playlistDetailsViewModel.sharePlaylist(currentState.playlist)
             }
-
-
         }
     }
 
