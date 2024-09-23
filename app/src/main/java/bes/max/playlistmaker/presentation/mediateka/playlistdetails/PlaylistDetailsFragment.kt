@@ -46,9 +46,13 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         }
 
         setUpBottomsheetMenu()
-
         setUpRecyclerview()
+        setClickListeners()
+        observeState()
+        observeEvent()
+    }
 
+    private fun setClickListeners() {
         binding.playlistDetailsScreenBackArrow.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -68,23 +72,33 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             sharePlaylist()
         }
         binding.playlistDetailsScreenBottomSheetMenuEdit.setOnClickListener {
-            val playlistId =
-                if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Menu)
-                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist.id
-                else (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist.id
-            val action =
-                PlaylistDetailsFragmentDirections.actionPlaylistDetailsFragmentToEditPlaylistFragment(
-                    playlistId
-                )
-            bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
-            findNavController().navigate(action)
+            val currentState = playlistDetailsViewModel.screenState.value
+            if (currentState is PlaylistDetailsScreenState.Content) {
+                val playlistId = currentState.playlistDetails.playlist.id
+                val action =
+                    PlaylistDetailsFragmentDirections.actionPlaylistDetailsFragmentToEditPlaylistFragment(
+                        playlistId
+                    )
+                bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
+                findNavController().navigate(action)
+            }
         }
+    }
 
+    private fun observeState() {
         playlistDetailsViewModel.screenState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is PlaylistDetailsScreenState.Content -> showContent(state)
-                is PlaylistDetailsScreenState.Menu -> showMenu(state)
                 else -> {}
+            }
+        }
+    }
+
+    private fun observeEvent() {
+        playlistDetailsViewModel.event.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                is PlaylistDetailsEvent.OpenBottomSheetMenu -> showMenu()
+                is PlaylistDetailsEvent.CloseBottomSheetMenu -> hideMenu()
             }
         }
     }
@@ -126,12 +140,15 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                     state.playlistDetails.tracksNumber
                 )
         }
-        //bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
         bindPlaylistItemViews(state.playlistDetails.playlist)
     }
 
-    private fun showMenu(state: PlaylistDetailsScreenState.Menu) {
+    private fun showMenu() {
         bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    private fun hideMenu() {
+        bottomSheetBehaviorMenu?.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     private fun showDeleteTrackDialog(trackId: Long) {
@@ -156,12 +173,12 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                 dialog.dismiss()
             }
             .setPositiveButton(R.string.yes) { dialog, _ ->
-                playlistDetailsViewModel.deletePlaylist(
-                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu)
-                        .playlist
-                )
-                dialog.dismiss()
-                findNavController().navigateUp()
+                val currentState = playlistDetailsViewModel.screenState.value
+                if (currentState is PlaylistDetailsScreenState.Content) {
+                    playlistDetailsViewModel.deletePlaylist(currentState.playlistDetails.playlist)
+                    dialog.dismiss()
+                    findNavController().navigateUp()
+                }
             }
         alert.show()
     }
@@ -182,7 +199,6 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             coverOption = TrackListItemAdapter.SMALL_COVER_OPTION
         )
         binding.playlistDetailsScreenBottomSheetRecyclerView.adapter = trackAdapter
-
     }
 
     private fun setUpBottomsheet() {
@@ -197,7 +213,7 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             BottomSheetBehavior.from(binding.playlistDetailsScreenBottomSheetMenu).apply {
                 state = BottomSheetBehavior.STATE_HIDDEN
             }
-        bottomSheetBehaviorMenu!!.addBottomSheetCallback(getCallbackForBottomSheetState())
+        bottomSheetBehaviorMenu?.addBottomSheetCallback(getCallbackForBottomSheetState())
     }
 
     private fun bindPlaylistItemViews(playlist: Playlist) {
@@ -224,8 +240,9 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     }
 
     private fun sharePlaylist() {
-        if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Content) {
-            if ((playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.tracks.isEmpty()) {
+        val currentState = playlistDetailsViewModel.screenState.value
+        if (currentState is PlaylistDetailsScreenState.Content) {
+            if (currentState.playlistDetails.tracks.isEmpty()) {
                 Toast.makeText(
                     requireContext(),
                     R.string.playlistdetails_screen_nothing_share,
@@ -233,23 +250,9 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                 ).show()
             } else {
                 playlistDetailsViewModel.sharePlaylist(
-                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Content).playlistDetails.playlist
+                    currentState.playlistDetails.playlist
                 )
             }
-        } else if (playlistDetailsViewModel.screenState.value is PlaylistDetailsScreenState.Menu) {
-            if ((playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist.tracks?.isEmpty() == true) {
-                Toast.makeText(
-                    requireContext(),
-                    R.string.playlistdetails_screen_nothing_share,
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
-                playlistDetailsViewModel.sharePlaylist(
-                    (playlistDetailsViewModel.screenState.value as PlaylistDetailsScreenState.Menu).playlist
-                )
-            }
-
-
         }
     }
 
@@ -262,6 +265,9 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                     BottomSheetBehavior.STATE_EXPANDED, BottomSheetBehavior.STATE_HALF_EXPANDED,
                     BottomSheetBehavior.STATE_COLLAPSED -> {
                         binding.overlay.visibility = View.VISIBLE
+                        binding.overlay.setOnClickListener {
+                            playlistDetailsViewModel.onCloseMenu()
+                        }
                     }
 
                     BottomSheetBehavior.STATE_HIDDEN -> {

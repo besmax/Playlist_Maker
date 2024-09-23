@@ -11,7 +11,8 @@ import bes.max.playlistmaker.data.db.entities.TrackEntity
 
 @Database(
     version = 5,
-    entities = [TrackEntity::class, PlaylistEntity::class, PlaylistTrackEntity::class]
+    entities = [TrackEntity::class, PlaylistEntity::class, PlaylistTrackEntity::class],
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 

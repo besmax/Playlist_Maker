@@ -27,7 +27,6 @@ open class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
     private var textWatcher: TextWatcher? = null
     protected open val viewModel: NewPlaylistViewModel by viewModel()
-    private val safeArgs: NewPlaylistFragmentArgs by navArgs()
     protected var coverUri: Uri? = null
 
     private var defaultDrawable: Drawable? = null
@@ -132,10 +131,10 @@ open class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
     private fun savePlaylist() {
         val name = binding.newPlaylistScreenNameInput.text.toString()
-        (viewModel as NewPlaylistViewModel).createPlaylist(
+        viewModel.createPlaylist(
             name = name,
             description = binding.newPlaylistScreenDescriptionInput.text.toString(),
-            trackArg = safeArgs.track,
+            trackArg = arguments?.getString("track"),
             uri = coverUri
         )
         Log.d(TAG, "save playlist with uri: ${coverUri.toString()}")

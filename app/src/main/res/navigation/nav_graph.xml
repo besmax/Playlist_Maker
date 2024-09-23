@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="bes.max.playlistmaker.presentation.search.SearchFragment"
+        android:name="bes.max.playlistmaker.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search">
         <action
@@ -16,13 +16,13 @@
     </fragment>
     <fragment
         android:id="@+id/mediatekaFragment"
-        android:name="bes.max.playlistmaker.presentation.mediateka.MediatekaFragment"
+        android:name="bes.max.playlistmaker.ui.mediateka.MediatekaFragment"
         android:label="MediatekaFragment" >
         <action
             android:id="@+id/action_mediatekaFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
         <action
-            android:id="@+id/action_mediatekaFragment_to_newPlaylistFragment2"
+            android:id="@+id/action_mediatekaFragment_to_newPlaylistFragment"
             app:destination="@id/newPlaylistFragment" />
         <action
             android:id="@+id/action_mediatekaFragment_to_playlistDetailsFragment"
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="bes.max.playlistmaker.presentation.settings.SettingsFragment"
+        android:name="bes.max.playlistmaker.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/playerFragment"
@@ -44,16 +44,6 @@
             android:id="@+id/action_playerFragment_to_newPlaylistFragment"
             app:destination="@id/newPlaylistFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/favoriteTracksFragment"
-        android:name="bes.max.playlistmaker.presentation.mediateka.favorite.FavoriteTracksFragment"
-        android:label="fragment_favorite_tracks"
-        tools:layout="@layout/fragment_favorite_tracks" />
-    <fragment
-        android:id="@+id/playlistFragment"
-        android:name="bes.max.playlistmaker.presentation.mediateka.playlists.PlaylistsFragment"
-        android:label="fragment_playlist"
-        tools:layout="@layout/fragment_playlist" />
     <fragment
         android:id="@+id/newPlaylistFragment"
         android:name="bes.max.playlistmaker.presentation.mediateka.newplaylist.NewPlaylistFragment"

@@ -31,15 +31,17 @@ class SearchViewModel(
 
 
     fun searchDebounce(searchText: String) {
-        if (searchJob?.isCompleted != true) {
-            searchJob?.cancel()
-        }
+        if (searchJob?.isActive != true)  searchJob?.cancel()
 
-        if (latestSearchText != searchText) {
-            latestSearchText = searchText
-            searchJob = viewModelScope.launch {
-                delay(SEARCH_DEBOUNCE_DELAY)
-                searchTrack(searchText)
+        if (searchText.isBlank()) {
+            showHistory()
+        } else {
+            if (latestSearchText != searchText) {
+                latestSearchText = searchText
+                searchJob = viewModelScope.launch {
+                    delay(SEARCH_DEBOUNCE_DELAY)
+                    searchTrack(searchText)
+                }
             }
         }
     }
@@ -48,7 +50,8 @@ class SearchViewModel(
         searchJob?.cancel()
     }
 
-    fun searchTrack(searchRequest: String) {
+    private fun searchTrack(searchRequest: String) {
+        if (searchRequest.isBlank()) return
         _screenState.value = SearchScreenState.Loading
         viewModelScope.launch {
             searchInNetworkUseCase.execute(searchRequest).collect { response ->
@@ -112,6 +115,10 @@ class SearchViewModel(
                 SearchScreenState.History.tracks = emptyList()
             }
         }
+    }
+
+    fun refreshSearch() {
+        searchTrack(latestSearchText)
     }
 
     companion object {

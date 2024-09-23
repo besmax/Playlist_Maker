@@ -26,10 +26,15 @@
     <string name="year">Год</string>
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
+    <string name="default_timer_value">00:00</string>
     <string name="search_screen_to_player_screen_track_as_json">TRACK_JSON</string>
-    <string name="player_screen_toast_added">Трек %1$s добавлен в плэйлист %2$s</string>
-    <string name="player_screen_toast_not_added">Трек %1$s уже добавлен в плэйлист %2$s</string>
+    <string name="player_screen_toast_added">Трек %1$s добавлен в плейлист %2$s</string>
+    <string name="player_screen_toast_not_added">Трек %1$s уже добавлен в плейлист %2$s</string>
     <string name="error_view_size_mode">Неизвестный режим ширины/высоты %1$s</string>
+    <string name="no_internet_message">Отсутствует подключение к интернету</string>
+    <string name="notification_placeholder">%1$s - %2$s</string>
+    <string name="no_notification_permission">Отсутствует разрешение на показ уведомлений</string>
+    <string name="player_notification_channel_name">Уведомление плеера</string>
 
     <string name="mediateka">Медиатека</string>
     <string name="favorite_tracks_screen_placeholder_text">Ваша медиатека пуста</string>
@@ -37,7 +42,7 @@
     <string name="playlist_screen_placeholder_button">Новый плейлист</string>
 
     <string name="mediateka_screen_tab_title_favorite_tracks">Избранные треки</string>
-    <string name="mediateka_screen_tab_title_playlist">Плейлисты</string>
+    <string name="mediateka_screen_tab_title_playlists">Плейлисты</string>
 
     <string name="new_playlist">Новый плейлист</string>
     <string name="new_playlist_name">Название*</string>
